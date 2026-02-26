@@ -1,0 +1,157 @@
+  .residents-container {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+
+  /* FORM */
+  .resident-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+  }
+
+  .resident-form input {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    color: #000;  /* Add this */
+    background: #fff;  /* Add this */
+    font-size: 14px;  /* Add this */
+  }
+
+  .resident-form input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  .resident-form button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  /* TABLE */
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .table th {
+    background: #f1f5f9;
+    padding: 12px;
+    text-align: left;
+  }
+
+  .table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .table tr:hover {
+    background: #f9fafb;
+  }
+
+  /* BUTTONS */
+  .edit-btn {
+    background: orange;
+    border: none;
+    padding: 6px 10px;
+    margin-right: 5px;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .delete-btn {
+    background: crimson;
+    border: none;
+    padding: 6px 10px;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .form-container {
+    background-color: #fff;
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Form heading */
+  .form-container h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #2c3e50;
+  }
+
+  /* Labels */
+  .form-container label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+    color: #34495e;
+  }
+
+  /* Inputs and textareas */
+  .form-container input,
+  .form-container select,
+  .form-container textarea {
+    width: 100%;
+    padding: 10px 12px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #bdc3c7;
+    font-size: 14px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+  }
+
+  /* Focus effect */
+  .form-container input:focus,
+  .form-container select:focus,
+  .form-container textarea:focus {
+    border-color: #2980b9;
+    outline: none;
+  }
+
+  /* Button styling */
+  .form-container button {
+    margin-top: 25px;
+    padding: 12px;
+    width: 100%;
+    border: none;
+    border-radius: 8px;
+    background-color: #2980b9;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  /* Button hover */
+  .form-container button:hover {
+    background-color: #1c5980;
+  }
+
+  /* Placeholder styling */
+  input::placeholder,
+  textarea::placeholder {
+    color: #95a5a6;
+  }
+
+  /* Responsive for smaller screens */
+  @media (max-width: 600px) {
+    .form-container {
+      margin: 20px;
+      padding: 20px;
+    }
+  }
