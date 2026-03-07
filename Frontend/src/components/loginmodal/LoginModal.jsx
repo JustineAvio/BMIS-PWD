@@ -1,13 +1,18 @@
-import { useState } from "react";
-import axios from "axios"
-import "./LoginModal.css";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import "./LoginModal.css";
+import logo2 from "../../assets/images/logo2.png";
+import modalbg from "../../assets/images/modalbg.png";
+import ForgotPass from "../forgotpasswordmodal/forgotpassmodal.jsx"
+import axios from "axios";
 
 function LoginModal({ isOpen, onClose, onLogin }) {
-  const [showPassword, setShowPassword] = useState(false);
+ 
   const [isRegister, setIsRegister] = useState(false);
   const navigate = useNavigate();
-
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [forgotOpen, setForgotOpen] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -22,6 +27,17 @@ function LoginModal({ isOpen, onClose, onLogin }) {
     pwd: "",
   });
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const handleChange = (e) => {
@@ -30,7 +46,6 @@ function LoginModal({ isOpen, onClose, onLogin }) {
   };
 
   const validateRegistration = () => {
-    // Added "birthday" as required
     const requiredFields = [
       "username",
       "password",
@@ -79,11 +94,11 @@ function LoginModal({ isOpen, onClose, onLogin }) {
     return true;
   };
 
-async function handleSubmit (e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (isRegister) {
       if (!validateRegistration()) return;
-      const response = await axios.post("http://localhost:3000/register",{
+       const response = await axios.post("http://localhost:3000/register",{
         GivenName: formData.givenName,
         MiddleName: formData.middleName,
         LastName: formData.lastName,
@@ -132,23 +147,45 @@ async function handleSubmit (e) {
         alert("Wrong username/password")
       }
       }
-      
   };
+
+  const today = new Date();
+  const maxBirthday = new Date(
+    today.getFullYear() - 13,
+    today.getMonth(),
+    today.getDate()
+  )
+    .toISOString()
+    .split("T")[0];
 
   return (
     <div className="modal" onClick={onClose}>
       <div
         className={`loginbox ${isRegister ? "registermode" : ""}`}
         onClick={(e) => e.stopPropagation()}
+
+        style={{
+          backgroundImage: `url(${modalbg})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          
+        }}
       >
-        <button className="close" onClick={onClose}>
+       <button
+          className="close"
+          onClick={onClose}
+          style={{
+            color: isRegister ? "#000" : "#fff", 
+          }}
+        >
           &times;
         </button>
 
         <div className="leftside">
           <div className="headermodal">
             <div className="avatar">
-              <img src="https://i.imgur.com/6VBx3io.png" alt="avatar" />
+              <img src={logo2} alt="avatar" />
             </div>
             <h1>{isRegister ? "REGISTER" : "WELCOME"}</h1>
           </div>
@@ -216,6 +253,7 @@ async function handleSubmit (e) {
                       name="birthday"
                       value={formData.birthday}
                       onChange={handleChange}
+                      max={maxBirthday}
                     />
                   </div>
 
@@ -248,13 +286,40 @@ async function handleSubmit (e) {
                   </div>
                 </div>
 
-                <div className="inputgroup">
+               <div className="inputgroup">
                   <label>Phone Number</label>
                   <input
                     type="tel"
                     name="phone"
                     value={formData.phone}
-                    onChange={handleChange}
+                    placeholder="+639 XXXXXXXXX"
+                    maxLength={14}
+                    onFocus={() => {
+                      if (!formData.phone) {
+                        setFormData((prev) => ({ ...prev, phone: "+639 " }));
+                      }
+                    }}
+                    onChange={(e) => {
+                      let value = e.target.value;
+
+                      // remove prefix
+                      if (value.startsWith("+639 ")) {
+                        value = value.replace("+639 ", "");
+                      }
+
+                      // allow numbers only
+                      value = value.replace(/\D/g, "");
+
+                      // limit to 9 digits
+                      value = value.slice(0, 9);
+
+                      const formatted = value ? `+639 ${value}` : "+639 ";
+
+                      setFormData((prev) => ({
+                        ...prev,
+                        phone: formatted,
+                      }));
+                    }}
                   />
                 </div>
 
@@ -284,7 +349,7 @@ async function handleSubmit (e) {
               />
             </div>
 
-            <div className="inputgroup passwordwrapper">
+             <div className="inputgroup">
               <label>
                 Password {isRegister && <span className="required">*</span>}
               </label>
@@ -303,6 +368,20 @@ async function handleSubmit (e) {
                 👁
               </button>
             </div>
+            
+
+            {!isRegister && (
+              <div className="forgot-password">
+                <span
+                  onClick={() => {
+                    setForgotOpen(true)
+                  }}
+                >
+                  Forgot Password?
+                </span>
+              </div>
+            
+            )}
 
             {isRegister && (
               <div className="inputgroup">
@@ -310,11 +389,18 @@ async function handleSubmit (e) {
                   Confirm Password <span className="required">*</span>
                 </label>
                 <input
-                  type="password"
+                  type={showConfirmPassword ? "text" : "password"}
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
                 />
+                <button
+                type="button"
+                className="togglepassword"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                👁
+              </button>
               </div>
             )}
 
@@ -336,16 +422,12 @@ async function handleSubmit (e) {
               )}
             </p>
           </form>
+
+          <ForgotPass isOpen={forgotOpen} onClose={() => setForgotOpen(false)}/>
+
         </div>
 
-        <div className="blueshape">
-          <svg viewBox="0 0 500 1288" preserveAspectRatio="none">
-            <path
-              d="M500 0V1288H150C150 1288 0 800 150 600C300 400 500 0 500 0Z"
-              fill="#2A7FFF"
-            />
-          </svg>
-        </div>
+        
       </div>
     </div>
   );

@@ -3,7 +3,8 @@ import  Header from  './components/navbar/Header.jsx'
 import  Footer from  './components/footer/Footer.jsx'
 import LandingPage from "./pages/landingpage/LandingPage.jsx";
 import LoginModal from "./components/loginmodal/LoginModal.jsx"
-import AccessibilityMenu from './components/access/AccessibilityMenu.jsx'
+import AccessibilityMenu from './components/access/AccessibilityMenu.jsx';
+import ResetPassword from './pages/resetpass/resetPassword.jsx';
 import ProtectedRoute from './routes/protectedroute.jsx'
 import AdminDashboard from './pages/Admin/dashboard/dashboard.jsx'
 import AdminLayout from './components/admincomponents/AdminLayout.jsx'
@@ -62,6 +63,7 @@ function App() {
                 <Routes>
                     <Route path='/' element={<Navigate to='/landing-page'/>}/>
                     <Route path='/landing-page' element={<LPageLayout/>}/>
+                    <Route path='/reset-password/:token' element={<ResetPassword/>}/>
 
                     <Route element={<ProtectedRoute allowedRoles={['admin']}/>} >
                         <Route path='/admin' element={<AdminLayout/>}>

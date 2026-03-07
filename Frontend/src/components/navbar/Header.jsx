@@ -68,7 +68,7 @@ function Header({ user, onAccountClick, onLogout }) {
                         </ul>
                     </div>
 
- <div
+                     <div
                         className="account"
                         onClick={(e) => {
                             e.stopPropagation();
@@ -88,7 +88,7 @@ function Header({ user, onAccountClick, onLogout }) {
                             {user ? (
                                 <>
                                     <p>Welcome Back!</p>
-                                    <p className="username">{user.name}</p>
+                                    <p className="username">{<span>{user.username}</span>}</p>
                                 </>
                             ) : (
                                 <p>Log in | Sign Up</p>
