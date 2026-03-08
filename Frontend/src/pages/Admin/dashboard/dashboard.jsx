@@ -8,15 +8,19 @@ export default function AdminDashboard() {
 
   //Ito pang display ng mga data sa website 
   const displayAccounts = async () => {
-    const response = await axios.get("http://localhost:3000/admin")
+  try {
+    const response = await fetch("http://localhost:3000/api/accounts");
+    const data = await response.json(); // You need this line for fetch!
 
-    if(Array.isArray(response.data)){
-      setAccounts(response.data)
+    if (Array.isArray(data)) {
+      setAccounts(data);
     } else {
-      console.error("Recieved Data is not an array", response.data)
       setAccounts([]);
     }
-  } 
+  } catch (error) {
+    console.log("Error Fetching");
+  }
+};
 
   useEffect(() => {
     displayAccounts(); //Tinawag ko ito para mag-render ito sa website 
@@ -35,28 +39,39 @@ export default function AdminDashboard() {
 
     {/* Table Card */}
     <div className="content-card">
-      <h3>Recent Users</h3>
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Account ID</th>
-            <th>Resident ID</th>
-            <th>Username</th>
-            <th>Role</th>
+  <h3>User Accounts Management</h3>
+  <table className="table">
+    <thead>
+      <tr>
+        <th>Account ID</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Actions</th> 
+      </tr>
+    </thead>
+    <tbody>
+      {accounts.length > 0 ? (
+        accounts.map((acc) => (
+          <tr key={acc.AccountID}>
+            <td>{acc.AccountID}</td>
+            <td>{acc.username}</td>
+            <td>{acc.email}</td>
+            <td>{acc.role}</td>
+            <td>
+              <button className="edit-btn" onClick={() => handleEdit(acc.UserID)}>Edit</button>
+              <button className="delete-btn" onClick={() => handleDelete(acc.UserID)}>Delete</button>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-      {accounts.map((a, i) => (
-        <tr key={i}>
-          <td>{a.AccountID}</td>
-          <td>{a.ResidentID}</td>
-          <td>{a.username}</td>
-          <td>{a.role}</td>
+        ))
+      ) : (
+        <tr>
+          <td colSpan="5">No accounts found.</td>
         </tr>
-        ))} 
-        </tbody>
-      </table>
+      )}
+    </tbody>
+  </table>
+</div>
     </div>
-  </div>
   );
-}
+};

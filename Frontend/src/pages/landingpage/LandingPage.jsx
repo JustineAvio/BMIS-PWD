@@ -215,7 +215,7 @@
                     </div>
                 </div>
 
-                <div class="emergencysection">
+                <div className="emergencysection">
                     <div className="title">
                         <span>Emergency Hotlines</span>
                         <div className="line"></div>
@@ -270,7 +270,7 @@
                         <span>Gallery and Places</span>
                         <div className="line"></div>
                     </div>
-                <div class="gallery">
+                <div className="gallery">
                     <div className="gallerypic"><img src={hall} alt="Barangay Hall"/><div className="galleryoverlay">Barangay Hall</div></div>
                     <div className="gallerypic"><img src={school} alt="Elementary School"/><div className="galleryoverlay">BL1 Elementary School</div></div>
                     <div className="gallerypic"><img src={expa} alt="Covered Court"/><div className="galleryoverlay">Covered Court</div></div>

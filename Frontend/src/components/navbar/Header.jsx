@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import './Header.css'
 import logo1 from '../../assets/images/logo1.png'
 import logo2 from '../../assets/images/logo2.png'
+import { Link, useNavigate } from "react-router-dom";
 
 function Header({ user, onAccountClick, onLogout }) {
     const [open, setOpen] = useState(false);
@@ -9,6 +10,8 @@ function Header({ user, onAccountClick, onLogout }) {
 
     const [serviceOpen, setServiceOpen] = useState(false);
     const [profileOpen, setProfileOpen] = useState(false);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -52,7 +55,13 @@ function Header({ user, onAccountClick, onLogout }) {
                             <li><a href="#news">News</a></li>
                              <li
                                 className="servicedropdown"
-                                onClick={toggleService}
+                                onClick={() => {
+                                    if(!user){
+                                        onAccountClick();
+                                        return;
+                                    }
+                                    toggleService()
+                                }}
                                 style={{ cursor: "pointer" }}
                             >
                                 Service ▾
@@ -99,9 +108,10 @@ function Header({ user, onAccountClick, onLogout }) {
                  
                     {user && profileOpen && (
                         <div className="profileoptions" onClick={(e)=>e.stopPropagation()}>
-                            <a href="#">Profile</a>
-                            <a href="#">Account Settings</a>
-                            <a href="#" onClick={(e) => {e.preventDefault(); onLogout(); setProfileOpen(false)}}>Logout</a>
+                            {/* <a href="#" onClick={() =>{navigate('/profile'); setProfileOpen(false)}}>Tite</a> */}
+                            <Link to="/profile" onClick={() => setProfileOpen(false)}>Profile</Link>
+                            <Link to="#" onClick={(e) => e.preventDefault()}>Account Settings</Link>
+                            <a href="#" onClick={(e) => { e.preventDefault(); onLogout(); setProfileOpen(false); }}>Logout</a>
                         </div>
                     )}
 

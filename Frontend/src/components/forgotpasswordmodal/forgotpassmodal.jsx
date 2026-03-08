@@ -18,7 +18,7 @@ function ForgotPasswordModal({ isOpen, onClose }) {
     }
 
     try {
-      const response = await axios.post("http://localhost:3000/forgot-password", {
+      const response = await axios.post("http://localhost:3000/api/auth/forgot-password", {
         email: email 
       });
 

@@ -20,7 +20,7 @@ export default function EditResident() {
   useEffect(() => {
     const fetchResident = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/admin/resident/${id}`);
+        const response = await axios.get(`http://localhost:3000/api/resident/${id}`);
         const data = response.data;
         const formattedDate = data.Birthday ? data.Birthday.split("T")[0]:'';
         setformData({...data, Birthday: formattedDate});

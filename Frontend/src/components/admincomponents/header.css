@@ -1,0 +1,16 @@
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 40px;
+background:white;
+box-shadow:0 3px 10px rgba(0,0,0,0.08);
+}
+
+.admin{
+background:linear-gradient(90deg,#1f9d74,#2f80ed);
+color:white;
+padding:8px 16px;
+border-radius:20px;
+font-size:14px;
+}

@@ -5,6 +5,7 @@ import logo2 from "../../assets/images/logo2.png";
 import modalbg from "../../assets/images/modalbg.png";
 import ForgotPass from "../forgotpasswordmodal/forgotpassmodal.jsx"
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 function LoginModal({ isOpen, onClose, onLogin }) {
  
@@ -96,9 +97,16 @@ function LoginModal({ isOpen, onClose, onLogin }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isRegister) {
+    if(!isRegister){
+      if (!formData.username.trim() || !formData.password.trim()) {
+      alert("Please enter both username and password.");
+      return; 
+    }
+  }
+    
+  if (isRegister) {
       if (!validateRegistration()) return;
-       const response = await axios.post("http://localhost:3000/register",{
+       const response = await axios.post("http://localhost:3000/api/auth/register",{
         GivenName: formData.givenName,
         MiddleName: formData.middleName,
         LastName: formData.lastName,
@@ -116,38 +124,61 @@ function LoginModal({ isOpen, onClose, onLogin }) {
         onClose();
       }
     } else {
-      const response = await axios.post("http://localhost:3000/login",{
+      try{
+      const response = await axios.post("http://localhost:3000/api/auth/login",{
         username: formData.username,
         password: formData.password
       });
+      console.log(response.data)
 
       if(response.data.success){
+          const token = response.data.accessToken;  
+          if(token){
+            localStorage.setItem("accessToken", token);// <-- key that ProtectedRoute expects
+              try{
+                  // Optionally store decoded info
+                  const decoded = jwtDecode(token);
+                  console.log(decoded);
+                  if(typeof onLogin === "function"){
+                  onLogin(decoded); // pass user info (name, role, etc.)
+                  } else {
+                    console.warn("onLogin prop was not passed to LoginModal")
+                  }
+                  alert("Login successful!");
 
-        onLogin(response.data.username);
+                  // Navigate based on role
+                  if(decoded.role === "admin") navigate("/admin");
+                  else if(decoded.role === "staff") navigate("/staff");
+                  else if(decoded.role === "resident") navigate("/landing-page");
 
-        localStorage.setItem("userRole", response.data.role);
-
-        if(response.data.role === "admin"){
-          navigate("/admin")
+                  onClose();
+                } catch (decodeError) {
+                  console.error("Decoding failed:", decodeError);
+                }
+            } else {
+               console.error("Token not found in response:", response.data);
+            }
+          if(response.data.status === 401){
+            alert("Wrong username/password")
+          }
         }
+      }
+      catch(error){
 
-        if(response.data.role === "staff"){
-          navigate("/staff")
+        if (error.response) {
+          
+        if (error.response.status === 401) {
+          alert("Invalid username or password. Please try again.");
+        } else {
+          alert(error.response.data.message || "An error occurred during login.");
         }
-
-        if(response.data.role === "resident"){
-          navigate("/resident")
-        }
-        
-        alert("Login successful!");
-        onClose();
+      } else {
+        alert("Cannot connect to server. Please check your connection.");
       }
-
-      if(response.data.status === 401){
-        alert("Wrong username/password")
-      }
-      }
+      console.error("Auth Error:", error);
+    }
   };
+};
 
   const today = new Date();
   const maxBirthday = new Date(
@@ -286,40 +317,38 @@ function LoginModal({ isOpen, onClose, onLogin }) {
                   </div>
                 </div>
 
-               <div className="inputgroup">
+                   <div className="inputgroup">
                   <label>Phone Number</label>
                   <input
                     type="tel"
                     name="phone"
                     value={formData.phone}
-                    placeholder="+639 XXXXXXXXX"
-                    maxLength={14}
-                    onFocus={() => {
-                      if (!formData.phone) {
-                        setFormData((prev) => ({ ...prev, phone: "+639 " }));
-                      }
-                    }}
                     onChange={(e) => {
-                      let value = e.target.value;
+                        let value = e.target.value;
 
-                      // remove prefix
-                      if (value.startsWith("+639 ")) {
-                        value = value.replace("+639 ", "");
-                      }
+                        // Remove non-numbers
+                        value = value.replace(/\D/g, "");
 
-                      // allow numbers only
-                      value = value.replace(/\D/g, "");
+                        // Force starting with 09
+                        if (!value.startsWith("09")) {
+                          value = "09" + value.replace(/^0*/, "").replace(/^9*/, "");
+                        }
 
-                      // limit to 9 digits
-                      value = value.slice(0, 9);
+                        // Limit to 11 digits
+                        if (value.length > 11) {
+                          value = value.slice(0, 11);
+                        }
 
-                      const formatted = value ? `+639 ${value}` : "+639 ";
-
-                      setFormData((prev) => ({
-                        ...prev,
-                        phone: formatted,
-                      }));
-                    }}
+                        setFormData((prev) => ({
+                          ...prev,
+                          phone: value
+                        }));
+                      }}
+                      onFocus={() => {
+                        if (!formData.phone) {
+                          setFormData((prev) => ({ ...prev, phone: "09" }));
+                        }
+                      }}
                   />
                 </div>
 
@@ -357,6 +386,7 @@ function LoginModal({ isOpen, onClose, onLogin }) {
                 type={showPassword ? "text" : "password"}
                 name="password"
                 className="passwordinput"
+                autoComplete="password"
                 value={formData.password}
                 onChange={handleChange}
               />
@@ -391,6 +421,7 @@ function LoginModal({ isOpen, onClose, onLogin }) {
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   name="confirmPassword"
+                  autoComplete="new-password"
                   value={formData.confirmPassword}
                   onChange={handleChange}
                 />

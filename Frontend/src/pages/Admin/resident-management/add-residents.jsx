@@ -5,22 +5,18 @@ import "./residents.css";
 
 export default function ResidentForm() {
 
-    /*Ilalagay mo sa value ng bawat input syntax yung variable name na formData
-    siya kumukuha ng mga ininput natin na data*/ 
     const [formData, setformData] = useState({
         GivenName: "", MiddleName: "", LastName: "",
         Birthday: "", Sex: "", PWD: "", PhoneNo: "", 
-        Address: "", Email: "", Address: ""
+        Address: "", Email: ""
     })
 
     const navigate = useNavigate(); 
 
-    //Ito ilalgay mo sa form syntax yung variable name na handleSubmit
-    //Ang trabaho nito is nag-insert mismo ng data sa database 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try{
-            const response = await axios.post("http://localhost:3000/admin/add-resident", formData);
+            const response = await axios.post("http://localhost:3000/admin/api/resident/add-resident", formData);
             console.log(response.data);
             navigate("/admin/resident"); 
         }
@@ -29,8 +25,6 @@ export default function ResidentForm() {
         }
     }
 
-    //Ito ilagay mo sa onChange na syntax based sa code na ginawa ko
-    //Siya naghandle ng value during input ng data
     const handleValue = (e) => {
         setformData({...formData, [e.target.name]: e.target.value});
     }

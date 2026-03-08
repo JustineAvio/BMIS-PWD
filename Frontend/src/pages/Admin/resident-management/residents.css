@@ -37,46 +37,38 @@
   }
 
   /* TABLE */
-  .table {
-    width: 100%;
-    border-collapse: collapse;
+.resident-table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+}
+
+.resident-table th{
+    background:#1e90ff;
+    color:white;
+    padding:12px;
+}
+
+.resident-table td{
+    padding:10px;
+    border-bottom:1px solid #eee;
+}
+
+  .top-actions{
+      display:flex;
+      gap:10px;
   }
 
-  .table th {
-    background: #f1f5f9;
-    padding: 12px;
-    text-align: left;
+  .top-actions input{
+      padding:8px;
   }
 
-  .table td {
-    padding: 12px;
-    border-bottom: 1px solid #eee;
+  .header-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
   }
-
-  .table tr:hover {
-    background: #f9fafb;
-  }
-
-  /* BUTTONS */
-  .edit-btn {
-    background: orange;
-    border: none;
-    padding: 6px 10px;
-    margin-right: 5px;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-
-  .delete-btn {
-    background: crimson;
-    border: none;
-    padding: 6px 10px;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-
   .form-container {
     background-color: #fff;
     max-width: 500px;
@@ -137,6 +129,30 @@
     transition: background-color 0.3s;
   }
 
+  .view-btn{
+    background:#3498db;
+    border:none;
+    padding:5px 10px;
+    color:white;
+    border-radius:4px;
+}
+
+.edit-btn{
+    background:#0f9b8e;
+    border:none;
+    padding:5px 10px;
+    color:white;
+    border-radius:4px;
+}
+
+.delete-btn{
+    background:#ff4d4d;
+    border:none;
+    padding:5px 10px;
+    color:white;
+    border-radius:4px;
+}
+
   /* Button hover */
   .form-container button:hover {
     background-color: #1c5980;
@@ -147,6 +163,20 @@
   textarea::placeholder {
     color: #95a5a6;
   }
+
+  .add-btn{
+    background:#1e90ff;
+    border:none;
+    color:white;
+    padding:8px 15px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.add-btn:hover{
+    background:#0f9b8e;
+}
+
 
   /* Responsive for smaller screens */
   @media (max-width: 600px) {

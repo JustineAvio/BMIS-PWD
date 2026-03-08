@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./profilepage.css";
-
+//Hindi pa maayos ang pag fetch ng data dito
 function ProfilePage({ user, onLogout }) {
 
     const [editing, setEditing] = useState(false);
@@ -33,7 +33,7 @@ function ProfilePage({ user, onLogout }) {
 
                 <div className="profileheader">
                     <div className="profilepic">
-                        {user.name.charAt(0).toUpperCase()}
+                        {user.username?.charAt(0).toUpperCase()}
                     </div>
 
                     <div>
@@ -48,45 +48,45 @@ function ProfilePage({ user, onLogout }) {
                     {editing ? (
                         <input
                             name="name"
-                            value={formData.name}
+                            value={formData?.GivenName}
                             onChange={handleChange}
                         />
                     ) : (
-                        <p>{formData.GivenName}</p>
+                        <p>{user.GivenName}</p>
                     )}
 
                     <label>Email</label>
                     {editing ? (
                         <input
                             name="email"
-                            value={formData.email}
+                            value={formData?.email}
                             onChange={handleChange}
                         />
                     ) : (
-                        <p>{formData.email}</p>
+                        <p>{user.email}</p>
                     )}
-
+                    {/* if di lagyan ng "?" sa tabi ng formData white page na */}
                     <label>Birthday</label>
                     {editing ? (
                         <input
                             type="date"
                             name="birthday"
-                            value={formData.birthday || ""}
+                            value={formData?.birthday || ""}
                             onChange={handleChange}
                         />
                     ) : (
-                        <p>{formData.birthday || "Not set"}</p>
+                        <p>{user.Birthday || "Not set"}</p>
                     )}
 
                     <label>Address</label>
                     {editing ? (
                         <input
                             name="address"
-                            value={formData.address || ""}
+                            value={formData?.address || ""}
                             onChange={handleChange}
                         />
                     ) : (
-                        <p>{formData.address || "Not set"}</p>
+                        <p>{user.address || "Not set"}</p>
                     )}
 
                 </div>

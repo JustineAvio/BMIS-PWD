@@ -10,7 +10,7 @@ export default function Residents() {
 
   //fetch ng mga data/records from database tapos ididisplay sa website
   const displayResidents = async() => {
-    const response = await axios.get("http://localhost:3000/admin/resident");
+    const response = await axios.get("http://localhost:3000/api/resident");
     setResidents(response.data);
   }
 
@@ -28,7 +28,7 @@ export default function Residents() {
   //Siya nagdelete ng data, ito ilalgay mo sa delete button 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/admin/resident/${id}`);
+      await axios.delete(`http://localhost:3000/api/resident/${id}`);
       displayResidents();
       console.log("Deleted Successfully!");
     } catch (error) {
@@ -36,11 +36,14 @@ export default function Residents() {
     }
   }
   return (
-    <div className="residents-container">
+    <div className="residents-container"> 
 
-      <h2>Residents Management</h2>
-      <button onClick={() => navigate("/admin/add-resident")}>Add Resident</button>
-
+      <div className="header-row">
+        <h2>Residents Management</h2>
+        <div className="top-actions">
+          <button className = "add-btn"onClick={() => navigate("/admin/add-resident")}>Add Resident</button>
+        </div>
+      </div>
       {/* TABLE */}
       <table className="table">
         <thead>
@@ -53,7 +56,6 @@ export default function Residents() {
             <th>PWD</th>
             <th>Phone Number</th>
             <th>Time Created</th>
-            <th>Address</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -69,8 +71,8 @@ export default function Residents() {
                   <td>{resident.PWD}</td>
                   <td>{resident.PhoneNo}</td>
                   <td>{new Date(resident.TimeCreated).toLocaleDateString()}</td>
-                  <td>{resident.address}</td>
                 <td>
+                  <button className="view-btn">View</button>
                   <button className="edit-btn" onClick={() => handleEdit(resident.ResidentID)}> Edit </button>
                   <button className="delete-btn" onClick={() => handleDelete(resident.ResidentID)}>Delete</button>
                 </td>
