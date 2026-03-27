@@ -17,7 +17,13 @@ async function seed() {
   try {
     console.log("Starting seed...");
 
-    await connection.query('DELETE FROM accounttable');
+      const AccountresetQuery = "TRUNCATE TABLE accounttable";
+      const ResidentResetQuery = "TRUNCATE TABLE residenttable";
+
+      await connection.query("SET FOREIGN_KEY_CHECKS = 0");
+      await connection.query(AccountresetQuery);
+      await connection.query(ResidentResetQuery);
+      await connection.query("SET FOREIGN_KEY_CHECKS = 1");
 
     for (const user of users) {
       const [username, role, plainPassword, email] = user;
@@ -30,7 +36,7 @@ async function seed() {
       console.log(`Inserted user: ${username}`);
     }
 
-    console.log("Database seeded successfully! 🌱");
+    console.log("Data inserted successfully! ");
   } catch (err) {
     console.error("Error seeding:", err);
   } finally {

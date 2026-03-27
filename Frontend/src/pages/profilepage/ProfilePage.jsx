@@ -1,15 +1,37 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./profilepage.css";
+import axios from 'axios';
 //Hindi pa maayos ang pag fetch ng data dito
 function ProfilePage({ user, onLogout }) {
 
     const [editing, setEditing] = useState(false);
     const [formData, setFormData] = useState(user || {});
 
+    const displayData = async () => {
+        try{
+            const id = user?.ResidentID;
+
+            if(!id) return;
+            const response = await axios.get(`http://localhost:3000/api/resident/${id}`);
+            console.log("API Response:", response.data);
+            const data = response.data;
+            const formattedDate = data.Birthday ? data.Birthday.split("T")[0]:'';
+            setFormData({...data, Birthday: formattedDate})
+        } catch(error) {
+            console.error("Error fetching resident:", error);
+        }
+    }
+
+    useEffect(() => {
+        if(user){
+            displayData();
+        }
+    }, [user])
+
     const handleChange = (e) => {
         setFormData({
             ...formData,
-            [e.target.name]: e.target.value
+            [e.target.name]: e.target.value,
         });
     };
 
@@ -47,46 +69,46 @@ function ProfilePage({ user, onLogout }) {
                     <label>Full Name</label>
                     {editing ? (
                         <input
-                            name="name"
-                            value={formData?.GivenName}
+                            name="fullname"
+                            value={`${formData.GivenName} ${formData.MiddleName} ${formData.LastName}`}
                             onChange={handleChange}
                         />
                     ) : (
-                        <p>{user.GivenName}</p>
+                        <p>{`${formData.GivenName || ""} ${formData.MiddleName || ""} ${formData.LastName || ""}`}</p>
                     )}
 
                     <label>Email</label>
                     {editing ? (
                         <input
                             name="email"
-                            value={formData?.email}
+                            value={formData.email}
                             onChange={handleChange}
                         />
                     ) : (
-                        <p>{user.email}</p>
+                        <p>{formData.email}</p>
                     )}
                     {/* if di lagyan ng "?" sa tabi ng formData white page na */}
                     <label>Birthday</label>
                     {editing ? (
                         <input
                             type="date"
-                            name="birthday"
-                            value={formData?.birthday || ""}
+                            name="Birthday"
+                            value={formData.Birthday || ""}
                             onChange={handleChange}
                         />
                     ) : (
-                        <p>{user.Birthday || "Not set"}</p>
+                        <p>{formData.Birthday || "Not set"}</p>
                     )}
 
                     <label>Address</label>
                     {editing ? (
                         <input
                             name="address"
-                            value={formData?.address || ""}
+                            value={formData.address || ""}
                             onChange={handleChange}
                         />
                     ) : (
-                        <p>{user.address || "Not set"}</p>
+                        <p>{formData.address || "Not set"}</p>
                     )}
 
                 </div>

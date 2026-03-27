@@ -28,9 +28,10 @@ export default function Residents() {
   //Siya nagdelete ng data, ito ilalgay mo sa delete button 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/api/resident/${id}`);
+      await axios.delete(`http://localhost:3000/api/resident/delete/${id}`);
       displayResidents();
       console.log("Deleted Successfully!");
+      alert("Delete Successfully!")
     } catch (error) {
       console.error("Error deleting resident:", error);
     }

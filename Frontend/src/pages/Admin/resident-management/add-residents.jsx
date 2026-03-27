@@ -1,23 +1,33 @@
 import axios from "axios";
 import {useState} from "react";
 import { useNavigate } from "react-router-dom";
-import "./residents.css"; 
+import "./add-resident.css"; 
 
 export default function ResidentForm() {
 
-    const [formData, setformData] = useState({
-        GivenName: "", MiddleName: "", LastName: "",
-        Birthday: "", Sex: "", PWD: "", PhoneNo: "", 
-        Address: "", Email: ""
-    })
+    const [formData, setFormData] = useState({
+      GivenName: "", MiddleName: "", LastName: "",
+      Birthday: "", Sex: "", PWD: "", PhoneNo: "", 
+      Address: "", email: "", username: "", 
+      password: "", confirmPassword: "" // Initialize this!
+    });
+
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const navigate = useNavigate(); 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (formData.password !== formData.confirmPassword) {
+          alert("Passwords do not match!");
+          return;
+       }
         try{
-            const response = await axios.post("http://localhost:3000/admin/api/resident/add-resident", formData);
+            const response = await axios.post("http://localhost:3000/api/resident/add-resident", formData);
             console.log(response.data);
+            alert("Resident Inserted Successfully!");
             navigate("/admin/resident"); 
         }
         catch(error){
@@ -26,12 +36,12 @@ export default function ResidentForm() {
     }
 
     const handleValue = (e) => {
-        setformData({...formData, [e.target.name]: e.target.value});
+        setFormData({...formData, [e.target.name]: e.target.value});
     }
 
     return (
         <div className="form-container">
-      <h2>Edit Resident Information</h2>
+      <h2>Add Resident Information</h2>
 
       <form onSubmit={handleSubmit}>
         <label>Given Name</label>
@@ -57,10 +67,49 @@ export default function ResidentForm() {
         <input type="text" name="PhoneNo" value={formData.PhoneNo} onChange={handleValue}/>
 
         <label>Email Address</label>
-        <input type="email" name="Email" value={formData.Email} onChange={handleValue}/>
+        <input type="email" name="email" value={formData.email} onChange={handleValue}/>
 
-        <label>Address</label>
-        <textarea name="address" rows="3" value={formData.address} onChange={handleValue}/>
+        {/* <label>Address</label>
+        <textarea name="address" rows="3" value={formData.address} onChange={handleValue}/> */}
+
+        <label>Username</label>
+        <input type="text" name="username" value={formData.username} onChange={handleValue}/>
+          
+        <label>Password</label>
+        <div className="password-field">
+          <input 
+            type={showPassword ? "text" : "password"} 
+            name="password" 
+            value={formData.password} 
+            onChange={handleValue}
+            placeholder="Enter password"
+          />
+          <button 
+            type="button" 
+            className="togglepassword" 
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? "🙈" : "👁️"} 
+          </button>
+        </div>
+
+        <label>Confirm Password <span className="required">*</span></label>
+        <div className="password-field">
+          <input 
+            type={showConfirmPassword ? "text" : "password"} 
+            name="confirmPassword" 
+            value={formData.confirmPassword} 
+            onChange={handleValue}
+            placeholder="Confirm your password"
+          />
+          <button 
+            type="button" 
+            className="togglepassword" 
+            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+          >
+            {showConfirmPassword ? "🙈" : "👁️"}
+          </button>
+        </div>
 
   <div>
     <label>Are you a Person with Disability (PWD)?</label>

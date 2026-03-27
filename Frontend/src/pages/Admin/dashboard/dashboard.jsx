@@ -6,11 +6,10 @@ export default function AdminDashboard() {
 
   const [accounts, setAccounts] = useState([]);
 
-  //Ito pang display ng mga data sa website 
   const displayAccounts = async () => {
   try {
-    const response = await fetch("http://localhost:3000/api/accounts");
-    const data = await response.json(); // You need this line for fetch!
+    const response = await fetch("http://localhost:3000/api/admin");
+    const data = await response.json();
 
     if (Array.isArray(data)) {
       setAccounts(data);
@@ -23,23 +22,15 @@ export default function AdminDashboard() {
 };
 
   useEffect(() => {
-    displayAccounts(); //Tinawag ko ito para mag-render ito sa website 
+    displayAccounts(); 
   }, [])
 
 
   return (
     <div className="content">
-      
-      {/* Stats */}
-    {/* 
-      <div className="stats">
-        {stats.map((s, i) => ( <StatCard key={i} {...s} />))}
-      </div>
-    */}
-
     {/* Table Card */}
     <div className="content-card">
-  <h3>User Accounts Management</h3>
+  <h3>Account Management</h3>
   <table className="table">
     <thead>
       <tr>

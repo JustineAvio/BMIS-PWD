@@ -14,11 +14,11 @@ export default function Main_Dashboard() {
                     <div className="summary">
                         <div className="summary-card">
                             <h4>Total Residents</h4>
-                            <p>1254</p>
+                            <p>0</p>
                         </div>
                         <div className="summary-card">
                             <h4>Total Applications</h4>
-                            <p>320</p>
+                            <p>0</p>
                         </div>
                         <div className="summary-card">
                             <h4>Officials</h4>
@@ -26,7 +26,7 @@ export default function Main_Dashboard() {
                         </div>
                         <div className="summary-card">
                             <h4>Announcements</h4>
-                            <p>5</p>
+                            <p>0</p>
                         </div>
                     </div>
 

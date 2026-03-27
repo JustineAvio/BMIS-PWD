@@ -8,7 +8,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
 function LoginModal({ isOpen, onClose, onLogin }) {
- 
+
   const [isRegister, setIsRegister] = useState(false);
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -92,21 +92,31 @@ function LoginModal({ isOpen, onClose, onLogin }) {
       return false;
     }
 
+    if (formData.email == email || formData.username == username) {
+      alert("Email or username already exists");
+      return false;
+    }
+
+    if (formData.email == null && formData.username == null) {
+      alert("Email or username is required");
+      return false;
+    }
+
     return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(!isRegister){
+    if (!isRegister) {
       if (!formData.username.trim() || !formData.password.trim()) {
-      alert("Please enter both username and password.");
-      return; 
+        alert("Please enter both username and password.");
+        return;
+      }
     }
-  }
-    
-  if (isRegister) {
+
+    if (isRegister) {
       if (!validateRegistration()) return;
-       const response = await axios.post("http://localhost:3000/api/auth/register",{
+      const response = await axios.post("http://localhost:3000/api/auth/register", {
         GivenName: formData.givenName,
         MiddleName: formData.middleName,
         LastName: formData.lastName,
@@ -118,67 +128,66 @@ function LoginModal({ isOpen, onClose, onLogin }) {
         username: formData.username,
         password: formData.password
       })
-      if(response.data.success){
+      if (response.data.success) {
         console.log("Registering user:", formData);
         alert("Registration successful!");
         onClose();
       }
     } else {
-      try{
-      const response = await axios.post("http://localhost:3000/api/auth/login",{
-        username: formData.username,
-        password: formData.password
-      });
-      console.log(response.data)
+      try {
+        const response = await axios.post("http://localhost:3000/api/auth/login", {
+          username: formData.username,
+          password: formData.password
+        });
+        console.log(response.data)
 
-      if(response.data.success){
-          const token = response.data.accessToken;  
-          if(token){
-            localStorage.setItem("accessToken", token);// <-- key that ProtectedRoute expects
-              try{
-                  // Optionally store decoded info
-                  const decoded = jwtDecode(token);
-                  console.log(decoded);
-                  if(typeof onLogin === "function"){
-                  onLogin(decoded); // pass user info (name, role, etc.)
-                  } else {
-                    console.warn("onLogin prop was not passed to LoginModal")
-                  }
-                  alert("Login successful!");
+        if (response.data.success) {
+          const token = response.data.accessToken;
+          if (token) {
+            localStorage.setItem("accessToken", token);
+            try {
+              const decoded = jwtDecode(token);
+              console.log(decoded);
+              if (typeof onLogin === "function") {
+                onLogin(decoded);
+              } else {
+                console.warn("onLogin prop was not passed to LoginModal")
+              }
+              alert("Login successful!");
 
-                  // Navigate based on role
-                  if(decoded.role === "admin") navigate("/admin");
-                  else if(decoded.role === "staff") navigate("/staff");
-                  else if(decoded.role === "resident") navigate("/landing-page");
-
-                  onClose();
-                } catch (decodeError) {
-                  console.error("Decoding failed:", decodeError);
-                }
-            } else {
-               console.error("Token not found in response:", response.data);
+              if (decoded.role === "admin") navigate("/admin");
+              else if (decoded.role === "staff") navigate("/staff");
+              else if (decoded.role === "resident") navigate("/landing-page");
+              onClose();
+            } catch (decodeError) {
+              console.error("Decoding failed:", decodeError);
             }
-          if(response.data.status === 401){
+          } else {
+            console.error("Token not found in response:", response.data);
+          }
+          if (response.data.status === 401) {
             alert("Wrong username/password")
           }
         }
       }
-      catch(error){
+      catch (error) {
 
         if (error.response) {
-          
-        if (error.response.status === 401) {
-          alert("Invalid username or password. Please try again.");
+
+          if (error.response.status === 401) {
+            alert("Invalid username or password. Please try again.");
+          } else if (error.response.status === 404) {
+            alert(error.response.data.error || "Username not found.");
+          } else {
+            alert(error.response.data.error || error.response.data.message || "An error occurred during login.");
+          }
         } else {
-          alert(error.response.data.message || "An error occurred during login.");
+          alert("Cannot connect to server. Please check your connection.");
         }
-      } else {
-        alert("Cannot connect to server. Please check your connection.");
+        console.error("Auth Error:", error);
       }
-      console.error("Auth Error:", error);
-    }
+    };
   };
-};
 
   const today = new Date();
   const maxBirthday = new Date(
@@ -200,14 +209,14 @@ function LoginModal({ isOpen, onClose, onLogin }) {
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
-          
+
         }}
       >
-       <button
+        <button
           className="close"
           onClick={onClose}
           style={{
-            color: isRegister ? "#000" : "#fff", 
+            color: isRegister ? "#000" : "#fff",
           }}
         >
           &times;
@@ -317,38 +326,38 @@ function LoginModal({ isOpen, onClose, onLogin }) {
                   </div>
                 </div>
 
-                   <div className="inputgroup">
+                <div className="inputgroup">
                   <label>Phone Number</label>
                   <input
                     type="tel"
                     name="phone"
                     value={formData.phone}
                     onChange={(e) => {
-                        let value = e.target.value;
+                      let value = e.target.value;
 
-                        // Remove non-numbers
-                        value = value.replace(/\D/g, "");
+                      // Remove non-numbers
+                      value = value.replace(/\D/g, "");
 
-                        // Force starting with 09
-                        if (!value.startsWith("09")) {
-                          value = "09" + value.replace(/^0*/, "").replace(/^9*/, "");
-                        }
+                      // Force starting with 09
+                      if (!value.startsWith("09")) {
+                        value = "09" + value.replace(/^0*/, "").replace(/^9*/, "");
+                      }
 
-                        // Limit to 11 digits
-                        if (value.length > 11) {
-                          value = value.slice(0, 11);
-                        }
+                      // Limit to 11 digits
+                      if (value.length > 11) {
+                        value = value.slice(0, 11);
+                      }
 
-                        setFormData((prev) => ({
-                          ...prev,
-                          phone: value
-                        }));
-                      }}
-                      onFocus={() => {
-                        if (!formData.phone) {
-                          setFormData((prev) => ({ ...prev, phone: "09" }));
-                        }
-                      }}
+                      setFormData((prev) => ({
+                        ...prev,
+                        phone: value
+                      }));
+                    }}
+                    onFocus={() => {
+                      if (!formData.phone) {
+                        setFormData((prev) => ({ ...prev, phone: "09" }));
+                      }
+                    }}
                   />
                 </div>
 
@@ -378,7 +387,7 @@ function LoginModal({ isOpen, onClose, onLogin }) {
               />
             </div>
 
-             <div className="inputgroup">
+            <div className="inputgroup">
               <label>
                 Password {isRegister && <span className="required">*</span>}
               </label>
@@ -398,7 +407,7 @@ function LoginModal({ isOpen, onClose, onLogin }) {
                 👁
               </button>
             </div>
-            
+
 
             {!isRegister && (
               <div className="forgot-password">
@@ -410,7 +419,7 @@ function LoginModal({ isOpen, onClose, onLogin }) {
                   Forgot Password?
                 </span>
               </div>
-            
+
             )}
 
             {isRegister && (
@@ -426,12 +435,12 @@ function LoginModal({ isOpen, onClose, onLogin }) {
                   onChange={handleChange}
                 />
                 <button
-                type="button"
-                className="togglepassword"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              >
-                👁
-              </button>
+                  type="button"
+                  className="togglepassword"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  👁
+                </button>
               </div>
             )}
 
@@ -454,11 +463,11 @@ function LoginModal({ isOpen, onClose, onLogin }) {
             </p>
           </form>
 
-          <ForgotPass isOpen={forgotOpen} onClose={() => setForgotOpen(false)}/>
+          <ForgotPass isOpen={forgotOpen} onClose={() => setForgotOpen(false)} />
 
         </div>
 
-        
+
       </div>
     </div>
   );

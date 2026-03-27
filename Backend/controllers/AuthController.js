@@ -5,34 +5,40 @@ const jwt = require("jsonwebtoken");
 const { generateResetToken } = require("../utils/token.js");
 
 exports.login = async (request, response) => {
-    const {username, password} = request.body;
-    
+    const { username, password } = request.body;
+
     if (!username || !password) {
         return response.status(400).json({ error: "Username and password are required" });
     }
 
-    try{
-        const [accounts] = await db.query("SELECT * FROM accounttable WHERE username = ?", 
-        [username]);
-    if(accounts.length > 0){
+    try {
+        const [accounts] = await db.query("SELECT * FROM accounttable WHERE username = ?",
+            [username]);
+
+        if (accounts.length === 0) {
+            return response.status(404).json({ error: "Username not found" });
+        }
+
         const user = accounts[0];
         const passwordMatch = await bcrypt.compare(password, user.password);
 
-        if(passwordMatch){
+        if (passwordMatch) {
             const accessToken = jwt.sign(
-                { "username": user.username,
+                {
+                    "username": user.username,
                     "role": user.role
                 },
-                process.env.SECRET_KEY, 
+                process.env.SECRET_KEY,
                 { expiresIn: "1h" }
             )
 
             const refreshToken = jwt.sign(
-                { "username": user.username,
+                {
+                    "username": user.username,
                     "role": user.role
                 },
-                process.env.REFRESH_KEY, 
-                { expiresIn: "1d"}
+                process.env.REFRESH_KEY,
+                { expiresIn: "1d" }
             )
 
             return response.json({
@@ -62,16 +68,15 @@ exports.login = async (request, response) => {
             //     })
             // }
         } else {
-            response.status(401).json({error: "Invalid username or password"});
+            response.status(401).json({ error: "Invalid username or password" });
         }
-    }
-    } catch(error){
+    } catch (error) {
         console.error("Error during login:", error);
-        response.status(500).json({error: "An error occurred during login"});
+        response.status(500).json({ error: "An error occurred during login" });
     }
 };
 
-exports.register =  async (req, response) => {
+exports.register = async (req, response) => {
 
     const connection = await db.getConnection();
 
@@ -109,23 +114,10 @@ exports.register =  async (req, response) => {
     }
 }
 
-exports.admin_register = async (request, response) => {
-    const {username, password, role, email, residentID} = request.body;
-    try{
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const [insertResult] = await db.query("INSERT INTO accounttable (username, password, role, email, ResidentID) VALUES (?, ?, ?,?,?)",
-        [username, hashedPassword, role, email, residentID]);
-        const newResidentID = insertResult.residentID;
-        response.json({message: "Registration successful", accountId: newResidentID});
-    } catch(error){
-        console.error("Error during registration:", error); 
-        response.status(500).json({error: "An error occurred during registration"});
-    }
-}
 
-exports.forgotpass =  async (req, res) => {
+exports.forgotpass = async (req, res) => {
     // 1. Always trim the email to avoid hidden spaces
-    const email = req.body.email; 
+    const email = req.body.email;
 
     try {
         // 2. Check if user exists
@@ -143,7 +135,7 @@ exports.forgotpass =  async (req, res) => {
         const [result] = await db.query(
             "UPDATE accounttable SET reset_token = ?, reset_expires = DATE_ADD(NOW(), INTERVAL 1 HOUR) WHERE email = ?",
             [token, email]
-        );  
+        );
 
         // 5. CRITICAL: Stop if the database didn't actually change
         if (result.affectedRows === 0) {
@@ -155,7 +147,7 @@ exports.forgotpass =  async (req, res) => {
         const resetLink = `http://localhost:5173/reset-password/${token}`;
 
         await sendResetEmail(email, resetLink);
-        
+
 
         res.json({ message: "RESET PASSWORD EMAIL LINK SENT SUCCESSFULLY!" });
 
@@ -171,7 +163,7 @@ exports.resetpass = async (req, res) => {
 
     // Log the incoming data to make sure frontend is sending it right
     console.log("Attempting reset for token:", token);
-    if(!newPassword){
+    if (!newPassword) {
         return res.status(400).json({ message: "New password is required" });
     }
 
@@ -188,17 +180,17 @@ exports.resetpass = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-const [result] = await db.query(
-    "UPDATE accounttable SET password = ?, reset_token = NULL, reset_expires = NULL WHERE reset_token = ?",
-    [hashedPassword, token]
-);
+        const [result] = await db.query(
+            "UPDATE accounttable SET password = ?, reset_token = NULL, reset_expires = NULL WHERE reset_token = ?",
+            [hashedPassword, token]
+        );
 
-console.log("Update successful. Rows affected:", result.affectedRows);
-res.json({ message: "Password successfully reset" });
+        console.log("Update successful. Rows affected:", result.affectedRows);
+        res.json({ message: "Password successfully reset" });
 
     } catch (err) {
         console.log("ERROR TRIGGERED:");
-        console.error(err); 
+        console.error(err);
         res.status(500).json({ error: err.message });
     }
 }

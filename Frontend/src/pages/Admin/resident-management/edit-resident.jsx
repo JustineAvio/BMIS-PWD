@@ -8,15 +8,12 @@ export default function EditResident() {
   const navigate = useNavigate();
   const { id } = useParams(); 
 
-   /*Ilalagay mo sa value ng bawat input syntax yung variable name na formData
-    siya kumukuha ng mga ininput natin na data*/
   const [formData, setformData] = useState({
     GivenName: "", MiddleName: "", LastName: "",
     Birthday: "", Sex: "", PWD: "", PhoneNo: "", 
     Address: "", Email: "", Address: ""
   });
 
-  //fetch ng data habang may binago na information
   useEffect(() => {
     const fetchResident = async () => {
       try {
@@ -31,19 +28,16 @@ export default function EditResident() {
         fetchResident(); 
     }, [id]);
 
-    //Ito ilagay mo sa onChange na syntax based sa code na ginawa ko
-    //Siya naghandle ng value during input ng data
   const handleValue = (e) => {
     setformData({...formData,[e.target.name]: e.target.value,
     });
   };
 
-    //Ito ilalgay mo sa form syntax yung variable name na handleSubmit
-    //Ang trabaho nito is nag-insert mismo ng data sa database  
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             await axios.put(`http://localhost:3000/admin/resident/update-resident/${id}`, formData);
+            console.log(respose.data);
             alert("Updated Successfully!");
             navigate("/admin/resident");
         } catch (err) {
@@ -81,21 +75,21 @@ export default function EditResident() {
         <label>Email Address</label>
         <input type="email" name="email" value={formData.Email} onChange={handleValue}/>
 
-        <label>Address</label>
-        <textarea name="address" rows="3" value={formData.address} onChange={handleValue}/>
+        {/* <label>Address</label>
+        <textarea name="address" rows="3" value={formData.address} onChange={handleValue}/> */}
 
-  <div>
-    <label>Are you a Person with Disability (PWD)?</label>
-      <div className="radio-group">
-        <label>
-          <input type="radio" name="PWD" value="Yes" checked={formData.PWD === "Yes"} onChange={handleValue}/>Yes
+    <div>
+      <label>Are you a Person with Disability (PWD)?</label>
+        <div className="radio-group">
+          <label>
+            <input type="radio" name="PWD" value="Yes" checked={formData.PWD === "Yes"} onChange={handleValue}/>Yes
+          </label>
+          <label>
+            <input
+              type="radio"name="PWD"value="No" checked={formData.PWD === "No"}onChange={handleValue}/> No
         </label>
-        <label>
-          <input
-            type="radio"name="PWD"value="No" checked={formData.PWD === "No"}onChange={handleValue}/> No
-      </label>
+      </div>
     </div>
-  </div>
 
         <button type="submit">Update Resident</button>
       </form>

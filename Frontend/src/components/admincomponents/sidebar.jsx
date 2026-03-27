@@ -35,7 +35,7 @@ const Sidebar = ({ handleLogoutClick }) => {
         </NavLink>
 
         <NavLink to="/admin/logs" className={({ isActive }) => (isActive ? "menu-item active" : "menu-item")}>
-          Logs
+          Account Management
         </NavLink>
 
         <NavLink to="/admin/settings" className={({ isActive }) => (isActive ? "menu-item active" : "menu-item")}>
