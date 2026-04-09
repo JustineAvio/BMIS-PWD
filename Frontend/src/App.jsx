@@ -34,7 +34,7 @@ function App() {
         }
     }, []);
 
-    
+
     const handleAccountClick = () => {
         if (user) console.log("User profile clicked");
         else setIsModalOpen(true);
@@ -47,13 +47,13 @@ function App() {
     };
 
     const handleLogin = (decodedUser) => {
-        setUser(decodedUser); 
+        setUser(decodedUser);
     };
 
     const LPageLayout = () => (
         <>
             <Header user={user} onAccountClick={handleAccountClick} onLogout={handleLogout} />
-            <LoginModal isOpen={isModalOpen}onClose={() => setIsModalOpen(false)} onLogin={handleLogin}/>
+            <LoginModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onLogin={handleLogin} />
             <LandingPage />
             <AccessibilityMenu />
             <Footer user={user} />
@@ -61,11 +61,11 @@ function App() {
     );
 
     const AdminLayoutWrapper = ({ setUser, onLogout }) => {
-    return (
-        <div className="app">
-            <Sidebar handleLogoutClick={handleLogout} />
+        return (
+            <div className="app">
+                <Sidebar handleLogoutClick={handleLogout} />
                 <div className="main">
-                    <Navbar/>
+                    <Navbar />
                     <div className="content">
                         <Outlet />
                     </div>
@@ -82,18 +82,20 @@ function App() {
 
                 {/* Resident Protected Routes */}
                 <Route element={<ProtectedRoute allowedRoles={['resident']} />}>
-                    <Route path="/profile" element={<ProfilePage user={user} setUser={setUser}/>} />
+                    <Route path="/profile" element={<ProfilePage user={user} setUser={setUser} />} />
                     <Route path="/landing-page" element={<LPageLayout />} />
                 </Route>
 
                 {/* Admin Protected Routes */}
                 <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
-                    <Route path="/admin" element={<AdminLayoutWrapper onLogout={handleLogout}/>}>
-                        <Route index element={<AdminDashboard />} />
-                        <Route path="resident" element={<ResidentDashboard />} />
+                    <Route path="/admin" element={<AdminLayoutWrapper onLogout={handleLogout} />}>
+                        <Route index element={<AdminDashboard />} /> {/*Dashboard*/}
+                        <Route path="resident" element={<ResidentDashboard />} /> {/*Resident Dashboard*/}
+                        {/*Resident Forms*/}
                         <Route path="add-resident" element={<AddResident />} />
                         <Route path="update-resident/:id" element={<EditResident />} />
-                        <Route path="logs" element={<AccountDashboard/>}/>
+                        {/*Account Dashboard*/}
+                        <Route path="logs" element={<AccountDashboard />} />
                     </Route>
                 </Route>
 

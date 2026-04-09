@@ -22,7 +22,7 @@ function Header({ user, onAccountClick, onLogout }) {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-     const toggleService = () => {
+    const toggleService = () => {
         setServiceOpen(!serviceOpen);
         setProfileOpen(false);
     };
@@ -32,11 +32,11 @@ function Header({ user, onAccountClick, onLogout }) {
         setServiceOpen(false);
     };
 
-    useEffect(()=>{
-        if(!user){
+    useEffect(() => {
+        if (!user) {
             setProfileOpen(false);
         }
-    },[user]);
+    }, [user]);
     return (
         <header className={`header ${scrolled ? "scrolled" : ""}`}>
             <div className="navholder">
@@ -53,13 +53,9 @@ function Header({ user, onAccountClick, onLogout }) {
                             <li>Home</li>
                             <li>About Us</li>
                             <li><a href="#news">News</a></li>
-                             <li
+                            <li
                                 className="servicedropdown"
                                 onClick={() => {
-                                    if(!user){
-                                        onAccountClick();
-                                        return;
-                                    }
                                     toggleService()
                                 }}
                                 style={{ cursor: "pointer" }}
@@ -68,8 +64,36 @@ function Header({ user, onAccountClick, onLogout }) {
 
                                 {serviceOpen && (
                                     <div className="servicedropdown-menu">
-                                        <a href="/forms">Forms & Certificates</a>
-                                        <a href="/marketplace">Online Marketplace</a>
+                                        <a
+                                            href="#"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                if (!user) {
+                                                    onAccountClick();
+                                                } else {
+                                                    navigate('/forms');
+                                                    setServiceOpen(false);
+                                                }
+                                            }}
+                                        >
+                                            Forms & Certificates
+                                        </a>
+                                        <a
+                                            href="#"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                if (!user) {
+                                                    onAccountClick();
+                                                } else {
+                                                    navigate('/marketplace');
+                                                    setServiceOpen(false);
+                                                }
+                                            }}
+                                        >
+                                            Online Marketplace
+                                        </a>
                                     </div>
                                 )}
                             </li>
@@ -77,13 +101,13 @@ function Header({ user, onAccountClick, onLogout }) {
                         </ul>
                     </div>
 
-                     <div
+                    <div
                         className="account"
                         onClick={(e) => {
                             e.stopPropagation();
 
                             if (!user) {
-                                onAccountClick();  
+                                onAccountClick();
                                 return;
                             }
 
@@ -105,9 +129,9 @@ function Header({ user, onAccountClick, onLogout }) {
                         </div>
                     </div>
 
-                 
+
                     {user && profileOpen && (
-                        <div className="profileoptions" onClick={(e)=>e.stopPropagation()}>
+                        <div className="profileoptions" onClick={(e) => e.stopPropagation()}>
                             {/* <a href="#" onClick={() =>{navigate('/profile'); setProfileOpen(false)}}>Tite</a> */}
                             <Link to="/profile" onClick={() => setProfileOpen(false)}>Profile</Link>
                             <Link to="#" onClick={(e) => e.preventDefault()}>Account Settings</Link>
@@ -119,7 +143,7 @@ function Header({ user, onAccountClick, onLogout }) {
                         ☰
                     </div>
 
-                    
+
 
                 </div>
             </div>
