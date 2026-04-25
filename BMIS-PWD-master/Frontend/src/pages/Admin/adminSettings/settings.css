@@ -1,0 +1,212 @@
+.admin-settings-page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.page-header {
+  margin-bottom: 24px;
+}
+
+.page-header h3 {
+  margin: 0;
+  font-size: 2rem;
+  color: #102a43;
+}
+
+.page-description {
+  margin: 10px 0 0;
+  color: #64748b;
+  max-width: 640px;
+  line-height: 1.6;
+}
+
+.settings-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 24px;
+}
+
+.settings-menu {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 22px;
+  box-shadow: 0 16px 30px rgba(15, 23, 42, 0.06);
+  padding: 22px;
+}
+
+.menu-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #475569;
+  margin-bottom: 18px;
+}
+
+.menu-button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  color: #334155;
+  padding: 14px 16px;
+  border-radius: 16px;
+  margin-bottom: 10px;
+  transition: background 0.2s ease, color 0.2s ease;
+  cursor: pointer;
+}
+
+.menu-button:hover,
+.menu-button.active {
+  background: #eff6ff;
+  color: #0c4a6e;
+}
+
+.settings-panel {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 22px;
+  box-shadow: 0 16px 30px rgba(15, 23, 42, 0.06);
+  padding: 26px;
+}
+
+.panel-header h4 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #102a43;
+}
+
+.panel-description {
+  margin: 10px 0 24px;
+  color: #64748b;
+  line-height: 1.7;
+}
+
+.panel-body {
+  display: grid;
+  gap: 18px;
+}
+
+.field-row {
+  display: grid;
+  gap: 10px;
+}
+
+.field-row label {
+  color: #475569;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.field-row input,
+.field-row select {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 14px;
+  padding: 14px 16px;
+  background: #f8fafc;
+  color: #0f172a;
+  font-size: 0.96rem;
+}
+
+.field-row input:focus,
+.field-row select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+.switch-row {
+  align-items: center;
+  grid-template-columns: 1fr auto;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 52px;
+  height: 30px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: #dbeafe;
+  border-radius: 999px;
+  transition: 0.2s ease;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.2s ease;
+}
+
+.switch input:checked + .slider {
+  background-color: #2563eb;
+}
+
+.switch input:checked + .slider:before {
+  transform: translateX(22px);
+}
+
+.note-box {
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  border-radius: 16px;
+  padding: 18px 20px;
+  color: #1e3a8a;
+  line-height: 1.7;
+}
+
+.panel-actions {
+  margin-top: 22px;
+}
+
+.save-btn {
+  border: none;
+  background: #2563eb;
+  color: white;
+  border-radius: 14px;
+  padding: 14px 24px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.save-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+}
+
+@media (max-width: 980px) {
+  .settings-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-settings-page {
+    padding: 24px 16px;
+  }
+
+  .settings-menu,
+  .settings-panel {
+    padding: 18px;
+  }
+}

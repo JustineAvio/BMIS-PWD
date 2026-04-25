@@ -1,0 +1,138 @@
+/* Overlay */
+.bmis-news-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+/* Modal */
+.bmis-news-modal-container {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  animation: bmisFadeIn 0.25s ease;
+  padding: 25px;
+}
+
+/* Title */
+.bmis-news-modal-title {
+  margin-bottom: 20px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #374151;
+}
+
+/* Form */
+.bmis-news-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Inputs */
+.bmis-news-input,
+.bmis-news-select,
+.bmis-news-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.bmis-news-input:focus,
+.bmis-news-select:focus,
+.bmis-news-textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* File input */
+.bmis-news-file {
+  border: 2px dashed #d1d5db;
+  background: #f9fafb;
+  cursor: pointer;
+  padding: 10px;
+}
+
+/* Preview */
+.bmis-news-preview {
+  margin-top: 10px;
+  border-radius: 8px;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+/* Actions */
+.bmis-news-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* Buttons */
+.bmis-news-btn {
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* Cancel */
+.bmis-news-btn-cancel {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+/* Submit */
+.bmis-news-btn-submit {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+}
+
+/* Hover */
+.bmis-news-btn:hover {
+  transform: translateY(-1px);
+}
+
+/* Animation */
+@keyframes bmisFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .bmis-news-modal-container {
+    padding: 20px;
+  }
+
+  .bmis-news-actions {
+    flex-direction: column;
+  }
+
+  .bmis-news-btn {
+    width: 100%;
+  }
+}

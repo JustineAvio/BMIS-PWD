@@ -1,0 +1,226 @@
+/* =========================
+   MODAL BACKDROP
+========================= */
+.formsModal {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(6px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    padding: 20px;
+}
+
+/* =========================
+   MODAL BOX
+========================= */
+.formsModalContent {
+    background: #ffffff;
+    width: 100%;
+    max-width: 440px;
+    border-radius: 18px;
+    padding: 24px;
+    position: relative;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.35);
+    animation: formsModalPop 0.2s ease-out;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+@keyframes formsModalPop {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* =========================
+   CLOSE BUTTON
+========================= */
+.formsModalClose {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    font-size: 22px;
+    background: rgba(241, 245, 249, 0.8);
+    border: none;
+    cursor: pointer;
+    color: #475569;
+    border-radius: 8px;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+}
+
+.formsModalClose:hover {
+    background: #fee2e2;
+    color: #ef4444;
+    transform: scale(1.05);
+}
+
+/* =========================
+   TITLES
+========================= */
+.formsModalTitle {
+    font-size: 1.5rem;
+    font-weight: 750;
+    color: #0f172a;
+    margin-bottom: 4px;
+}
+
+.formsModalSubtitle {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-bottom: 14px;
+}
+
+/* =========================
+   LOGIN GATE
+========================= */
+.formsModalLoginGate {
+    text-align: center;
+    padding: 20px 10px;
+}
+
+.formsModalIcon {
+    font-size: 42px;
+    margin-bottom: 10px;
+}
+
+.formsModalLoginTitle {
+    font-size: 1.2rem;
+    color: #0f172a;
+    margin-bottom: 6px;
+}
+
+.formsModalLoginText {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-bottom: 15px;
+}
+
+/* login button */
+.formsModalLoginBtn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background: #ef4444;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.formsModalLoginBtn:hover {
+    background: #dc2626;
+    transform: translateY(-2px);
+}
+
+/* =========================
+   INPUTS
+========================= */
+.formsModalInput {
+    width: 100%;
+    padding: 11px 12px;
+    margin-top: 6px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    outline: none;
+    font-size: 0.92rem;
+    transition: 0.2s ease;
+    background: #fff;
+}
+
+.formsModalInput:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+}
+
+/* DISABLED INPUT */
+.formsModalInputDisabled {
+    width: 100%;
+    padding: 11px 12px;
+    margin-top: 6px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    color: #475569;
+    font-size: 0.9rem;
+}
+
+/* =========================
+   INFO BOX
+========================= */
+.formsModalInfoBox {
+    margin-top: 14px;
+    padding: 14px;
+    background: linear-gradient(180deg, #f8fafc, #f1f5f9);
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.formsModalInfoBox h4 {
+    margin-bottom: 8px;
+    font-size: 0.92rem;
+    color: #0f172a;
+}
+
+.formsModalInfoBox ul {
+    margin: 0;
+    padding-left: 18px;
+    color: #475569;
+    line-height: 1.5;
+}
+
+.formsModalInfoBox li {
+    margin-bottom: 4px;
+}
+
+/* =========================
+   ERROR TEXT
+========================= */
+/* REQUIRED FIELD ERROR BORDER */
+.inputError {
+    border: 1px solid #ef4444 !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12) !important;
+}
+
+/* ERROR TEXT */
+.formsModalErrorText {
+    color: #ef4444;
+    font-size: 0.75rem;
+    margin-top: 4px;
+    margin-bottom: 6px;
+    display: block;
+}
+
+/* =========================
+   APPLY BUTTON
+========================= */
+.formsModalApplyBtn {
+    width: 100%;
+    margin-top: 16px;
+    padding: 12px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.formsModalApplyBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(59, 130, 246, 0.35);
+}
+
+.formsModalApplyBtn:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
