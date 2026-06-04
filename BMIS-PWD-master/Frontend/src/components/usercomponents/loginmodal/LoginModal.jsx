@@ -177,7 +177,7 @@ function LoginModal({ isOpen, onClose, onLogin }) {
       if (isRegister) {
         if (!validateRegistration()) return;
 
-        const response = await axios.post("http://localhost:3000/api/auth/register", {
+        const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/register`, {
           GivenName: formData.givenName,
           MiddleName: formData.middleName,
           LastName: formData.lastName,
@@ -208,7 +208,7 @@ function LoginModal({ isOpen, onClose, onLogin }) {
           return;
         }
 
-        const response = await axios.post("http://localhost:3000/api/auth/login", {
+        const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/login`, {
           username: formData.username,
           password: formData.password,
         });

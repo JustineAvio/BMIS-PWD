@@ -25,6 +25,8 @@ dist-ssr
 
 # Dependency directories
 node_modules/
+**/.env
+**/.env.*
 
 # Images
 *.png

@@ -28,7 +28,7 @@ export default function ResidentForm() {
     }
 
     try {
-      await axios.post("http://localhost:3000/api/resident/add-resident", formData);
+      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/resident/add-resident`, formData);
       toast.success("Resident Inserted Successfully!");
       navigate("/admin/resident");
     } catch (error) {

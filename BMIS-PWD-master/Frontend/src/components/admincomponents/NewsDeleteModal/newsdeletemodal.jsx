@@ -13,7 +13,7 @@ const NewsDeleteModal = ({ isOpen, onClose, newsData, onConfirmDelete }) => {
     }
 
     try {
-      await axios.delete(`http://localhost:3000/api/news/delete/${id}`);
+      await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/news/delete/${id}`);
       if (onConfirmDelete) onConfirmDelete(id);
       
       onClose();

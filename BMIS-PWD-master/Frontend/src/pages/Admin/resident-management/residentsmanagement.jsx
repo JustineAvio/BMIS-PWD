@@ -71,7 +71,7 @@ export default function Residents() {
 
   //fetch ng mga data/records from database tapos ididisplay sa website
   const displayResidents = async() => {
-    const response = await axios.get("http://localhost:3000/api/resident");
+    const response = await axios.get("${process.env.REACT_APP_BACKEND_URL}/api/resident");
     setResidents(response.data);
     setFilteredResidents(response.data);
   };

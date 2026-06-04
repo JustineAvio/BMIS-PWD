@@ -13,7 +13,7 @@ export default function FormManagement() {
 
   const fetchApplications = async () => {
     try{
-      const response = await axios.get("http://localhost:3000/api/forms");
+      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/forms`);
       setApplications(response.data);
     } catch (error) {
       console.error("Error fetching applications:", error);
@@ -22,7 +22,7 @@ export default function FormManagement() {
 
   const handleStatusChange = async (applicationId, newStatus) => {
     try{
-      const response = await axios.put(`http://localhost:3000/api/forms/decision/${applicationId}`, {
+      const response = await axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/forms/decision/${applicationId}`, {
         decision: newStatus
       });
 
@@ -37,7 +37,7 @@ export default function FormManagement() {
 
   const handleReview = async (applicationId) => {
     try{
-      const response = await axios.put(`http://localhost:3000/api/forms/review/${applicationId}`);
+      const response = await axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/forms/review/${applicationId}`);
       toast.success(response.data.message);
       fetchApplications();
     } catch (error) {

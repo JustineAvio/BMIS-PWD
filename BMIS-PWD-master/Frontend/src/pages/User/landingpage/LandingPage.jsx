@@ -27,12 +27,12 @@
     function LandingPage() {
         const [currentIndex, setCurrentIndex] = useState(0);
         const [news, setNews] = useState([]);
-        const BackedURL = "http://localhost:3000/uploads/news/";
+        const BackedURL = `${process.env.REACT_APP_BACKEND_URL}/uploads/news/`;
         const navigate = useNavigate();
 
         const fetchNews = async () => {
             try {
-                const response = await axios.get("http://localhost:3000/api/news");
+                const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/news`);
                 
                 // Use the exact case from your Database/ERD
                 const publishedNews = response.data

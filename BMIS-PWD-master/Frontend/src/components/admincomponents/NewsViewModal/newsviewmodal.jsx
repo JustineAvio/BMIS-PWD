@@ -23,7 +23,7 @@ const NewsViewModal = ({ isOpen, onClose, newsData, onEdit }) => {
 
   const fetchNewsDetails = async (id) => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/news/${id}`);
+      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/news/${id}`);
       setNews(response.data); 
     } catch (error) {
       console.error("Error fetching details:", error);

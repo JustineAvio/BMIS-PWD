@@ -9,11 +9,11 @@ function NewsPerPage() {
     const { id } = useParams();
     const [news, setNews] = useState(null);
     const [loading, setLoading] = useState(true);
-    const BackedURL = "http://localhost:3000/uploads/news/";
+    const BackedURL = `${process.env.REACT_APP_BACKEND_URL}/uploads/news/`;
 
     const fetchNews = async () => {
         try {
-            const response = await axios.get(`http://localhost:3000/api/news/${id}`);
+            const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/news/${id}`);
             setNews(response.data);
             setLoading(false);
         } catch (error) {

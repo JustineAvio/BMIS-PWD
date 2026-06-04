@@ -13,7 +13,7 @@ export default function NewsPostModal({ isOpen, onClose, refresh, selectedNews }
   const [image, setImage] = useState(null);
   const [existingImage, setExistingImage] = useState("");
   const isEditMode = Boolean(selectedNews); 
-  const backendUrl = "http://localhost:3000/uploads/news/";
+  const backendUrl = `${process.env.REACT_APP_BACKEND_URL}/uploads/news/`;
 
   useEffect(() => {
     if (isOpen) {
@@ -66,10 +66,10 @@ export default function NewsPostModal({ isOpen, onClose, refresh, selectedNews }
 
     try {
       if (id) {
-        await axios.put(`http://localhost:3000/api/news/edit/${id}`, formData);
+        await axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/news/edit/${id}`, formData);
         toast.success("News updated successfully!");
       } else {
-        await axios.post("http://localhost:3000/api/news/publish", formData);
+        await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/news/publish`, formData);
         toast.success("News published successfully!");
       }
       refresh(); 

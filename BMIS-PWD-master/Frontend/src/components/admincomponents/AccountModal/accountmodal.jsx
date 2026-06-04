@@ -38,7 +38,7 @@ export default function AccountModal({ isOpen, onClose, selectedAccount, onRefre
     const accountID = selectedAccount?.AccountID;
 
     await axios.put(
-      `http://localhost:3000/api/accounts/change-role/${accountID}`,
+      `${process.env.REACT_APP_BACKEND_URL}/api/accounts/change-role/${accountID}`,
       {
         Email: form.Email,
         Role: form.Role
