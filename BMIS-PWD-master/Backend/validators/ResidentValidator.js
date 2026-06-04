@@ -1,53 +1,67 @@
 const Joi = require('joi');
 
+const eighteenYearsAgo = new Date(new Date().setFullYear(new Date().getFullYear() - 18));
+
 const AddResidentSchema = Joi.object({
-    GivenName: Joi.string().required(),
-    MiddleName: Joi.string().allow('', null),
-    LastName: Joi.string().required(),
-    Sex: Joi.string().valid('Male', 'Female', 'Prefer not to say') 
+    GivenName: Joi.string().trim().required().messages({
+        'string.empty': 'First name is required.'
+    }),
+    MiddleName: Joi.string().allow('', null).trim(),
+    LastName: Joi.string().trim().required().messages({
+        'string.empty': 'Last name is required.'
+    }),
+    Sex: Joi.string().valid('Male', 'Female', 'Prefer not to say')
         .required()
         .messages({
-            'any.only': 'Please select a valid gender (Male, Female or Prefer not to say).',
-            'any.required': 'Sex is a required field.',
-            'string.empty': 'Please choose your sex from the list.'
+            'any.only': 'Please select a valid gender.',
+            'any.required': 'Sex is a required field.'
         }),
-    Birthday: Joi.date().required(),
+    Birthday: Joi.date()
+        .less('now')
+        .max(eighteenYearsAgo)
+        .required()
+        .messages({
+            'date.base': 'Please enter a valid date.',
+            'date.max': 'Resident must be at least 18 years old.',
+            'any.required': 'Birthday is required.'
+        }),
     PWD: Joi.string().required().messages({
-        'string.empty': 'Please specify if you are a PWD or not.',
-        'any.required': 'Please select a PWD status.'
+        'string.empty': 'Please specify PWD status.'
     }),
-    email: Joi.string().email().required(),
-    ContactNo: Joi.string().required(),
-    Address: Joi.string().required(),
-    username: Joi.string().required(),
-    password: Joi.string().min(6).max(30).required(),
-    confirmPassword: Joi.string().valid(Joi.ref('password')),
-    // childGivenName: Joi.string().optional(),
-    // childSex: Joi.string().optional(),
-    // childBirthday: Joi.date().optional(),
-    // childIsPWD: Joi.boolean().optional()
-}).unknown(true); 
+    email: Joi.string().email().lowercase().required().messages({
+        'string.email': 'Please provide a valid email address.'
+    }),
+    ContactNo: Joi.string().pattern(/^[0-9]+$/).length(11).required().messages({
+        'string.pattern.base': 'Contact number must only contain numbers.',
+        'string.length': 'Contact number must be exactly 11 digits.'
+    }),
+    Address: Joi.string().required().messages({
+        'string.empty': 'Address is required.'
+    }),
+    username: Joi.string().alphanum().min(3).max(20).required().messages({
+        'string.alphanum': 'Username must only contain letters and numbers.'
+    }),
+    password: Joi.string().min(6).max(30).required().messages({
+        'string.min': 'Password must be at least 6 characters.'
+    }),
+    confirmPassword: Joi.string().valid(Joi.ref('password')).required().messages({
+        'any.only': 'Passwords do not match.'
+    })
+}).options({ stripUnknown: true }); 
 
 const UpdateResidentSchema = Joi.object({
-    GivenName: Joi.string().required(),
-    MiddleName: Joi.string().allow('', null),
-    LastName: Joi.string().required(),
-    Sex: Joi.string().valid('Male', 'Female', 'Prefer not to say') // Ensures they don't send "Select..."
-        .required()
-        .messages({
-            'any.only': 'Please select a valid gender (Male, Female or Prefer not to say).',
-            'any.required': 'Sex is a required field.',
-            'string.empty': 'Please choose your sex from the list.'
-        }),
-    Birthday: Joi.date().required(),
-    PWD: Joi.string().required().messages({
-        'string.empty': 'Please specify if you are a PWD or not.',
-        'any.required': 'Please select a PWD status.'
+    GivenName: Joi.string().trim().required(),
+    MiddleName: Joi.string().allow('', null).trim(),
+    LastName: Joi.string().trim().required(),
+    Sex: Joi.string().valid('Male', 'Female', 'Prefer not to say').required(),
+    Birthday: Joi.date().less('now').max(eighteenYearsAgo).required().messages({
+        'date.max': 'Resident must be at least 18 years old.'
     }),
-    email: Joi.string().email().required(),
-    ContactNo: Joi.string().required(),
+    PWD: Joi.string().required(),
+    email: Joi.string().email().lowercase().required(),
+    ContactNo: Joi.string().pattern(/^[0-9]+$/).length(11).required(),
     Address: Joi.string().required(),
-}).unknown(true);
+}).options({ stripUnknown: true });
 
 const AddResidentValidator = (payload) => {
     return AddResidentSchema.validate(payload, { abortEarly: false });
@@ -56,7 +70,6 @@ const AddResidentValidator = (payload) => {
 const UpdateResidentValidator = (payload) => {
     return UpdateResidentSchema.validate(payload, { abortEarly: false });
 }
-
 
 exports.AddResidentValidator = AddResidentValidator;
 exports.UpdateResidentValidator = UpdateResidentValidator;

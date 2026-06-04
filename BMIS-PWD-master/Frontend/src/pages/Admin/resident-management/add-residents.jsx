@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./add-resident.css";
+import { toast } from 'react-toastify';
 
 export default function ResidentForm() {
   const [formData, setFormData] = useState({
@@ -22,13 +23,13 @@ export default function ResidentForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      toast.error("Passwords do not match!");
       return;
     }
 
     try {
       await axios.post("http://localhost:3000/api/resident/add-resident", formData);
-      alert("Resident Inserted Successfully!");
+      toast.success("Resident Inserted Successfully!");
       navigate("/admin/resident");
     } catch (error) {
       if(error.response) {
@@ -55,13 +56,13 @@ export default function ResidentForm() {
         } else if (messages.length > 1){
           finalMsg = messages.slice(0, -1).join(", ") + ", and " + messages.slice(-1) + ".";
         }
-        alert(finalMsg);
+        toast.error(finalMsg);
 
       } else if(status === 401 || status === 403 || status === 409){
           const displayMsg = data.message || data.error || "Login Failed"
-          alert(displayMsg);
+          toast.error(displayMsg);
       } else {
-          alert("Server error. Please try again later.");
+          toast.error("Server error. Please try again later.");
       }
     } else {
       console.error("Network/Connection Error", error.message);

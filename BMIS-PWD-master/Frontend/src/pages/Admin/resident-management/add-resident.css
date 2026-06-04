@@ -1,109 +1,202 @@
+/* Page Container */
 .add-resident-container {
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 20px;
-  background: #f9fafb;
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 30px;
 }
 
+/* Header */
 .form-header {
-  margin-bottom: 30px;
-  border-bottom: 2px solid #e5e7eb;
-  padding-bottom: 10px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+  padding: 30px;
+  border-radius: 15px;
+  margin-bottom: 25px;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2);
 }
 
-.form-section {
-  background: white;
-  padding: 25px;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  margin-bottom: 20px;
+.form-header h2 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
 }
 
-.form-section h3 {
-  margin-top: 0;
-  margin-bottom: 20px;
-  color: #1f2937;
-  font-size: 1.1rem;
-  border-left: 4px solid #2563eb;
-  padding-left: 10px;
+.form-header p {
+  margin-top: 8px;
+  opacity: 0.9;
 }
 
-.input-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+/* Form Card */
+.styled-form {
+  display: flex;
+  flex-direction: column;
   gap: 20px;
 }
 
+/* Section Card */
+.form-section {
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  transition: 0.3s ease;
+}
+
+.form-section:hover {
+  transform: translateY(-2px);
+}
+
+/* Section Title */
+.form-section h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #1f2937;
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #f3f4f6;
+}
+
+/* Input Grid */
+.input-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* Input Group */
 .input-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
 }
 
 .input-group label {
+  margin-bottom: 8px;
   font-weight: 600;
+  color: #374151;
   font-size: 14px;
-  color: #4b5563;
 }
 
-.input-group input, .input-group select {
-  padding: 10px;
+/* Inputs */
+.input-group input,
+.input-group select {
+  height: 48px;
+  padding: 0 14px;
   border: 1px solid #d1d5db;
-  border-radius: 6px;
+  border-radius: 10px;
   font-size: 14px;
+  background: #fafafa;
+  transition: all 0.3s ease;
 }
 
-/* Radio buttons alignment */
-.radio-container {
-  display: flex;
-  gap: 20px;
-  padding-top: 8px;
+/* Focus */
+.input-group input:focus,
+.input-group select:focus {
+  border-color: #2563eb;
+  background: white;
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(37,99,235,0.15);
 }
 
-/* Password wrapper inside the grid item */
+/* Password Wrapper */
 .password-wrapper {
   position: relative;
-  display: flex;
-  align-items: center;
 }
 
 .password-wrapper input {
   width: 100%;
-  padding-right: 40px;
+  padding-right: 45px;
 }
 
 .password-wrapper button {
   position: absolute;
-  right: 10px;
-  background: none;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
   border: none;
+  background: none;
   cursor: pointer;
   font-size: 18px;
+  color: #6b7280;
 }
 
-/* Bottom Buttons */
+/* Radio Buttons */
+.radio-container {
+  display: flex;
+  gap: 20px;
+  margin-top: 12px;
+}
+
+.radio-container label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+/* Error */
+.error-text {
+  color: #dc2626;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+/* Buttons */
 .form-actions {
   display: flex;
   justify-content: flex-end;
   gap: 15px;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
+.cancel-btn,
 .submit-btn {
-  background: #2563eb;
-  color: white;
-  padding: 12px 24px;
-  border-radius: 6px;
+  min-width: 160px;
+  height: 50px;
   border: none;
+  border-radius: 10px;
   font-weight: 600;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .cancel-btn {
-  background: #e5e7eb;
+  background: #f3f4f6;
   color: #374151;
-  padding: 12px 24px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  background: #e5e7eb;
+}
+
+.submit-btn {
+  background: linear-gradient(
+    135deg,
+    #2563eb,
+    #1d4ed8
+  );
+  color: white;
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(37,99,235,0.25);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .add-resident-container {
+    padding: 15px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .cancel-btn,
+  .submit-btn {
+    width: 100%;
+  }
 }

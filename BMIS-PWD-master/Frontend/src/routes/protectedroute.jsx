@@ -14,7 +14,8 @@ const ProtectedRoute = ({ allowedRoles }) => {
 
         if (exp < currentTime) {
             console.warn("Token expired");
-            return <div>Loading...</div>;
+            localStorage.removeItem('accessToken');
+            return <Navigate to="/landing-page" replace />;
         }
 
         if (allowedRoles && !allowedRoles.map(r => r.toLowerCase()).includes(role?.toLowerCase())) {

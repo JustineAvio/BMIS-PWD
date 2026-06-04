@@ -19,6 +19,7 @@ async function seedDatabase() {
         await connection.query('TRUNCATE TABLE accounttable');
         await connection.query('TRUNCATE TABLE residenttable');
         await connection.query('TRUNCATE TABLE persontable');
+        await connection.query('TRUNCATE TABLE applicationtable');
         await connection.query('SET FOREIGN_KEY_CHECKS = 1');
         console.log("✔ Tables cleared and IDs reset.");
 

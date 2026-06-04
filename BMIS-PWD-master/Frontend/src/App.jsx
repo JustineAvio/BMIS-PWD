@@ -2,6 +2,8 @@
     import LandingPage from './pages/User/landingpage/LandingPage.jsx';
     import FormsPage from './pages/User/formspage/formspage.jsx';
     import ProfilePage from './pages/User/profilepage/ProfilePage.jsx';
+    import AboutUs from './pages/User/aboutuspage/aboutuspage.jsx';
+    import FAQs from './pages/User/faqspage/faqspage.jsx';
     import AdminDashboard from './pages/Admin/main-dashboard/main-dashboard.jsx';
     import AccountDashboard from './pages/Admin/account-management/accountmanagement.jsx'
     import ResidentDashboard from './pages/Admin/resident-management/residentsmanagement.jsx';
@@ -17,10 +19,12 @@
     import Sidebar from './components/admincomponents/sidebar/sidebar.jsx';
     import AccessibilityMenu from './components/usercomponents/access/AccessibilityMenu.jsx';
     import LoginModal from './components/usercomponents/loginmodal/LoginModal.jsx';
+    import NewsPerPage from './pages/User/newsperpage/NewsPerPage.jsx';
     import { AuthProvider } from './routes/AuthContext.jsx';
     import { useState, useEffect } from 'react';
     import { jwtDecode } from 'jwt-decode';
-
+    import { ToastContainer } from 'react-toastify';
+    import 'react-toastify/dist/ReactToastify.css'
     function App() {
         const [user, setUser] = useState(null);
         const [isModalOpen, setIsModalOpen] = useState(false);
@@ -92,13 +96,19 @@
                     {/* Public Routes */}
                     <Route element = {<LPageLayout />}>
                         <Route path="/forms" element={<FormsPage />} />
-                        <Route path="/landing-page" element={<LandingPage />} />    
+                        <Route path="/landing-page" element={<LandingPage />} /> 
+                        <Route path="/about-us" element={<AboutUs/>}/>
+                        <Route path="/faqs" element={<FAQs/>}/>   
+                        <Route path="/news/:id" element={<NewsPerPage />} />
                     </Route>
 
                     {/* Resident Protected Routes */}
                     <Route element={<ProtectedRoute allowedRoles={['resident']} />}>
                         <Route path="/profile" element={<ProfilePage user={user} setUser={setUser} />} />
                         <Route path="/landing-page" element={<LPageLayout />} />
+                        <Route path="/about-us" element={<AboutUs/>}/>
+                        <Route path="/faqs" element={<FAQs/>}/>   
+                        <Route path="/news/:id" element={<NewsPerPage />} />
                     </Route>
 
                     {/* Admin Protected Routes */}
@@ -117,6 +127,17 @@
 
                     <Route path="*" element={<h1>404 Not Found</h1>} />
                 </Routes>
+
+                <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop
+                closeOnClick
+                pauseOnHover
+                draggable
+                theme="colored"
+                />
             </BrowserRouter>
             </AuthProvider>
         );

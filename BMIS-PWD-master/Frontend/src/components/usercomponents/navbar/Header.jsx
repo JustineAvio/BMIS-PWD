@@ -77,7 +77,7 @@ function Header({ user, onAccountClick, onLogout }) {
                                     </div>
                                 )}
                             </li>
-                            <li>FAQs</li>
+                            <li><a href="/faqs">FAQs</a></li>
                         </ul>
                     </div>
 

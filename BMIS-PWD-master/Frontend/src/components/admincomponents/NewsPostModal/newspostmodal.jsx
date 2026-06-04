@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "../NewsPostModal/newspostmodal.css";
+import { toast } from "react-toastify";
 
 export default function NewsPostModal({ isOpen, onClose, refresh, selectedNews }) {
   const [form, setForm] = useState({
@@ -66,16 +67,16 @@ export default function NewsPostModal({ isOpen, onClose, refresh, selectedNews }
     try {
       if (id) {
         await axios.put(`http://localhost:3000/api/news/edit/${id}`, formData);
-        alert("News updated successfully!");
+        toast.success("News updated successfully!");
       } else {
         await axios.post("http://localhost:3000/api/news/publish", formData);
-        alert("News published successfully!");
+        toast.success("News published successfully!");
       }
       refresh(); 
       onClose();
     } catch (err) {
       console.error("Save Error:", err);
-      alert("Error saving news.");
+      toast.error("Error saving news.");
     }
   };
 

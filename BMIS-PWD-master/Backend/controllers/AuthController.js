@@ -160,7 +160,7 @@ exports.register = async (req, res) => {
         // }   
 
         const [ResidentInfo] = await connection.query(`INSERT INTO residenttable (PersonID, Address, ContactNo, RegistrationDate) VALUES (?, ?, ?, ?)`,
-            [PersonID, values.Address, values.ContactNo, new Date()]);
+            [PersonID, values.Address, values.PhoneNo, new Date()]);
 
         const ResidentID = ResidentInfo.insertId;
         const hashedPassword = await bcrypt.hash(values.password, 10);

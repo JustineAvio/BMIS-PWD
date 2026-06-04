@@ -1,0 +1,305 @@
+/* Modern Minimalist Modal Styles */
+
+* {
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+}
+
+/* Account Modal Overlay */
+.account-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Account Modal Container */
+.account-modal-container {
+  background: #ffffff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  padding: 0;
+  position: relative;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Modal Header */
+.account-modal-title {
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  padding: 28px 30px;
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  color: #1a1a1a;
+  border-bottom: 1px solid #f0f0f0;
+  letter-spacing: -0.3px;
+}
+
+/* Close Button */
+.account-modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #999;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.account-modal-close:hover {
+  color: #1a1a1a;
+  transform: rotate(90deg);
+}
+
+/* Form */
+.account-modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 30px;
+}
+
+/* Form Group */
+.account-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.account-form-group:last-of-type {
+  margin-bottom: 0;
+}
+
+.account-form-group label {
+  font-weight: 500;
+  color: #1a1a1a;
+  font-size: 14px;
+  letter-spacing: 0.2px;
+}
+
+/* Inputs and Selects */
+.account-form-group input,
+.account-form-group select {
+  padding: 12px 14px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  background: #ffffff;
+  color: #1a1a1a;
+  transition: all 0.2s ease;
+}
+
+.account-form-group input::placeholder,
+.account-form-group select::placeholder {
+  color: #b0b0b0;
+}
+
+.account-form-group input:hover,
+.account-form-group select:hover {
+  border-color: #d0d0d0;
+}
+
+.account-form-group input:focus,
+.account-form-group select:focus {
+  outline: none;
+  border-color: #1e90ff;
+  box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.08);
+}
+
+.account-form-group input:disabled {
+  background-color: #f8f9fa;
+  color: #999;
+  cursor: not-allowed;
+  border-color: #f0f0f0;
+}
+
+/* Actions */
+.account-modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding: 24px 30px;
+  border-top: 1px solid #f0f0f0;
+  background: #fafafa;
+  margin: 0 -30px -30px -30px;
+  border-radius: 0 0 16px 16px;
+}
+
+.account-save-btn,
+.account-cancel-btn {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  letter-spacing: 0.2px;
+}
+
+.account-save-btn {
+  background: #1e90ff;
+  color: white;
+}
+
+.account-save-btn:hover {
+  background: #0f78d4;
+  box-shadow: 0 4px 12px rgba(30, 144, 255, 0.3);
+}
+
+.account-save-btn:active {
+  transform: scale(0.98);
+}
+
+.account-cancel-btn {
+  background: transparent;
+  color: #666;
+  border: 1px solid #e0e0e0;
+}
+
+.account-cancel-btn:hover {
+  background: #f0f0f0;
+  color: #1a1a1a;
+}
+
+.frame .i-agree-to-the-terms {
+  position: absolute;
+  top: 621px;
+  left: 172px;
+  width: 263px;
+  font-family: "Inter-Light", Helvetica;
+  font-weight: 300;
+  color: transparent;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.frame .span {
+  color: #000000;
+}
+
+.frame .text-wrapper-5 {
+  color: #5aa930;
+}
+
+.frame .already-have-an {
+  position: absolute;
+  top: 752px;
+  left: 240px;
+  width: 285px;
+  font-family: "Inter-Light", Helvetica;
+  font-weight: 300;
+  color: transparent;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.frame .text-wrapper-6 {
+  color: #43cf68;
+}
+
+.frame .div-6 {
+  position: absolute;
+  top: 340px;
+  left: 109px;
+  width: 473px;
+  height: 49px;
+  border-radius: 10px;
+  border: 1px solid;
+  border-color: #000000;
+}
+
+.frame .text-wrapper-7 {
+  position: absolute;
+  top: 303px;
+  left: 109px;
+  width: 86px;
+  font-family: "Inter-Medium", Helvetica;
+  font-weight: 500;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.frame .div-wrapper {
+  display: flex;
+  width: 500px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 2px 15px;
+  position: absolute;
+  top: 680px;
+  left: 108px;
+  background-color: #2a7fff;
+  border-radius: 10px;
+}
+
+.frame .text-wrapper-8 {
+  position: relative;
+  width: fit-content;
+  margin-top: -1px;
+  font-family: "Inter-Bold", Helvetica;
+  font-weight: 700;
+  color: #ffffff;
+  font-size: 32px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.frame .div-7 {
+  position: absolute;
+  top: 622px;
+  left: 126px;
+  width: 20px;
+  height: 17px;
+  border-radius: 4px;
+  border: 1px solid;
+  border-color: #000000;
+}

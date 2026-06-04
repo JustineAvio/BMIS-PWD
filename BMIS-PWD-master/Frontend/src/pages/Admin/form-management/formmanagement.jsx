@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "./formmanagement.css";
 import axios from "axios";
+import { toast } from 'react-toastify';
 export default function FormManagement() {
   const [applications, setApplications] = useState([]);
   const [selectedApplication, setSelectedApplication] = useState(null);
@@ -25,7 +26,7 @@ export default function FormManagement() {
         decision: newStatus
       });
 
-        alert(response.data.message);
+        toast.success(response.data.message);
         setSelectedApplication(null);
         fetchApplications();
   
@@ -37,10 +38,10 @@ export default function FormManagement() {
   const handleReview = async (applicationId) => {
     try{
       const response = await axios.put(`http://localhost:3000/api/forms/review/${applicationId}`);
-      alert(response.data.message);
+      toast.success(response.data.message);
       fetchApplications();
     } catch (error) {
-      console.error("Error opening form for review:", error);
+      console.error("Error opening application for review:", error);
     }
   };
 
@@ -80,7 +81,7 @@ export default function FormManagement() {
     <div className="content form-management-page">
       <div className="page-header">
         <div>
-          <h3>Form Management</h3>
+          <h3>Application Management</h3>
           <p className="page-description">Review incoming applications from residents and track each submission status.</p>
         </div>
       </div>

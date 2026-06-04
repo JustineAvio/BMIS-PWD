@@ -1,14 +1,15 @@
 import { useState } from "react";
 import "./settings.css";
+import { toast } from 'react-toastify';
 
 export default function Settings() {
   const [activeSection, setActiveSection] = useState("general");
   const [settings, setSettings] = useState({
-    officeName: "Barangay San Isidro",
-    adminEmail: "admin@barangay.local",
-    contactNumber: "0917 123 4567",
-    address: "Brgy. San Isidro, Quezon City",
-    timezone: "(GMT+8) Manila",
+    officeName: "",
+    adminEmail: "",
+    contactNumber: "",
+    address: "",
+    timezone: "",
     notifications: true,
     enableTwoFactor: false,
     currentPassword: "",
@@ -22,7 +23,7 @@ export default function Settings() {
 
   const handleSave = () => {
     console.log("Save settings", settings, activeSection);
-    alert(`Saved ${activeSection} settings.`);
+    toast.success(`Saved ${activeSection} settings.`);
   };
 
   return (

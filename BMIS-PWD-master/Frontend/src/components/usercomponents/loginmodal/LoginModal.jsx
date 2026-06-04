@@ -6,6 +6,7 @@ import logo2 from "../../../assets/images/logo2.png";
 import ForgotPass from "../forgotpasswordmodal/forgotpassmodal.jsx";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import { toast } from "react-toastify";
 
 function LoginModal({ isOpen, onClose, onLogin }) {
  
@@ -15,7 +16,6 @@ function LoginModal({ isOpen, onClose, onLogin }) {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [forgotOpen, setForgotOpen] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState("");
-  const [errors, setErrors] = useState({})
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -30,6 +30,7 @@ function LoginModal({ isOpen, onClose, onLogin }) {
     pwd: "",
     address: "",
   });
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (isOpen) {
@@ -45,63 +46,117 @@ function LoginModal({ isOpen, onClose, onLogin }) {
   if (!isOpen) return null;
 
   const handleChange = (e) => {
-  const { name, value } = e.target;
-  setFormData((prev) => ({ ...prev, [name]: value }));
+    const { name, value } = e.target;
 
-  if (name === "password") {
-    setPasswordStrength(checkPasswordStrength(value));
-  }
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // remove error when user edits
+    setErrors((prev) => ({ ...prev, [name]: "" }));
+
+    if (name === "password") {
+      setPasswordStrength(checkPasswordStrength(value));
+    }
   };
 
   const validateRegistration = () => {
-    const requiredFields = [
-      "username",
-      "password",
-      "confirmPassword",
-      "email",
-      "givenName",
-      "lastName",
-      "birthday",
-      "address",
-    ];
+  const newErrors = {};
 
-    for (let field of requiredFields) {
-      if (!formData[field] || formData[field].trim() === "") {
-        alert(`${field} is required`);
-        return false;
-      }
+  if (!formData.givenName.trim()) {
+    newErrors.givenName = "Given name is required";
+  } else if (formData.givenName.length < 2) {
+    newErrors.givenName = "Given name is too short";
+  }
+
+  if (!formData.lastName.trim()) {
+    newErrors.lastName = "Last name is required";
+  } else if (formData.lastName.length < 2) {
+    newErrors.lastName = "Last name is too short";
+  }
+
+  if (!formData.email.trim()) {
+    newErrors.email = "Email is required";
+  } else if (
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+  ) {
+    newErrors.email = "Enter a valid email address";
+  }
+  if (formData.phone && !/^09\d{9}$/.test(formData.phone)) {
+    newErrors.phone =
+      "Phone number must start with 09 and contain 11 digits";
+  }
+
+  if (!formData.address.trim()) {
+    newErrors.address = "Address is required";
+  } else if (formData.address.length < 5) {
+    newErrors.address = "Address is too short";
+  }
+
+  if (!formData.username.trim()) {
+    newErrors.username = "Username is required";
+  } else if (formData.username.length < 4) {
+    newErrors.username =
+      "Username must be at least 4 characters";
+  }
+
+  if (!formData.password) {
+    newErrors.password = "Password is required";
+  } else if (formData.password.length < 8) {
+    newErrors.password =
+      "Password must be at least 8 characters";
+  } else if (!/[A-Z]/.test(formData.password)) {
+    newErrors.password =
+      "Password must contain an uppercase letter";
+  } else if (!/[0-9]/.test(formData.password)) {
+    newErrors.password =
+      "Password must contain a number";
+  }
+
+  if (!formData.confirmPassword) {
+    newErrors.confirmPassword =
+      "Please confirm your password";
+  } else if (
+    formData.password !== formData.confirmPassword
+  ) {
+    newErrors.confirmPassword =
+      "Passwords do not match";
+  }
+
+  if (!formData.birthday) {
+    newErrors.birthday = "Birthday is required";
+  } else {
+    const birthDate = new Date(formData.birthday);
+    const today = new Date();
+
+    let age =
+      today.getFullYear() - birthDate.getFullYear();
+
+    const monthDiff =
+      today.getMonth() - birthDate.getMonth();
+
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 &&
+        today.getDate() < birthDate.getDate())
+    ) {
+      age--;
     }
 
-    if (formData.password.length < 6) {
-      alert("Password must be at least 6 characters");
-      return false;
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match");
-      return false;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      alert("Invalid email address");
-      return false;
-    }
-
-    if (formData.phone && !/^\d{10,15}$/.test(formData.phone)) {
-      alert("Phone number must be 10-15 digits");
-      return false;
-    }
-
-    const age =
-      new Date().getFullYear() - new Date(formData.birthday).getFullYear();
     if (age < 13) {
-      alert("You must be at least 13 years old");
+      newErrors.birthday =
+        "You must be at least 13 years old";
+    }
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
+      toast.error("Please fix the highlighted fields");
       return false;
     }
 
     return true;
   };
+
   const checkPasswordStrength = (password) => {
   let score = 0;
   if (password.length >= 8) score++;
@@ -115,101 +170,92 @@ function LoginModal({ isOpen, onClose, onLogin }) {
   if (score === 5) return "Strong";
 };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setErrors({});
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  try{
-    const endpoint = isRegister ? "register" : "login";
+    try {
+      if (isRegister) {
+        if (!validateRegistration()) return;
 
-    if(isRegister && formData.password !== formData.confirmPassword){
-      setErrors({confirmPassword: "Passwords do not match"});
-      return;
-    }
+        const response = await axios.post("http://localhost:3000/api/auth/register", {
+          GivenName: formData.givenName,
+          MiddleName: formData.middleName,
+          LastName: formData.lastName,
+          Sex: formData.sex,
+          Birthday: formData.birthday,
+          PWD: formData.pwd,
+          email: formData.email,
+          PhoneNo: formData.phone,
+          Address: formData.address,
+          username: formData.username,
+          password: formData.password,
+          confirmPassword: formData.confirmPassword
+        });
 
-    const payload = isRegister ? { 
-      GivenName: formData.givenName,
-      MiddleName: formData.middleName || "",
-      LastName: formData.lastName,
-      Sex: formData.sex,
-      Birthday: formData.birthday,
-      PWD: formData.pwd,
-      email: formData.email,
-      ContactNo: formData.phone,
-      Address: formData.address,
-      username: formData.username || formData.Username,
-      password: formData.password
-    } : {
-      username: formData.username,
-      password: formData.password
-    }
-      
-    const response = await axios.post(`http://localhost:3000/api/auth/${endpoint}`, payload);
-
-      if (response.data.success) {
-        if(isRegister){
-          alert("Registration Successful!")
+        if (response.data.success) {
+          toast.success("Registration successful!");
           onClose();
-        } 
-        else{
-          const token = response.data.accessToken;
-        if(token){
-          localStorage.setItem("accessToken", token);
-          try{
-            const decoded = jwtDecode(token);
-            if(typeof onLogin === "function") onLogin(decoded);
-            
-            alert("Login Successfully!");
+        }
 
-            if(decoded.role === "admin") navigate("/admin");
-            else if(decoded.role === "resident") navigate("/landing-page");
-            
-          } catch(decodeError){
-            console.error("Decode Failed!", decodeError)
+      } else {
+        if (!formData.username.trim()) {
+          toast.error("Username is required");
+          return;
+        }
+
+        if (!formData.password.trim()) {
+          toast.error("Password is required");
+          return;
+        }
+
+        const response = await axios.post("http://localhost:3000/api/auth/login", {
+          username: formData.username,
+          password: formData.password,
+        });
+
+        if (response.data.success) {
+          const token = response.data.accessToken;
+
+          if (token) {
+            localStorage.setItem("accessToken", token);
+
+            try {
+              const decoded = jwtDecode(token);
+
+              if (typeof onLogin === "function") {
+                onLogin(decoded);
+              }
+
+              toast.success("Login successful!");
+
+              if (decoded.role === "admin") navigate("/admin");
+              else if (decoded.role === "staff") navigate("/staff");
+              else navigate("/landing-page");
+
+              onClose();
+
+            } catch (decodeError) {
+              console.error("Decoding failed:", decodeError);
+              toast.error("Invalid token received");
+            }
+          } else {
+            toast.error("Token not found in response");
           }
         }
-        onClose();
 
-        }
       }
-  } catch(error){
-    if(error.response) {
-      const {status, data} = error.response;
 
-      if(status === 400){
-        const rawErrors = data.errors || data;
-        const formattedErrors = {};
+    } catch (error) {
+      console.error("Login/Register error:", error);
 
-        if (Array.isArray(rawErrors)){
-          rawErrors.forEach((err) => {
-            formattedErrors[err.path[0]] = err.message.replace(/['"]+/g, "");
-          });
-        } else {
-          Object.assign(formattedErrors, rawErrors);
-        }
-
-        setErrors(formattedErrors);
-
-        const messages = Object.values(formattedErrors);
-        let finalMsg = "";
-        if(messages.length === 1){
-          finalMsg = messages[0] + ".";
-        } else if (messages.length > 1){
-          finalMsg = messages.slice(0, -1).join(", ") + ", and " + messages.slice(-1) + ".";
-        }
-        alert(finalMsg);
-
-      } else if(status === 401 || status === 403 || status === 409){
-          const displayMsg = data.message || data.error || "Login Failed"
-          alert(displayMsg);
+      if (error.response?.status === 401) {
+        toast.error("Wrong username/password");
       } else {
-          alert("Server error. Please try again later.");
+        toast.error("Something went wrong. Please try again.");
       }
-    } else {
-      console.error("Network/Connection Error", error.message);
     }
-  }
-}
+  };
+
   const today = new Date();
   const maxBirthday = new Date(
     today.getFullYear() - 13,
@@ -264,17 +310,25 @@ const handleSubmit = async (e) => {
                       name="givenName"
                       value={formData.givenName}
                       onChange={handleChange}
+                      className={errors.givenName ? "input-error" : ""}
                     />
+                    {errors.givenName && (
+                      <small className="error-text">
+                        {errors.givenName}
+                      </small>
+                    )}
                   </div>
 
                   <div className="inputgroup">
-                    <label>Middle Name<span className="required invisible">*</span></label>
+                    <label>Middle Name</label>
                     <input
                       type="text"
                       name="middleName"
                       value={formData.middleName}
                       onChange={handleChange}
+                      className={errors.middleName ? "input-error" : ""}
                     />
+                    
                   </div>
 
                   <div className="inputgroup">
@@ -286,7 +340,13 @@ const handleSubmit = async (e) => {
                       name="lastName"
                       value={formData.lastName}
                       onChange={handleChange}
+                      className={errors.lastName ? "input-error" : ""}
                     />
+                    {errors.lastName && (
+                      <small className="error-text">
+                        {errors.lastName}
+                      </small>
+                    )}
                   </div>
                 </div>
 
@@ -296,6 +356,7 @@ const handleSubmit = async (e) => {
                     name="sex"
                     value={formData.sex}
                     onChange={handleChange}
+                    className={errors.sex ? "input-error" : ""}
                   >
                     <option value="">Select</option>
                     <option>Male</option>
@@ -314,8 +375,14 @@ const handleSubmit = async (e) => {
                       name="birthday"
                       value={formData.birthday}
                       onChange={handleChange}
+                      className={errors.birthday ? "input-error" : ""}
                       max={maxBirthday}
                     />
+                    {errors.birthday && (
+                      <small className="error-text">
+                        {errors.birthday}
+                      </small>
+                    )}
                   </div>
 
                   <div className="divider2"></div>
@@ -363,6 +430,11 @@ const handleSubmit = async (e) => {
                       }));
                     }}
                   />
+                  {errors.phone && (
+                    <small className="error-text">
+                      {errors.phone}
+                    </small>
+                  )}
                 </div>
 
                 <div className="inputgroup">
@@ -374,7 +446,13 @@ const handleSubmit = async (e) => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
+                    className={errors.email ? "input-error" : ""}
                   />
+                  {errors.email && (
+                    <small className="error-text">
+                      {errors.email}
+                    </small>
+                  )}
                 </div>
                 <div className="inputgroup">
                   <label>
@@ -385,8 +463,14 @@ const handleSubmit = async (e) => {
                     name="address"
                     value={formData.address}
                     onChange={handleChange}
+                    className={errors.address ? "input-error" : ""}
                     placeholder="Street, Barangay, City"
                   />
+                  {errors.address && (
+                    <small className="error-text">
+                      {errors.address}
+                    </small>
+                  )}
                 </div>
               </>
             )}
@@ -400,7 +484,13 @@ const handleSubmit = async (e) => {
                 name="username"
                 value={formData.username}
                 onChange={handleChange}
+                className={errors.username ? "input-error" : ""}
               />
+              {errors.username && (
+                <small className="error-text">
+                  {errors.username}
+                </small>
+              )}
             </div>
 
             <div className="inputgroup">
@@ -410,10 +500,16 @@ const handleSubmit = async (e) => {
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
-                className="passwordinput"
+               
                 value={formData.password}
                 onChange={handleChange}
+                className={errors.password ? "input-error" : ""}
               />
+              {errors.password && (
+                <small className="error-text">
+                  {errors.password}
+                </small>
+              )}
               <button
                 type="button"
                 className="togglepassword"
@@ -452,7 +548,13 @@ const handleSubmit = async (e) => {
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
+                  className={errors.confirmPassword ? "input-error" : ""}
                 />
+                {errors.confirmPassword && (
+                  <small className="error-text">
+                    {errors.confirmPassword}
+                  </small>
+                )}
                 <button
                 type="button"
                 className="togglepassword"

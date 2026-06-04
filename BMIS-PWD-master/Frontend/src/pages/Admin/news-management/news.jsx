@@ -7,6 +7,7 @@
   import NewsDeleteModal from "../../../components/admincomponents/NewsDeleteModal/newsdeletemodal.jsx";
   import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
   import { faEye, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+  import { toast } from "react-toastify";
 
   export default function NewsManagement() {
     const [news, setNews] = useState([]);
@@ -45,7 +46,7 @@
       } catch (err) {
         console.error("Fetch Error:", err);
         if(err.response?.status === 304) {
-          alert("Error fetching news. Please check your connection.");
+          toast.error("Error fetching news. Please check your connection.");
         }
       } finally {
         setisLoading(false);
@@ -68,7 +69,7 @@
       setIsAddModalOpen(true); 
   } else {
     console.error("Invalid news item selected for editing:", item);
-    alert("Error: Unable to edit this news item. Please try again.");
+    toast.error("Error: Unable to edit this news item. Please try again.");
   } 
 };
 
@@ -91,11 +92,11 @@
     const handleDeleteNews = async (newsID) => {
       try {
         await axios.delete(`http://localhost:3000/api/news/delete/${newsID}`);
-        alert("News deleted successfully!");
+        toast.success("News deleted successfully!");
         fetchNews();
       } catch (error) {
         console.error("Delete Error:", error);
-        alert("Error deleting news. Please try again.");
+        toast.error("Error deleting news. Please try again.");
       }
     };
     const filteredNews = news.filter(item => {

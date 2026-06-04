@@ -10,6 +10,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 router.get('/', newsController.getNews);
+router.get('/page/:id', newsController.getNewsPerPage);
 router.post('/publish', upload.single('newsImage'), newsController.postNews);
 router.put('/edit/:id', upload.single('newsImage'), newsController.editNews);
 router.get('/:id', newsController.fetchSpecificNews);

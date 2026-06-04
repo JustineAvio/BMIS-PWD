@@ -123,7 +123,7 @@ exports.edit_resident = async (request, response) => {
 exports.fetch_edit_resident =  async (req, res) => {
     try {
         const residentID = req.params.ResidentID;
-        const query = `SELECT r.ResidentID, p.GivenName, p.LastName, 
+        const query = `SELECT r.ResidentID, p.GivenName, p.MiddleName, p.LastName, 
         p.Sex, p.Birthday, p.is_PWD, r.address, r.ContactNo, r.RegistrationDate,
         a.email
         FROM residenttable AS r
@@ -142,37 +142,81 @@ exports.fetch_edit_resident =  async (req, res) => {
     }
 }
 
-exports.delete_resident =  async (request, response) => { 
+exports.delete_resident = async (request, response) => {
 
     const connection = await db.getConnection();
 
-    try{
-        const {ResidentID} = request.params;
-        const resID = parseInt(ResidentID)
+    try {
 
-        const [resident] = await connection.query("SELECT PersonID FROM residenttable WHERE ResidentID =? ", [resID]);
-        if(resident.length === 0){
-            return response.status(404).json({error: "Resident not found"});
+        const { ResidentID } = request.params;
+        const resID = parseInt(ResidentID);
+
+        const [resident] = await connection.query(
+            "SELECT PersonID FROM residenttable WHERE ResidentID = ?",
+            [resID]
+        );
+
+        if (resident.length === 0) {
+            return response.status(404).json({
+                error: "Resident not found"
+            });
         }
 
         const personID = resident[0].PersonID;
 
         await connection.beginTransaction();
 
-        await connection.query("DELETE FROM accounttable WHERE ResidentID = ?", [resID]);
+        // DELETE CHILD/RELATED RECORDS FIRST
 
-        await connection.query("DELETE FROM residenttable WHERE ResidentID = ?", [resID]);
+        // Example related tables
+        await connection.query(
+            "DELETE FROM accounttable WHERE ResidentID = ?",
+            [resID]
+        );
 
-        await connection.query("DELETE FROM persontable WHERE PersonID = ?", [personID]);
-        
+        // DELETE RESIDENT
+        await connection.query(
+            "DELETE FROM residenttable WHERE ResidentID = ?",
+            [resID]
+        );
+
+        // DELETE PERSON
+        await connection.query(
+            "DELETE FROM persontable WHERE PersonID = ?",
+            [personID]
+        );
+
         await connection.commit();
-        response.json({message: "Resident deleted successfully"});
 
-    } catch(error){
-        if (connection) await connection.rollback();
+        response.json({
+            message: "Resident deleted successfully"
+        });
+
+    } catch (error) {
+
+        if (connection) {
+            await connection.rollback();
+        }
+
         console.error("Error deleting resident:", error);
-        response.status(500).json({error: "Failed to delete resident"});
+
+        // Better error response
+        if (error.code === "ER_ROW_IS_REFERENCED_2") {
+
+            return response.status(400).json({
+                error:
+                    "Cannot delete resident because related records still exist."
+            });
+        }
+
+        response.status(500).json({
+            error: "Failed to delete resident"
+        });
+
     } finally {
-        if (connection) connection.release();
+
+        if (connection) {
+            connection.release();
+        }
     }
-}
+};

@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./formsmodal.css";
 import { useAuth } from "../../../routes/AuthContext.jsx";
 import axios from "axios";
+import { toast } from 'react-toastify';
 
 function FormModal({ open, onClose, form }) {
     const [firstName, setFirstName] = useState("");
@@ -54,6 +55,7 @@ function FormModal({ open, onClose, form }) {
         try{ 
             const token = localStorage.getItem("accessToken");
             const formData = {
+                AccountID: user.id,
                 GivenName: firstName,
                 MiddleName: middleName,
                 LastName: lastName,
@@ -63,13 +65,13 @@ function FormModal({ open, onClose, form }) {
 
             const config = {headers: {Authorization: `Bearer ${token}`,}};
 
-            const response = await axios.post("http://localhost:3000/api/forms/submit", formData, config);
+            const response = await axios.post(`http://localhost:3000/api/forms/submit/${user.id}`, formData, config);
             console.log(response.data);
-            alert("Application submitted successfully!");
+            toast.success("Application submitted successfully!");
             onClose();
          }catch(error){
             console.error("Error submitting form:", error);
-             alert("An error occurred while submitting the form. Please try again later.");
+             toast.error("An error occurred while submitting the form. Please try again later.");
              return;
         }
     };

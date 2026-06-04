@@ -23,11 +23,12 @@
     import outpost from '../../../assets/images/outpost.jpg';
     import expa from '../../../assets/images/expa.jpg';
     import axios from 'axios';
-
+    import { useNavigate } from 'react-router-dom';
     function LandingPage() {
         const [currentIndex, setCurrentIndex] = useState(0);
         const [news, setNews] = useState([]);
         const BackedURL = "http://localhost:3000/uploads/news/";
+        const navigate = useNavigate();
 
         const fetchNews = async () => {
             try {
@@ -153,15 +154,15 @@
                                         <div className="update-date">{new Date(news[0].NewsPublished).toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'})}</div>
                                         <h3>{news[0].NewsTitle || news[0].newstitle}</h3>
                                             <p>{(news[0].NewsContent || news[0].newscontent).substring(0, 150)}...</p>
-                                        <button className="read-more">Read More</button>
+                                        <button className="read-more" onClick={() => navigate(`/news/${news[0].NewsID}`)}>Read More</button>
                                     </div>
                                 </div>
                                 ) : (<p>No news available.</p> )}
 
-                               <div className="news-sidebar-list">
+                               <div className="news-sidebar-list" >
                                     {news.length > 1 ? (
                                         news.slice(1, 6).map((item) => (
-                                        <div className="side-card" key={item.NewsID}>
+                                        <div className="side-card" key={item.NewsID} onClick={() => navigate(`/news/${item.NewsID}`)}>
                                             <div className="side-thumb">
                                             <img 
                                                 src={`${BackedURL}${item.NewsImage}`} 

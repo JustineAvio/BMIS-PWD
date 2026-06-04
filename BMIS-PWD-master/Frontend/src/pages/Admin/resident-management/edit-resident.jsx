@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./add-resident.css";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function EditResident() {
 
@@ -11,7 +12,7 @@ export default function EditResident() {
   const [formData, setformData] = useState({
     GivenName: "", MiddleName: "", LastName: "",
     Birthday: "", Sex: "", PWD: "", ContactNo: "", 
-    address: "", email: ""
+    Address: "", email: ""
   });
 
   useEffect(() => {
@@ -19,8 +20,13 @@ export default function EditResident() {
       try {
         const response = await axios.get(`http://localhost:3000/api/resident/${id}`);
         const data = response.data;
-        const formattedDate = data.Birthday ? data.Birthday.split("T")[0]:'';
-        setformData({...data, Birthday: formattedDate});
+        const formattedDate = data.Birthday ? data.Birthday.split("T")[0] : "";
+        setformData({
+          ...data,
+          Birthday: formattedDate,
+          Address: data.Address || data.address || "",
+          address: data.address || data.Address || ""
+        });
       } catch (error) {
         console.error("Error fetching resident:", error);
       }
@@ -36,11 +42,17 @@ export default function EditResident() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.put(`http://localhost:3000/api/resident/update-resident/${id}`, formData);
-            alert("Updated Successfully!");
-            navigate("/admin/resident");
+            const payload = {
+          ...formData,
+          Address: formData.Address || formData.address || "",
+          address: formData.address || formData.Address || ""
+        };
+
+        await axios.put(`http://localhost:3000/api/resident/update-resident/${id}`, payload);
+        toast.success("Updated Successfully!");
+        navigate("/admin/resident");
         } catch (err) {
-            alert("Update failed!");
+            toast.error("Update failed!");
         }
     };
 
@@ -58,15 +70,15 @@ export default function EditResident() {
           <div className="input-grid">
             <div className="input-group">
               <label>Given Name</label>
-              <input type="text" name="GivenName" value={formData.GivenName} onChange={handleValue} placeholder="John" />
+              <input type="text" name="GivenName" value={formData.GivenName} onChange={handleValue} placeholder="" />
             </div>
             <div className="input-group">
               <label>Middle Name</label>
-              <input type="text" name="MiddleName" value={formData.MiddleName} onChange={handleValue} placeholder="Quincy" />
+              <input type="text" name="MiddleName" value={formData.MiddleName} onChange={handleValue} placeholder="" />
             </div>
             <div className="input-group">
               <label>Last Name</label>
-              <input type="text" name="LastName" value={formData.LastName} onChange={handleValue} placeholder="Doe" />
+              <input type="text" name="LastName" value={formData.LastName} onChange={handleValue} placeholder="" />
             </div>
             <div className="input-group">
               <label>Date of Birth</label>
@@ -89,7 +101,7 @@ export default function EditResident() {
             </div>
              <div className="input-group">
               <label>Address</label>
-              <input type="text" name="address" value={formData.address} onChange={handleValue} placeholder="123 Main St, Barangay, City" />
+              <input type="text" name="Address" value={formData.Address} onChange={handleValue} placeholder="123 Main St, Barangay, City" />
             </div>
           </div>
         </section>

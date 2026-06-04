@@ -1,97 +1,224 @@
 const db = require("../config/db.js");
 
-// 1. GET ALL FORMS (General List)
+// ===============================
+// 1. GET ALL FORMS
+// ===============================
 exports.getForms = async (req, res) => {
     try {
-        const [rows] = await db.query("SELECT * FROM applicationtable");
-        res.json(rows);
+        const [rows] = await db.query(
+            "SELECT * FROM applicationtable ORDER BY DateSubmitted DESC"
+        );
+
+        res.status(200).json(rows);
+
     } catch (error) {
         console.error("Error fetching forms:", error);
-        res.status(500).json({ error: "An error occurred while fetching forms." });
+
+        res.status(500).json({
+            success: false,
+            message: "An error occurred while fetching forms."
+        });
     }
 };
 
+// ===============================
+// 2. SUBMIT APPLICATION FORM
+// ===============================
 exports.requestform = async (req, res) => {
-    const { GivenName, MiddleName, LastName, AppType, ContactNo } = req.body;
 
-    const DateofApplication = new Date();
-    const defaultStatus = "Submitted";
-    const fullname = `${GivenName} ${MiddleName ? MiddleName + " " : ""}${LastName}`;
+    const { id } = req.params;
+
+    const {
+        GivenName,
+        MiddleName,
+        LastName,
+        AppType,
+        ContactNo
+    } = req.body;
+
+    // Basic Validation
+    if (!GivenName || !LastName || !AppType || !ContactNo) {
+        return res.status(400).json({
+            success: false,
+            message: "Please fill in all required fields."
+        });
+    }
+
     try {
-        const query = "INSERT INTO applicationtable (AccountID, FullName, ApplicationType, PhoneNo, Status, DateSubmitted) VALUES (?, ?, ?, ?, ?, ?)";
-        const [result] = await db.query(query, [3, fullname, AppType, ContactNo, defaultStatus, DateofApplication]);
 
-        res.json({
-            message: "Form submitted successfully",
+        const fullname =
+            `${GivenName.trim()} ${MiddleName ? MiddleName.trim() + " " : ""}${LastName.trim()}`;
+
+        const defaultStatus = "Submitted";
+
+        const DateofApplication = new Date();
+
+        const query = `
+            INSERT INTO applicationtable
+            (
+                AccountID,
+                FullName,
+                ApplicationType,
+                PhoneNo,
+                Status,
+                DateSubmitted
+            )
+            VALUES (?, ?, ?, ?, ?, ?)
+        `;
+
+        const [result] = await db.query(query, [
+            id,
+            fullname,
+            AppType,
+            ContactNo,
+            defaultStatus,
+            DateofApplication
+        ]);
+
+        res.status(201).json({
+            success: true,
+            message: "Form submitted successfully.",
             formId: result.insertId
         });
+
     } catch (error) {
+
         console.error("Error submitting form:", error);
-        res.status(500).json({ error: "An error occurred while submitting the form." });
+
+        res.status(500).json({
+            success: false,
+            message: "An error occurred while submitting the form."
+        });
     }
 };
 
-// 3. ADMIN VIEWS FORM (Triggers "In Review" status)
+// ===============================
+// 3. REVIEW FORM
+// ===============================
 exports.reviewform = async (req, res) => {
+
     const ApplicationID = req.params.id;
 
     try {
-        const [rows] = await db.query("SELECT * FROM applicationtable WHERE ApplicationID = ?", [ApplicationID]);
-        
+
+        const [rows] = await db.query(
+            "SELECT * FROM applicationtable WHERE ApplicationID = ?",
+            [ApplicationID]
+        );
+
+        // Check if form exists
         if (rows.length === 0) {
-            return res.status(404).json({ error: "Form not found." });
+            return res.status(404).json({
+                success: false,
+                message: "Form not found."
+            });
         }
 
-        let message = "Form has already been processed.";
-        
-        // FIX: Change 'formstatus' to 'Status' to match your DB column
-        const currentStatus = rows[0].Status; 
+        const form = rows[0];
 
-        if (currentStatus === "Submitted") {
+        let message = "";
+
+        // Update only if submitted
+        if (form.Status === "Submitted") {
+
             await db.query(
-                "UPDATE applicationtable SET Status = ? WHERE ApplicationID = ?", 
+                "UPDATE applicationtable SET Status = ? WHERE ApplicationID = ?",
                 ["In Review", ApplicationID]
             );
-            rows[0].Status = "In Review"; // Update the object before returning
-            message = "Form status updated to In Review";
-        } else if (currentStatus === "In Review") {
-            message = "Form is already under review";
+
+            form.Status = "In Review";
+
+            message = "Form status updated to In Review.";
+
+        } else if (form.Status === "In Review") {
+
+            message = "Form is already under review.";
+
+        } else {
+
+            message = `Form already ${form.Status}.`;
         }
 
-        res.json({ 
-            message: message, 
-            form: rows[0] 
+        res.status(200).json({
+            success: true,
+            message,
+            form
         });
+
     } catch (error) {
-        console.error("Error opening form for review:", error);
-        res.status(500).json({ error: "An error occurred while opening the form." });
+
+        console.error("Error reviewing form:", error);
+
+        res.status(500).json({
+            success: false,
+            message: "An error occurred while reviewing the form."
+        });
     }
 };
 
-// 4. ADMIN DECISION (Approve or Reject)
+// ===============================
+// 4. FORM DECISION
+// ===============================
 exports.formdecision = async (req, res) => {
-    const ApplicationID = req.params.id;
-    const { decision } = req.body; // Expecting "Approved" or "Rejected"
 
-    // Validation to prevent garbage data in the status column
+    const ApplicationID = req.params.id;
+
+    const { decision } = req.body;
+
     const validDecisions = ["Approved", "Rejected"];
+
+    // Validate decision
     if (!validDecisions.includes(decision)) {
-        return res.status(400).json({ error: "Invalid decision. Use 'Approved' or 'Rejected'." });
+        return res.status(400).json({
+            success: false,
+            message: "Invalid decision. Use Approved or Rejected only."
+        });
     }
 
     try {
-        const [result] = await db.query(
-            "UPDATE applicationtable SET Status = ? WHERE ApplicationID = ?", 
+
+        // Check first if form exists
+        const [rows] = await db.query(
+            "SELECT * FROM applicationtable WHERE ApplicationID = ?",
+            [ApplicationID]
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "Form not found."
+            });
+        }
+
+        // Prevent multiple decisions
+        if (
+            rows[0].Status === "Approved" ||
+            rows[0].Status === "Rejected"
+        ) {
+            return res.status(400).json({
+                success: false,
+                message: `Form already ${rows[0].Status}.`
+            });
+        }
+
+        // Update status
+        await db.query(
+            "UPDATE applicationtable SET Status = ? WHERE ApplicationID = ?",
             [decision, ApplicationID]
         );
 
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ error: "Form not found." });
-        }
+        res.status(200).json({
+            success: true,
+            message: `Form has been successfully ${decision}.`
+        });
 
-        res.json({ message: `Form has been successfully ${decision}.` });
     } catch (error) {
-        console.error("Error making decision on form:", error);
-        res.status(500).json({ error: "An error occurred while processing the decision." });
+
+        console.error("Error making form decision:", error);
+
+        res.status(500).json({
+            success: false,
+            message: "An error occurred while processing the decision."
+        });
     }
 };

@@ -13,7 +13,22 @@ exports.getNews = async (req, res) => {
  }
 };
 
+exports.getNewsPerPage = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const [rows] = await db.query("SELECT * FROM newstable WHERE NewsID = ?", [id]);
+        if (rows.length === 0) {
+            return res.status(404).json({ error: "News not found" });
+        }
+        res.json(rows[0]);
+    } catch (error) {
+        res.status(500).json({ error: "An error occurred while fetching news." });
+        console.error("Error fetching news:", error);
+    }
+}
+
 exports.postNews = async (req, res) => {
+    const { id } = req.params;
     const { newstitle, newscategory, newscontent, newsstatus, existingImage } = req.body;
     let image = existingImage || null;
 
@@ -31,7 +46,7 @@ exports.postNews = async (req, res) => {
         const query = `INSERT INTO newstable (AccountID, NewsTitle, NewsCategory, NewsContent, NewsStatus, NewsImage) 
                        VALUES (?, ?, ?, ?, ?, ?)`;
         
-        const params = [null, newstitle, newscategory, newscontent, newsstatus, image];
+        const params = [id, newstitle, newscategory, newscontent, newsstatus, image];
         
         await db.query(query, params);
         res.json({ success: true, message: "News saved successfully!" });

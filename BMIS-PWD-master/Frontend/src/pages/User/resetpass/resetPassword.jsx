@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 import "./ResetPassword.css";
 
 function ResetPassword() {
@@ -35,12 +36,23 @@ function ResetPassword() {
       setLoading(true);
       const response = await axios.post(
         `http://localhost:3000/api/auth/reset-password/${token}`,
-       {password}
+        { password }
       );
 
       // Backend should return { message: "Password successfully reset" }
       if (response.data.message) {
-        setMessage(response.data.message);
+        const successMessage = response.data.message;
+        toast.success(successMessage, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+
+        setMessage(successMessage);
         setPassword("");
         setConfirmPassword("");
 
@@ -49,7 +61,17 @@ function ResetPassword() {
       }
     } catch (err) {
       console.error(err);
-      setMessage(err.response?.data?.message || "Something went wrong.");
+      const errorMessage = err.response?.data?.message || "Something went wrong.";
+      toast.error(errorMessage, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      setMessage(errorMessage);
     } finally {
       setLoading(false);
     }

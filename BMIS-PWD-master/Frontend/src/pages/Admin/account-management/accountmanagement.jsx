@@ -1,15 +1,19 @@
 import { useState, useEffect } from "react";
 import "./accountmanagement.css";
+import axios from 'axios';
+import AccountModal from '../../../components/admincomponents/AccountModal/accountmodal.jsx';
 
 export default function AccountManagement() {
   const [accounts, setAccounts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterRole, setFilterRole] = useState("all");
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedAccount, setSelectedAccount] = useState(null);
 
   const displayAccounts = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/admin");
-      const data = await response.json();
+      const response = await axios.get("http://localhost:3000/api/fetch");
+      const data = await response.data;
 
       if (Array.isArray(data)) {
         setAccounts(data);
@@ -25,8 +29,14 @@ export default function AccountManagement() {
     displayAccounts();
   }, []);
 
-  const handleEdit = (id) => {
-    console.log("Edit account", id);
+  const handleEdit = (account) => {
+    setSelectedAccount(account);
+    setIsEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+    setSelectedAccount(null);
   };
 
   const handleDelete = (id) => {
@@ -56,7 +66,7 @@ export default function AccountManagement() {
           <h3>Account Management</h3>
           <p className="page-description">Manage registered users, filter by role, and take quick action.</p>
         </div>
-        <button className="primary-btn">Create Account</button>
+        {/* <button className="primary-btn">Create Account</button> */}
       </div>
 
       <div className="summary-grid">
@@ -122,12 +132,12 @@ export default function AccountManagement() {
                     </span>
                   </td>
                   <td className="table-actions">
-                    <button className="edit-btn" onClick={() => handleEdit(acc.UserID || acc.AccountID)}>
+                    <button className="edit-btn" onClick={() => handleEdit(acc)}>
                       Edit
                     </button>
-                    <button className="delete-btn" onClick={() => handleDelete(acc.UserID || acc.AccountID)}>
+                    {/* <button className="delete-btn" onClick={() => handleDelete(acc.UserID || acc.AccountID)}>
                       Delete
-                    </button>
+                    </button> */}
                   </td>
                 </tr>
               ))
@@ -141,6 +151,14 @@ export default function AccountManagement() {
           </tbody>
         </table>
       </div>
+
+      <AccountModal
+        isOpen={isEditModalOpen}
+        onClose={closeEditModal}
+        selectedAccount={selectedAccount}
+        onRefresh={displayAccounts}
+      />
     </div>
+    
   );
 }
