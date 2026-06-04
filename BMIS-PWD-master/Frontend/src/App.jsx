@@ -19,7 +19,7 @@
     import Sidebar from './components/admincomponents/Sidebar/sidebar.jsx';
     import AccessibilityMenu from './components/usercomponents/access/AccessibilityMenu.jsx';
     import LoginModal from './components/usercomponents/loginmodal/LoginModal.jsx';
-    import NewsPerPage from './pages/User/newsperpage/NewsPerPage.jsx';
+    import NewsPerPage from './pages/User/newsperpage/newsperpage.jsx';
     import { AuthProvider } from './routes/AuthContext.jsx';
     import { useState, useEffect } from 'react';
     import { jwtDecode } from 'jwt-decode';
