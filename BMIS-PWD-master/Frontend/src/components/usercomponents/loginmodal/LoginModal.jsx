@@ -246,10 +246,19 @@ function LoginModal({ isOpen, onClose, onLogin }) {
     } catch (error) {
       console.error("Login/Register error:", error);
 
-      if (error.response?.status === 401) {
-        toast.error("Wrong username/password");
+      const status = error.response?.status;
+      const serverMessage = error.response?.data?.message;
+
+      if (status === 401) {
+        toast.error(serverMessage || "Wrong username or password.");
+      } else if (status === 403) {
+        toast.error(serverMessage || "Account is temporarily locked. Please try again later.");
+      } else if (status === 500) {
+        toast.error("Server error. Please try again later.");
+      } else if (!error.response) {
+        toast.error("Cannot reach the server. Please check your connection.");
       } else {
-        toast.error("Something went wrong. Please try again.");
+        toast.error(serverMessage || "Something went wrong. Please try again.");
       }
     }
   };

@@ -207,7 +207,7 @@ exports.forgotpass = async (req, res) => {
             return res.status(400).json({error: "The token is failed to save."});
         }
 
-        const resetLink = `http://localhost:5173/reset-password/${token}`;
+        const resetLink = `${process.env.FRONTEND_URL}/reset-password/${token}`;
 
         await sendResetEmail(email, resetLink);
 
