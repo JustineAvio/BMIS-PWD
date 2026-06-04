@@ -88,7 +88,6 @@ export default function Residents() {
   };
 
   const handleAccountSettings = (username) => {
-    console.log("Open account settings for", username);
     // Add navigation or modal logic here when needed
   };
   

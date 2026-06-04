@@ -31,7 +31,6 @@ export default function Main_Dashboard() {
                     
                 setNews(publishedNews);
             } catch (error) {
-                console.error("Error fetching news:", error);
             }
         };
 
@@ -52,7 +51,6 @@ export default function Main_Dashboard() {
                 setAgeData([]);
             }
         } catch (error) {
-            console.log("Error Fetching Age Data", error);
         }
     };
 
@@ -73,7 +71,6 @@ export default function Main_Dashboard() {
                 setGenderData([]);
             }
         } catch (error) {
-            console.log("Error Fetching Gender Data", error);
         }
     };
 
@@ -83,7 +80,6 @@ export default function Main_Dashboard() {
             const data = response.data;
             setAppCount(data[0].application_count);
         } catch (error) {
-            console.log("Error Fetching Application Data", error);
         }
     };
 
@@ -93,7 +89,6 @@ export default function Main_Dashboard() {
             const data = response.data;
             setResCount(data[0].resident_count);
         } catch (error) {
-            console.log("Error Fetching Resident Data", error);
         }
     };
 
@@ -103,7 +98,6 @@ export default function Main_Dashboard() {
             const data = response.data;
             setNewsCount(data[0].news_count);
         } catch (error) {
-            console.log("Error Fetching News Data", error);
         }
     };
 

@@ -13,12 +13,10 @@ function ProfilePage({ user, onLogout }) {
 
             if(!id) return;
             const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/resident/${id}`);
-            console.log("API Response:", response.data);
             const data = response.data;
             const formattedDate = data.Birthday ? data.Birthday.split("T")[0]:'';
             setFormData({...data, Birthday: formattedDate})
         } catch(error) {
-            console.error("Error fetching resident:", error);
         }
     }
 
@@ -36,7 +34,6 @@ function ProfilePage({ user, onLogout }) {
     };
 
     const handleSave = () => {
-        console.log("Updated user:", formData);
         setEditing(false);
     };
 

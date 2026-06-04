@@ -15,7 +15,6 @@ const ResidentDeleteModal = ({
     const id = residentData.ResidentID;
 
     if (!id) {
-      console.error("No valid resident ID found.");
       return;
     }
 
@@ -32,7 +31,6 @@ const ResidentDeleteModal = ({
 
       onClose();
     } catch (error) {
-      console.error("Error deleting resident:", error);
       toast.error("Failed to delete resident.");
     }
   };

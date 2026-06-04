@@ -66,11 +66,10 @@ function FormModal({ open, onClose, form }) {
             const config = {headers: {Authorization: `Bearer ${token}`,}};
 
             const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/forms/submit/${user.id}`, formData, config);
-            console.log(response.data);
             toast.success("Application submitted successfully!");
             onClose();
          }catch(error){
-            console.error("Error submitting form:", error);
+
              toast.error("An error occurred while submitting the form. Please try again later.");
              return;
         }

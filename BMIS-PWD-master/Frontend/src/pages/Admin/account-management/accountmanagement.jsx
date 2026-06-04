@@ -21,7 +21,6 @@ export default function AccountManagement() {
         setAccounts([]);
       }
     } catch (error) {
-      console.log("Error Fetching");
     }
   };
 
@@ -40,7 +39,6 @@ export default function AccountManagement() {
   };
 
   const handleDelete = (id) => {
-    console.log("Delete account", id);
   };
 
   const filteredAccounts = accounts.filter((acc) => {

@@ -61,16 +61,13 @@ exports.editNews = async (req, res) => {
   const values = req.body;
   let query, params;
 
-  console.log("Target ID:", id); // Is this the correct ID?
-  console.log("Received Values:", values)
-
   try{
     if (req.file) {
         const newsImage = req.file ? req.file.filename : values.existingImage;
-        query = 'UPDATE newstable SET newstitle=?, newscontent=?, newscategory=?, newsstatus=?, newsimage=? WHERE newsid=?';
+        query = 'UPDATE newstable SET NewsTitle=?, NewsContent=?, NewsCategory=?, NewsStatus=?, NewsImage=? WHERE NewsID=?';
         params = [values.newstitle, values.newscontent, values.newscategory, values.newsstatus, newsImage, id];
     } else {
-        query = 'UPDATE newstable SET newstitle=?, newscontent=?, newscategory=?, newsstatus=? WHERE newsid=?';
+        query = 'UPDATE newstable SET NewsTitle=?, NewsContent=?, NewsCategory=?, NewsStatus=? WHERE NewsID=?';
         params = [values.newstitle, values.newscontent, values.newscategory, values.newsstatus, id];
     }
 
@@ -79,7 +76,6 @@ exports.editNews = async (req, res) => {
 
   } catch (error) {
     res.status(500).json({ error: error.message });
-    console.error("Error updating news:", error);
   };
 }
 
@@ -98,7 +94,7 @@ exports.deleteNews = async (req, res) => {
         await db.query("DELETE FROM newstable WHERE NewsID = ?", [id]);
         res.json({ message: "News deleted successfully!" });
     } catch (error) {
-        console.error("Error fetching news image:", error);
+        res.status(500).json({ error: "Error deleting news." });
     }
 }
 

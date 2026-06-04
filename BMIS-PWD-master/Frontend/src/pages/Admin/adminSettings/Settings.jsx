@@ -22,7 +22,6 @@ export default function Settings() {
   };
 
   const handleSave = () => {
-    console.log("Save settings", settings, activeSection);
     toast.success(`Saved ${activeSection} settings.`);
   };
 

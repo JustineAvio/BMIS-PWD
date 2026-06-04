@@ -35,16 +35,11 @@
         const response = await axios.get("${process.env.REACT_APP_BACKEND_URL}/api/news");
         if(response.data && response.data.length > 0){
           setNews(response.data);
-          if(response.data.length === 0){
-            console.log("No news data found.");
-          }
         } else {
-          console.log("No news data received:", response.data);
           setNews([]);
         }
         setNews(response.data);
       } catch (err) {
-        console.error("Fetch Error:", err);
         if(err.response?.status === 304) {
           toast.error("Error fetching news. Please check your connection.");
         }
@@ -54,7 +49,6 @@
     };
 
     useEffect(() => {
-      console.log("Component mounted, fetching news...", news);
       fetchNews();
     }, []);
 
@@ -68,7 +62,6 @@
       setSelectedNewsId(item);  
       setIsAddModalOpen(true); 
   } else {
-    console.error("Invalid news item selected for editing:", item);
     toast.error("Error: Unable to edit this news item. Please try again.");
   } 
 };
@@ -95,7 +88,6 @@
         toast.success("News deleted successfully!");
         fetchNews();
       } catch (error) {
-        console.error("Delete Error:", error);
         toast.error("Error deleting news. Please try again.");
       }
     };

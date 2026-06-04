@@ -8,7 +8,6 @@ const NewsDeleteModal = ({ isOpen, onClose, newsData, onConfirmDelete }) => {
   const handleDelete = async () => {
     const id = newsData.NewsID;
     if(!id) {
-      console.error("No valid ID found for deletion.");
       return;
     }
 
@@ -18,7 +17,6 @@ const NewsDeleteModal = ({ isOpen, onClose, newsData, onConfirmDelete }) => {
       
       onClose();
     } catch (error) {
-      console.error("Error deleting news:", error);
     }
     
   };

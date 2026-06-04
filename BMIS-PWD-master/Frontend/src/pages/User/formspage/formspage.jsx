@@ -18,7 +18,6 @@ function FormsPage() {
     ];
     
     const {isLoggedIn, user} = useAuth();
-    console.log("FormsPage - isLoggedIn:", isLoggedIn, "user:", user);
     
     const [selectedForm, setSelectedForm] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);

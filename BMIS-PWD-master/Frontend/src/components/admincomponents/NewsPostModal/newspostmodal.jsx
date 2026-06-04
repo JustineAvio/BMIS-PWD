@@ -43,8 +43,6 @@ export default function NewsPostModal({ isOpen, onClose, refresh, selectedNews }
     e.preventDefault();
     
     const id = selectedNews?.newsid || selectedNews?.id || selectedNews?.NewsID;
-    console.log("Submitting with ID:", id); // Verify this ID is correct
-    console.log("Form Data:", form);
     
     const formData = new FormData();
     formData.append("newstitle", form.title);
@@ -75,7 +73,6 @@ export default function NewsPostModal({ isOpen, onClose, refresh, selectedNews }
       refresh(); 
       onClose();
     } catch (err) {
-      console.error("Save Error:", err);
       toast.error("Error saving news.");
     }
   };
