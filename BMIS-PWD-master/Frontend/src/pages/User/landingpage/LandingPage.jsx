@@ -1,5 +1,5 @@
     import React, { useEffect, useState } from 'react';
-    import '../landingpage/Landingpage.css';
+    import '../landingpage/LandingPage.css';
     import axios from 'axios';
     import { useNavigate } from 'react-router-dom';
     function LandingPage() {
