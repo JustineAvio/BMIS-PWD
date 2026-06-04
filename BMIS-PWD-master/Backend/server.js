@@ -12,10 +12,7 @@ const accountRoute = require("./routes/AccountRoute.js");
 
 const app = express();
 
-app.use(cors({
-    origin: process.env.FRONTEND_URL,
-    credentials: true
-}));
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use('/uploads/news', express.static(path.join(process.cwd(), 'uploads', 'news')));
