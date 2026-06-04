@@ -48,7 +48,7 @@ export default function EditResident() {
           address: formData.address || formData.Address || ""
         };
 
-        await axios.put(`http://localhost:3000/api/resident/update-resident/${id}`, payload);
+        await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/resident/update-resident/${id}`, payload);
         toast.success("Updated Successfully!");
         navigate("/admin/resident");
         } catch (err) {

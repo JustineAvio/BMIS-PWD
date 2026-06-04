@@ -32,7 +32,7 @@
       setisLoading(true);
 
       try {
-        const response = await axios.get("${import.meta.env.VITE_BACKEND_URL}/api/news");
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/news`);
         if(response.data && response.data.length > 0){
           setNews(response.data);
         } else {
@@ -207,7 +207,7 @@
                     <div className="news-thumbnail-container">
                       {displayImage ? (
                         <img 
-                          src={`http://localhost:3000/uploads/news/${displayImage}`} 
+                          src={`${import.meta.env.VITE_BACKEND_URL}/uploads/news/${displayImage}`} 
                           alt="thumbnail" 
                           className="table-thumbnail" 
                         />

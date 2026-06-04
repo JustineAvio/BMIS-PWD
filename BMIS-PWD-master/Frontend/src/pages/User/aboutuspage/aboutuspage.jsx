@@ -23,7 +23,7 @@ function AboutUsPage() {
 
                 <div className="about-content">
                     <div className="about-image">
-                        <img src={hall} alt="Barangay Hall" />
+                        <img src={"images/hall.jpg"} alt="Barangay Hall" />
                     </div>
 
                     <div className="about-text">
