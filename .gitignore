@@ -28,15 +28,5 @@ node_modules/
 **/.env
 **/.env.*
 
-# Images
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.bmp
-*.svg
-*.ico
-*.webp
-
 # Build output
 build/
