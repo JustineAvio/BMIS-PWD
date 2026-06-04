@@ -34,7 +34,7 @@ const count_sex = async (req, res) => {
         const [count_record] = await db.query(query);
         res.json(count_record);
     } catch (err) {
-         res.status(500).json({message: "Internal Server Error", error: error.message});
+         res.status(500).json({message: "Internal Server Error", error: err.message});
     }
 }
 
@@ -44,7 +44,7 @@ const count_news = async (req, res) => {
         const [count_record] = await db.query(query);
         res.json(count_record);
     } catch (err) {
-         res.status(500).json({message: "Internal Server Error", error: error.message});
+         res.status(500).json({message: "Internal Server Error", error: err.message});
     }
 }
 
@@ -54,7 +54,7 @@ const count_residents = async (req, res) => {
         const [count_record] = await db.query(query);
         res.json(count_record);
     } catch (err) {
-         res.status(500).json({message: "Internal Server Error", error: error.message});
+         res.status(500).json({message: "Internal Server Error", error: err.message});
     }
 }
 
@@ -64,7 +64,7 @@ const count_applications = async (req, res) => {
         const [count_record] = await db.query(query);
         res.json(count_record);
     } catch (err) {
-         res.status(500).json({message: "Internal Server Error", error: error.message});
+         res.status(500).json({message: "Internal Server Error", error: err.message});
     }
 }
 
