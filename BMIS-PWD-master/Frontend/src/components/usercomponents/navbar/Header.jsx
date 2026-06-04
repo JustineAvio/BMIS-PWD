@@ -48,9 +48,9 @@ function Header({ user, onAccountClick, onLogout }) {
                 <div className="right">
                     <div className={`navhyperlink ${open ? "active" : ""}`}>
                         <ul>
-                            <li><a href="/landing-page">Home</a></li>
-                            <li><a href="/about-us">About Us</a></li>
-                            <li><a href="/news">News</a></li>
+                            <li><Link to="/landing-page">Home</Link></li>
+                            <li><Link to="/about-us">About Us</Link></li>
+                            <li><Link to="/news">News</Link></li>
                             <li
                                 className="servicedropdown"
                                 onClick={() => {
@@ -62,20 +62,22 @@ function Header({ user, onAccountClick, onLogout }) {
 
                                 {serviceOpen && (
                                     <div className="servicedropdown-menu">
-                                        <a
-                                            href="/forms"
+                                        <Link
+                                            to="/forms"
                                         >
                                             Forms & Certificates
-                                        </a>
-                                        <a
-                                            href="/marketplace"
+                                        </Link>
+                                        <Link
+                                            to="https://www.facebook.com/bayanlumav.imus"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
                                         >
                                             Online Marketplace
-                                        </a>
+                                        </Link>
                                     </div>
                                 )}
                             </li>
-                            <li><a href="/faqs">FAQs</a></li>
+                            <li><Link to="/faqs">FAQs</Link></li>
                         </ul>
                     </div>
 
