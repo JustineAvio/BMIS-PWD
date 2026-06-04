@@ -65,7 +65,7 @@ function FormModal({ open, onClose, form }) {
 
             const config = {headers: {Authorization: `Bearer ${token}`,}};
 
-            const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/forms/submit/${user.id}`, formData, config);
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/forms/submit/${user.id}`, formData, config);
             toast.success("Application submitted successfully!");
             onClose();
          }catch(error){

@@ -14,7 +14,7 @@ export default function Main_Dashboard() {
     const colors2 = ["#00BFFF", "#F4C2C2", "#FFFF00"];
     const fetchNews = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/news`);
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/news`);
                 
                 // Use the exact case from your Database/ERD
                 const publishedNews = response.data
@@ -36,7 +36,7 @@ export default function Main_Dashboard() {
 
     const fetchAgeData = async () => {
         try{
-            const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/fetch/count-age`);
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/fetch/count-age`);
             const data = response.data;
 
             if(Array.isArray(data)){
@@ -56,7 +56,7 @@ export default function Main_Dashboard() {
 
      const fetchGenderData = async () => {
         try{
-            const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/fetch/count-sex`);
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/fetch/count-sex`);
             const data = response.data;
 
             if(Array.isArray(data)){
@@ -76,7 +76,7 @@ export default function Main_Dashboard() {
 
     const countApplicationData = async () => {
         try{
-            const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/fetch/count-application`);
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/fetch/count-application`);
             const data = response.data;
             setAppCount(data[0].application_count);
         } catch (error) {
@@ -85,7 +85,7 @@ export default function Main_Dashboard() {
 
      const countResidentData = async () => {
         try{
-            const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/fetch/count-residents`);
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/fetch/count-residents`);
             const data = response.data;
             setResCount(data[0].resident_count);
         } catch (error) {
@@ -94,7 +94,7 @@ export default function Main_Dashboard() {
 
      const countNewsData = async () => {
         try{
-            const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/fetch/count-news`);
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/fetch/count-news`);
             const data = response.data;
             setNewsCount(data[0].news_count);
         } catch (error) {

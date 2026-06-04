@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import '../AccountModal/accountmodal.css';
+import './accountmodal.css';
 import { toast } from 'react-toastify';
 
 export default function AccountModal({ isOpen, onClose, selectedAccount, onRefresh }) {
@@ -38,7 +38,7 @@ export default function AccountModal({ isOpen, onClose, selectedAccount, onRefre
     const accountID = selectedAccount?.AccountID;
 
     await axios.put(
-      `${process.env.REACT_APP_BACKEND_URL}/api/accounts/change-role/${accountID}`,
+      `${import.meta.env.VITE_BACKEND_URL}/api/accounts/change-role/${accountID}`,
       {
         Email: form.Email,
         Role: form.Role

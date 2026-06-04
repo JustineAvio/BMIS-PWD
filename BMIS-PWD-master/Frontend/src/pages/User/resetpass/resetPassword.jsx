@@ -35,7 +35,7 @@ function ResetPassword() {
     try {
       setLoading(true);
       const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/api/auth/reset-password/${token}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/reset-password/${token}`,
         { password }
       );
 

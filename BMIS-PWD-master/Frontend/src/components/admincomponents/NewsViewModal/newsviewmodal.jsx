@@ -23,7 +23,7 @@ const NewsViewModal = ({ isOpen, onClose, newsData, onEdit }) => {
 
   const fetchNewsDetails = async (id) => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/news/${id}`);
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/news/${id}`);
       setNews(response.data); 
     } catch (error) {
       setNews(newsData); 

@@ -20,7 +20,7 @@ const ResidentDeleteModal = ({
 
     try {
       await axios.delete(
-        `${process.env.REACT_APP_BACKEND_URL}/api/resident/delete/${id}`
+        `${import.meta.env.VITE_BACKEND_URL}/api/resident/delete/${id}`
       );
 
       toast.success("Resident deleted successfully!");

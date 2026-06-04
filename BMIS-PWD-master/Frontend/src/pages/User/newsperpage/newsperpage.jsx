@@ -1,19 +1,17 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import "./newsperpage.css";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import "./newsperpage.css";
 import axios from "axios";
 
 function NewsPerPage() {
     const { id } = useParams();
     const [news, setNews] = useState(null);
     const [loading, setLoading] = useState(true);
-    const BackedURL = `${process.env.REACT_APP_BACKEND_URL}/uploads/news/`;
+    const BackedURL = `${import.meta.env.VITE_BACKEND_URL}/uploads/news/`;
 
     const fetchNews = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/news/${id}`);
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/news/${id}`);
             setNews(response.data);
             setLoading(false);
         } catch (error) {

@@ -18,7 +18,7 @@ export default function EditResident() {
   useEffect(() => {
     const fetchResident = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/resident/${id}`);
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/resident/${id}`);
         const data = response.data;
         const formattedDate = data.Birthday ? data.Birthday.split("T")[0] : "";
         setformData({

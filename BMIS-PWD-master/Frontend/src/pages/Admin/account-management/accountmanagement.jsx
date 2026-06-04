@@ -12,7 +12,7 @@ export default function AccountManagement() {
 
   const displayAccounts = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/fetch`);
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/fetch`);
       const data = await response.data;
 
       if (Array.isArray(data)) {
