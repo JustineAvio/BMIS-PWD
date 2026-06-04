@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import './Header.css'
-import logo1 from '../../../assets/images/logo1.png'
-import logo2 from '../../../assets/images/logo2.png'
 
 function Header({ user, onAccountClick, onLogout }) {
     const [open, setOpen] = useState(false);
@@ -42,8 +40,8 @@ function Header({ user, onAccountClick, onLogout }) {
             <div className="navholder">
                 <div className="left">
                     <div className="logoholder">
-                        <img src={logo1} alt="imuslogo" />
-                        <img src={logo2} alt="bl5logo" />
+                        <img src="/images/logo1.png" alt="imuslogo" />
+                        <img src="/images/logo2.png" alt="bl5logo" />
                     </div>
                 </div>
 

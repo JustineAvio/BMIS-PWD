@@ -1,6 +1,5 @@
 import { useState } from "react";
 import "./formspage.css";
-import bg from "../../../assets/images/bg.jpg";
 import FormModal from "../../../components/usercomponents/formsmodal/formsmodal.jsx";
 import { useAuth } from "../../../routes/AuthContext.jsx";
 
@@ -37,7 +36,7 @@ function FormsPage() {
 
             {/* HERO */}
             <div className="forms-hero">
-                <img src={bg} alt="Forms Banner" />
+                <img src="/images/bg.jpg" alt="Forms Banner" />
                 <div className="overlay">
                     <h1>Certificates and Forms</h1>
                 </div>

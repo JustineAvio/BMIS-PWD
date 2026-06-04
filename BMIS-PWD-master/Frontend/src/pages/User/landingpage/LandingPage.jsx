@@ -1,27 +1,5 @@
     import React, { useEffect, useState } from 'react';
-    import '../landingpage/landingpage.css';;
-    import image2 from '../../../assets/images/image 2.png';
-    import signature from '../../../assets/images/signature.png';
-    import bg from '../../../assets/images/bg.jpg';
-    import capedgie from '../../../assets/images/capedgie.jpg';
-    import kagsasis from '../../../assets/images/kagsasis.jpg';
-    import kagsasis2 from '../../../assets/images/kagsasis2.jpg';
-    import skvilla from '../../../assets/images/skvilla.jpg';
-    import kaglegaspi from '../../../assets/images/kaglegaspi.jpg';
-    import kaggoawen from '../../../assets/images/kaggoawen.jpg';
-    import kagmatro from '../../../assets/images/kagmatro.jpg';
-    import kagtagle from '../../../assets/images/kagtagle.jpg';
-    import kagjavier from '../../../assets/images/kagjavier.jpg';
-    import kaglegaspi2 from '../../../assets/images/kaglegaspi2.jpg';
-    import bautista from '../../../assets/images/bautista.jpg';
-    import pine from '../../../assets/images/pine.jpg';
-    import sui from '../../../assets/images/sui.png';
-    import hall from '../../../assets/images/hall.jpg';
-    import health from '../../../assets/images/health.jpg';
-    import school from '../../../assets/images/school.jpg';
-    import food from '../../../assets/images/food.jpg';
-    import outpost from '../../../assets/images/outpost.jpg';
-    import expa from '../../../assets/images/expa.jpg';
+    import '../landingpage/landingpage.css';
     import axios from 'axios';
     import { useNavigate } from 'react-router-dom';
     function LandingPage() {
@@ -73,7 +51,7 @@
             <main>
                 <div className="hero">
                     <div className="hero-bg">
-                        <img src={bg} alt="bg" />
+                        <img src="/images/bg.jpg" alt="bg" />
                     </div>
                     <div className="herotext">
                         <p>Maligayang pagbati mula sa</p>
@@ -81,11 +59,11 @@
                         <p>Patungo sa masaya, ligtas, at mapayapang bayan.</p>
                     </div>
                     <div className="signature">
-                        <img src={signature} alt="Signature" className="signatureimg" fetchPriority='high'/>
+                        <img src="/images/signature.png" alt="Signature" className="signatureimg" fetchPriority='high'/>
                         <div className="officialname"> Hon. Edgardo D. Reyes </div>
                         <p className='signaturerole'>Punong Barangay </p>
                     </div>  
-                    <img src={image2} alt="Kap. Edgardo" className="officialphoto" fetchPriority='high'/>       
+                    <img src="/images/image 2.png" alt="Kap. Edgardo" className="officialphoto" fetchPriority='high'/>       
                 </div>
 
                 <div className="status">
@@ -113,18 +91,18 @@
                                 className="slider-track" 
                                 style={{ transform: `translateX(-${currentIndex * 25}%)` }}
                             >
-                                <div className="card"><img src={capedgie} alt="Official"/><p>Hon. Edgardo D. Reyes</p><p>Kapitan</p></div>
-                                <div className="card"><img src={kagsasis} alt="Official"/><p>Hon. Mark E. Sasis</p><p>Kagawad</p></div>
-                                <div className="card"><img src={kagsasis2} alt="Official"/><p>Hon. Maria Socorro A. Sasis</p><p>Kagawad</p></div>
-                                <div className="card"><img src={skvilla} alt="Official"/><p>Hon. Joli James T. De Villa</p><p>Kagawad</p></div>
-                                <div className="card"><img src={kaglegaspi} alt="Official"/><p>Hon. Ferdinand P. Legaspi</p><p>Kagawad</p></div>
-                                <div className="card"><img src={kaggoawen} alt="Official"/><p>Hon. Geronimo G. Godawen</p><p>Kagawad</p></div>
-                                <div className="card"><img src={kagmatro} alt="Official"/><p>Hon. Marc Bien A. Matro</p><p>Kagawad</p></div>
-                                <div className="card"><img src={kagtagle} alt= "Official"/><p>Hon. Rolando A. Tagle</p><p>Kagawad</p></div>
-                                <div className="card"><img src={kagjavier} alt="Official"/><p>Hon. Alvin P.Javier</p><p>Kagawad</p></div>
-                                <div className="card"><img src={kaglegaspi2} alt="Official"/><p>Aubrey Mae A. Legaspi</p><p>Secretary</p></div>
-                                <div className="card"><img src={bautista} alt="Official"/><p>Edminda S. Bautista</p><p>Treasurer</p></div>
-                                <div className="card"><img src={pine}alt="Official"/><p>Josephine P. Nasis</p><p>Clerk</p></div>
+                                <div className="card"><img src="/images/capedgie.jpg" alt="Official"/><p>Hon. Edgardo D. Reyes</p><p>Kapitan</p></div>
+                                <div className="card"><img src="/images/kagsasis.jpg" alt="Official"/><p>Hon. Mark E. Sasis</p><p>Kagawad</p></div>
+                                <div className="card"><img src="/images/kagsasis2.jpg" alt="Official"/><p>Hon. Maria Socorro A. Sasis</p><p>Kagawad</p></div>
+                                <div className="card"><img src="/images/skvilla.jpg" alt="Official"/><p>Hon. Joli James T. De Villa</p><p>Kagawad</p></div>
+                                <div className="card"><img src="/images/kaglegaspi.jpg" alt="Official"/><p>Hon. Ferdinand P. Legaspi</p><p>Kagawad</p></div>
+                                <div className="card"><img src="/images/kaggoawen.jpg" alt="Official"/><p>Hon. Geronimo G. Godawen</p><p>Kagawad</p></div>
+                                <div className="card"><img src="/images/kagmatro.jpg" alt="Official"/><p>Hon. Marc Bien A. Matro</p><p>Kagawad</p></div>
+                                <div className="card"><img src="/images/kagtagle.jpg" alt= "Official"/><p>Hon. Rolando A. Tagle</p><p>Kagawad</p></div>
+                                <div className="card"><img src="/images/kagjavier.jpg" alt="Official"/><p>Hon. Alvin P.Javier</p><p>Kagawad</p></div>
+                                <div className="card"><img src="/images/kaglegaspi2.jpg" alt="Official"/><p>Aubrey Mae A. Legaspi</p><p>Secretary</p></div>
+                                <div className="card"><img src="/images/bautista.jpg" alt="Official"/><p>Edminda S. Bautista</p><p>Treasurer</p></div>
+                                <div className="card"><img src="/images/pine.jpg" alt="Official"/><p>Josephine P. Nasis</p><p>Clerk</p></div>
                             </div>
                         </div>  
 
@@ -266,12 +244,12 @@
                         <div className="line"></div>
                     </div>
                 <div className="gallery">
-                    <div className="gallerypic"><img src={hall} alt="Barangay Hall"/><div className="galleryoverlay">Barangay Hall</div></div>
-                    <div className="gallerypic"><img src={school} alt="Elementary School"/><div className="galleryoverlay">BL1 Elementary School</div></div>
-                    <div className="gallerypic"><img src={expa} alt="Covered Court"/><div className="galleryoverlay">Covered Court</div></div>
-                    <div className="gallerypic"><img src={health} alt="Health Center"/><div className="galleryoverlay">Health Center</div></div>
-                    <div className="gallerypic"><img src={outpost} alt="Outpost"/><div className="galleryoverlay">Barangay Outpost</div></div>
-                    <div className="gallerypic"><img src={food} alt="Food Court"/><div className="galleryoverlay">Food Court</div></div>
+                    <div className="gallerypic"><img src="/images/hall.jpg" alt="Barangay Hall"/><div className="galleryoverlay">Barangay Hall</div></div>
+                    <div className="gallerypic"><img src="/images/school.jpg" alt="Elementary School"/><div className="galleryoverlay">BL1 Elementary School</div></div>
+                    <div className="gallerypic"><img src="/images/expa.jpg" alt="Covered Court"/><div className="galleryoverlay">Covered Court</div></div>
+                    <div className="gallerypic"><img src="/images/health.jpg" alt="Health Center"/><div className="galleryoverlay">Health Center</div></div>
+                    <div className="gallerypic"><img src="/images/outpost.jpg" alt="Outpost"/><div className="galleryoverlay">Barangay Outpost</div></div>
+                    <div className="gallerypic"><img src="/images/food.jpg" alt="Food Court"/><div className="galleryoverlay">Food Court</div></div>
                 </div>
 
             </main>

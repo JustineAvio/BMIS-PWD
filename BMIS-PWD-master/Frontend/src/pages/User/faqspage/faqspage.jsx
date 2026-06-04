@@ -1,6 +1,5 @@
 import { useState } from "react";
 import "./faqspage.css";
-import bg from "../../../assets/images/bg.jpg";
 
 function FAQsPage() {
     const [activeIndex, setActiveIndex] = useState(null);
@@ -53,7 +52,7 @@ function FAQsPage() {
 
             {/* HERO */}
             <div className="faqs-hero">
-                <img src={bg} alt="Forms Banner" />
+                <img src="/images/bg.jpg" alt="Forms Banner" />
 
                 <div className="overlay">
                     <h1>Frequently Asked Questions</h1>

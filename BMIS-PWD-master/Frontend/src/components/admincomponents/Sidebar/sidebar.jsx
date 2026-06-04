@@ -1,14 +1,13 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import './sidebar.css';
-import logo from '../../../assets/images/logo2.png'
 
 const Sidebar = ({ handleLogoutClick }) => {
   return (
     <div className="sidebar">
       {/* BRANDING AREA */}
       <div className="logo-area">
-        <img src={logo} className="logo" alt="Logo" />
+        <img src="/images/logo2.png" className="logo" alt="Logo" />
         <h3>Barangay System</h3>
       </div>
 

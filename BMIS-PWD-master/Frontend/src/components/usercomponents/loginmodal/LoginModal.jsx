@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./LoginModal.css";
-import modalbg from "../../../assets/images/modalbg.png";
-import logo2 from "../../../assets/images/logo2.png";
 import ForgotPass from "../forgotpasswordmodal/forgotpassmodal.jsx";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
@@ -272,7 +270,7 @@ function LoginModal({ isOpen, onClose, onLogin }) {
         onClick={(e) => e.stopPropagation()}
 
         style={{
-          backgroundImage: `url(${modalbg})`,
+          backgroundImage: `url(/images/modalbg.png)`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -292,7 +290,7 @@ function LoginModal({ isOpen, onClose, onLogin }) {
         <div className="leftside">
           <div className="headermodal">
             <div className="avatar">
-              <img src={logo2} alt="avatar" />
+              <img src="/images/logo2.png" alt="avatar" />
             </div>
             <h1 className="loginh1">{isRegister ? "REGISTER" : "WELCOME"}</h1>
           </div>
