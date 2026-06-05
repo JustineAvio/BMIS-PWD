@@ -51,7 +51,7 @@
         const handleLogout = () => {
             localStorage.removeItem('accessToken');
             setUser(null);
-            window.location.href = "/landing-page";
+            window.location.href = "/";
         };
 
         const handleLogin = (decodedUser) => {
