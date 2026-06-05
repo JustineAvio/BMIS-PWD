@@ -26,10 +26,10 @@ function Footer() {
             }
         };
 
-        if (location.pathname === "/landing-page") {
+        if (location.pathname === "/") {
             scrollToNews();
         } else {
-            navigate("/landing-page");
+            navigate("/");
 
             setTimeout(() => {
                 scrollToNews();
@@ -60,9 +60,9 @@ function Footer() {
                     <h3>NAVIGATION</h3>
 
                     <ul>
-                        <li onClick={() => navigate('/landing-page')}>Home</li>
+                        <li onClick={() => navigate('/')}>Home</li>
 
-                        <li onClick={() => navigate('/aboutus')}>
+                        <li onClick={() => navigate('/about-us')}>
                             About Us
                         </li>
 
@@ -92,7 +92,7 @@ function Footer() {
                     <ul>
                         <li>
                             <Link
-                                to="https://www.facebook.com/bayanlumav.imus"
+                                to="https://www.facebook.com/barangaybayanlumaV"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >

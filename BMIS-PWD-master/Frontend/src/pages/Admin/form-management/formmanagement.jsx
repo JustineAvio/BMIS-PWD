@@ -241,10 +241,12 @@ export default function FormManagement() {
                 <p>{selectedApplication.description}</p>
               </div> */}
               <div className="detail-actions">
-                <button className="approve-btn" type="button" onClick={() => {handleStatusChange(selectedApplication.ApplicationID, "Approved")}}>
+                <button className="approve-btn" type="button" disabled={selectedApplication.Status === "Approved"}
+                onClick={() => {handleStatusChange(selectedApplication.ApplicationID, "Approved")}}>
                   Approve
                 </button>
-                <button className="reject-btn" type="button" onClick={() => {handleStatusChange(selectedApplication.ApplicationID, "Rejected")}}>
+                <button className="reject-btn" type="button" disabled={selectedApplication.Status === "Rejected"}
+                onClick={() => {handleStatusChange(selectedApplication.ApplicationID, "Rejected")}}>
                   Reject
                 </button>
               </div>

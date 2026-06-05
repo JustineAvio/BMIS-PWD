@@ -11,7 +11,6 @@
     import EditResident from './pages/Admin/resident-management/edit-resident.jsx';
     import NewsManagement from './pages/Admin/news-management/news.jsx';
     import FormManagement from './pages/Admin/form-management/formmanagement.jsx';
-    import Settings from './pages/Admin/adminSettings/Settings.jsx';
     import ResetPassword from './pages/User/resetpass/resetPassword.jsx';
     import ProtectedRoute from './routes/protectedroute.jsx';
     import Header from './components/usercomponents/navbar/Header.jsx';
@@ -89,13 +88,12 @@
             <BrowserRouter>
                 <Routes>
                     {/* Root */}
-                    <Route path="/" element={<Navigate to="/landing-page" />} />
                     <Route path="/reset-password/:token" element={<ResetPassword />} />
 
                     {/* Public Routes */}
                     <Route element = {<LPageLayout />}>
                         <Route path="/forms" element={<FormsPage />} />
-                        <Route path="/landing-page" element={<LandingPage />} /> 
+                        <Route path="/" element={<LandingPage />} /> 
                         <Route path="/about-us" element={<AboutUs/>}/>
                         <Route path="/faqs" element={<FAQs/>}/>   
                         <Route path="/news/:id" element={<NewsPerPage />} />
@@ -119,7 +117,6 @@
                             <Route path="update-resident/:id" element={<EditResident />} />
                             <Route path="application" element={<FormManagement />} />
                             <Route path="news-update" element={<NewsManagement />} />
-                            <Route path="settings" element={<Settings />} />
                             <Route path="logs" element={<AccountDashboard />} />
                         </Route>
                     </Route>

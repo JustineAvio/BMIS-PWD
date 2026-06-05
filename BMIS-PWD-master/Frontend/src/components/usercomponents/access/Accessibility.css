@@ -1,8 +1,17 @@
 /* ===============================
+   WRAPPER (ANCHOR ONLY)
+================================= */
+.a11y-wrapper {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 999;
+}
+
+/* ===============================
    FLOATING BUTTON (FAB)
 ================================= */
-
-.fab {
+.a11y-fab {
     width: 60px;
     height: 60px;
     border-radius: 50%;
@@ -13,42 +22,50 @@
     cursor: pointer;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.fab:hover {
+.a11y-fab:hover {
     transform: scale(1.1);
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
 }
 
 /* ===============================
    MENU CARD
 ================================= */
+.a11y-menu-card {
+    position: fixed;
+    bottom: 90px;
+    left: 20px;
 
-.menu-card {
-    position: absolute;
-    bottom: 75px;
-    left: 0;
+
     width: 260px;
+    max-height: 70vh;
+    overflow-y: auto;
+
     background: #ffffff;
     border-radius: 14px;
     padding: 18px;
     box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+
     display: flex;
     flex-direction: column;
     gap: 12px;
-    animation: fadeIn 0.25s ease;
+
+    animation: a11yFadeIn 0.2s ease;
+    z-index: 999;
 }
 
-@keyframes fadeIn {
+@keyframes a11yFadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
 /* ===============================
-   TOGGLE ROWS
+   TOGGLES
 ================================= */
-
-.toggle-row {
+.a11y-toggle-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -57,9 +74,8 @@
     color: #1d3557;
 }
 
-/* Modern Toggle Switch */
-
-.toggle-row input[type="checkbox"] {
+/* Switch */
+.a11y-toggle-row input[type="checkbox"] {
     appearance: none;
     width: 42px;
     height: 22px;
@@ -68,9 +84,10 @@
     position: relative;
     cursor: pointer;
     transition: 0.3s ease;
+    outline: none;
 }
 
-.toggle-row input[type="checkbox"]::before {
+.a11y-toggle-row input[type="checkbox"]::before {
     content: "";
     position: absolute;
     width: 18px;
@@ -82,19 +99,18 @@
     transition: 0.3s ease;
 }
 
-.toggle-row input[type="checkbox"]:checked {
+.a11y-toggle-row input[type="checkbox"]:checked {
     background: #40916c;
 }
 
-.toggle-row input[type="checkbox"]:checked::before {
+.a11y-toggle-row input[type="checkbox"]:checked::before {
     transform: translateX(20px);
 }
 
 /* ===============================
-   BUTTONS (Read / Stop)
+   BUTTONS
 ================================= */
-
-.menu-card button {
+.a11y-menu-card button {
     border: none;
     padding: 8px 12px;
     border-radius: 8px;
@@ -103,51 +119,95 @@
     transition: 0.2s ease;
 }
 
-.menu-card button:first-of-type {
+.a11y-menu-card button:first-of-type {
     background: #1b4332;
     color: white;
 }
 
-.menu-card button:last-of-type {
+.a11y-menu-card button:last-of-type {
     background: #e63946;
     color: white;
 }
 
-.menu-card button:hover {
+.a11y-menu-card button:hover {
     opacity: 0.85;
 }
 
 /* ===============================
-   ACCESSIBILITY BODY CLASSES
+   ACCESSIBILITY MODES
 ================================= */
 
-/* Big Cursor */
-.a11y-big-cursor,
-.a11y-big-cursor * {
-    cursor: url("https://cur.cursors-4u.net/cursors/cur-9/cur862.cur"), auto !important;
+/* BIG CURSOR (more stable than image-only cursor) */
+body.a11y-big-cursor {
+    cursor: none !important;
 }
 
-/* Dyslexia Friendly Font */
+body.a11y-big-cursor a,
+body.a11y-big-cursor button,
+body.a11y-big-cursor input,
+body.a11y-big-cursor textarea,
+body.a11y-big-cursor select,
+body.a11y-big-cursor label,
+body.a11y-big-cursor span,
+body.a11y-big-cursor div {
+    cursor: none !important;
+}
+
+/* custom cursor element is used instead */
+
+/* DYSLEXIA MODE */
+body.a11y-dyslexia {
+    font-family: Arial, sans-serif !important;
+}
+
+body.a11y-dyslexia p,
+body.a11y-dyslexia span,
+body.a11y-dyslexia li,
+body.a11y-dyslexia a,
+body.a11y-dyslexia button,
+body.a11y-dyslexia input,
+body.a11y-dyslexia textarea,
+body.a11y-dyslexia label,
+body.a11y-dyslexia h1,
+body.a11y-dyslexia h2,
+body.a11y-dyslexia h3,
+body.a11y-dyslexia h4,
+body.a11y-dyslexia h5,
+body.a11y-dyslexia h6 {
+    font-family: Arial, sans-serif !important;
+    letter-spacing: 0.5px !important;
+    word-spacing: 1.5px !important;
+    line-height: 1.6 !important;
+}
+
+/* optional improvement */
 .a11y-dyslexia {
-    font-family: "OpenDyslexic", Arial, sans-serif !important;
-}
-
-/* Zoom */
-.a11y-zoom {
-    transform: scale(1.1);
-    transition: transform 0.2s ease;
+    text-rendering: optimizeLegibility;
 }
 
 /* ===============================
-   MASK LAYERS
+   MASK
 ================================= */
-
 .a11y-mask-layer {
     position: fixed;
     left: 0;
     width: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 999998;
-    display: none;
+    background: rgba(0,0,0,0.85);
+    z-index: 99999;
     pointer-events: none;
-}     
+    display: none; /* IMPORTANT default fix */
+}
+
+/* ===============================
+   BIG CURSOR ELEMENT
+================================= */
+#a11y-cursor {
+    position: fixed;
+    width: 28px;
+    height: 28px;
+    border: 3px solid black;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999999;
+    transform: translate(-50%, -50%);
+}

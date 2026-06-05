@@ -41,33 +41,59 @@ function NewsPerPage() {
     }
 
     return (
-        <div className="single-news-page">
+       <div className="news-page">
 
-            {/* HERO IMAGE */}
-            <div className="single-news-hero">
-                <img src={`${BackedURL}${news.NewsImage}`} alt={news.NewsTitle} />
-            </div>
+        <div className="news-wrapper">
 
-            {/* CONTENT */}
-            <div className="single-news-container">
+            {/* ARTICLE HEADER */}
+            <div className="news-header">
 
-                <span className="single-news-date">
-                    {new Date(news.NewsPublished).toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'})}
-                </span>
+                <p className="news-category">COMMUNITY</p>
 
                 <h1>{news.NewsTitle}</h1>
 
-                <p className="single-news-author">
-                    By {news.NewsAuthor || "Barangay Management Information System"}
+                <p className="news-description">
+                    Latest updates and important announcements from the barangay.
                 </p>
 
-                <div className="single-news-content">
-                    {news.NewsContent.split('\n').map((paragraph, index) => (
-                        <p key={index}>{paragraph}</p>
-                    ))}
+                <div className="news-meta">
+                    <span>{new Date(news.NewsPublished).toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'})}</span>
+                    <span>•</span>
+                    <span>{news.NewsAuthor}</span>
                 </div>
+
+            </div>
+
+            {/* FEATURE IMAGE */}
+            <div className="news-image">
+                <img src={`${BackedURL}${news.NewsImage}`} alt={news.NewsTitle} />
+            </div>
+
+            {/* CONTENT AREA */}
+            <div className="news-body">
+
+                {/* LEFT SIDE */}
+                <div className="news-sidebar">
+
+                    <div className="author-box">
+                        <h3>{news.author}</h3>
+                        <p>Barangay Writer</p>
+                    </div>
+
+                    <p className="publish-date">
+                        {new Date(news.NewsPublished).toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'})}
+                    </p>
+
+                </div>
+
+                {/* ARTICLE */}
+                <div className="news-content">
+                    {news.NewsContent}
+                </div>
+
             </div>
         </div>
+    </div>
     );
 }
 

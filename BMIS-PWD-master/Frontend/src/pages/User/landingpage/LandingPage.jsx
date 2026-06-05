@@ -10,11 +10,11 @@
 
         const fetchNews = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/news`);
-                
+                const response = await axios.get(
+                    `${import.meta.env.VITE_BACKEND_URL}/api/news`
+                );
                 // Use the exact case from your Database/ERD
-                const publishedNews = response.data
-                    .filter(item => {
+                const publishedNews = response.data.filter(item => {
                         // Check for both casings just in case
                         const status = item.NewsStatus || item.newsstatus;
                         return status === "Published";
@@ -24,7 +24,7 @@
                         const dateB = new Date(b.NewsPublished || b.createdat);
                         return dateB - dateA;
                     });
-                    
+                
                 setNews(publishedNews);
             } catch (error) {
                 console.error("Error fetching news:", error);

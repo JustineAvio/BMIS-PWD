@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('accessToken');
         setUser(null);
         setIsLoggedIn(false);
-        window.location.href = '/landing-page';
+        window.location.href = '/';
     };
 
     return (

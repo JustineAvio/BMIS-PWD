@@ -136,7 +136,7 @@ export default function Main_Dashboard() {
 
                     {/* CHARTS SECTION */}
                     <div className="dashboard">
-                        <div className="pieChart">
+                         <div className="pieChart">
                         <h3 align="center">Age</h3>
                         <ResponsiveContainer width={375} height={375}>
                             <PieChart>
@@ -178,7 +178,7 @@ export default function Main_Dashboard() {
                         {news.length > 0 ? (
                             news.map((item, index) => (
                                 <div key={index} className="news-item">
-                                    <img src={`http://localhost:3000/uploads/news/${item.NewsImage}`} alt="news" />
+                                    <img src={`${import.meta.env.VITE_BACKEND_URL}/uploads/news/${item.NewsImage}`} alt="news" />
                                     <div className="news-info">
                                        <h4>
                             {item.NewsTitle.length > 45

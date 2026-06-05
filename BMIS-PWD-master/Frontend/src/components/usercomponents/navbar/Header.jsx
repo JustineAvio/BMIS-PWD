@@ -107,10 +107,10 @@ function Header({ user, onAccountClick, onLogout }) {
             }
         };
 
-        if (location.pathname === "/landing-page") {
+        if (location.pathname === "/") {
             scrollToNews();
         } else {
-            navigate("/landing-page");
+            navigate("/");
             setTimeout(scrollToNews, 200);
         }
     };
@@ -132,8 +132,8 @@ function Header({ user, onAccountClick, onLogout }) {
                 <div className="right">
                     <div className={`navhyperlink ${open ? "active" : ""}`}>
                         <ul>
-                            <li><Link to="/landing-page">Home</Link></li>
-                            <li><Link to="/aboutus">About Us</Link></li>
+                            <li><Link to="/">Home</Link></li>
+                            <li><Link to="/about-us">About Us</Link></li>
 
                             <li>
                                 <Link to="#news" onClick={handleNewsClick}>
