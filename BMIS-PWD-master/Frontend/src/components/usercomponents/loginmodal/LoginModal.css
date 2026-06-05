@@ -1,240 +1,41 @@
+/* MODAL BACKDROP */
 .modal {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 2000;
+    
 }
 
+/* MAIN CONTAINER */
 .loginbox {
     position: relative;
     width: 1100px;
     max-width: 95%;
-    min-height: 800px; 
+    min-height: 800px;
     display: flex;
     border-radius: 15px;
     overflow: hidden;
-    background-color: rgb(25, 160, 119);
+    background: white;
     box-shadow: 0 25px 50px rgba(0,0,0,0.3);
 }
 
-/* Base style for the sliding panels */
-.leftside {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 50%;
-    height: 100%;
-    padding: 60px;
-    display: flex;
-    flex-direction: column;
-    z-index: 5;
-    color: white;
-    overflow-y: auto;
-    scroll-behavior: smooth;
-    scrollbar-width: none;  /* Firefox */
-    -ms-overflow-style: none;  /* IE 10+ */
-    transition: transform 0.6s cubic-bezier(0.7, 0, 0.3, 1);
-}
-.leftside::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Edge */
-}
-
-.blueshape {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 50%;
-    height: 100%;
-    z-index: 2;
-    pointer-events: none;
-    transition: transform 0.6s cubic-bezier(0.7, 0, 0.3, 1);
-}
-
-/* --- THE ANIMATION --- */
-
-/* When Register Mode is active */
-.loginbox.registermode .leftside {
-    transform: translateX(100%); /* Moves form to right half */
-}
-
-.loginbox.registermode .blueshape {
-    transform: translateX(-100%); /* Moves blue shape to left half */
-}
-
-.loginbox.registermode .blueshape svg {
-    transform: scaleX(-1); /* Flips the curve background */
-}
-
-/* --- UI ELEMENTS --- */
-
-.headermodal{
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.avatar {
-    width: 120px;
-    height: 120px;
-    margin: 0 auto 15px auto;
-    
-}
-
-.avatar img {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-h1 {
-    font-size: 36px;
-    font-weight: 500;
-    letter-spacing: 2px;
-    margin: 0;
-    text-transform: uppercase;
-    text-align: center;
-}
-
-.inputgroup {
-    margin-bottom: 25px;
-    position: relative;
-}
-
-.inputgroup label {
-    font-size: 14px;
-    font-weight: bold;
-    display: block;
-    margin-bottom: 8px;
-}
-
-.inputgroup input {
-    width: 100%;
-    padding: 10px 0;
-    border: none;
-    border-bottom: 2px solid white;
-    background: transparent;
-    color: white;
-    font-size: 16px;
-    outline: none;
-}
-.namerow {
-    display: flex;
-    gap: 15px;
-}
-
-.namerow .inputgroup {
-    flex: 1;
-}
-.rowshort {
-    display: flex;
-    gap: 20px;
-}
-.required {
-    position: fixed ;
-    color: rgb(218, 29, 29);
-    font-size:20px; 
-    margin-left: 5px;   
-    margin-top: -5px;
-}       
-/* Make each take roughly half width */
-.rowshort .inputgroup {
-    flex: 1;
-}
-/* Match select styling to text inputs */
-/* Style the select itself */
-.inputgroup select {
-    width: 100%;
-    padding: 10px 15px;
-    font-size: 16px;
-    color: white;
-    background-color: rgb(25, 160, 119); /* match your theme */
-    border: none;
-    border-radius: 8px;
-    outline: none;
-    cursor: pointer;
-}
-
-/* Style the options */
-.inputgroup select option {
-    background-color: rgb(25, 160, 119);
-    color: white;
-    padding: 8px 12px;
-}
-
-/* Optional: hover effect on the select */
-.inputgroup select:hover {
-    background-color: rgb(20, 140, 105);
-}
-
-/* Optional: focus effect */
-.inputgroup select:focus {
-    background-color: rgb(20, 140, 105);
-    border-bottom: 2px solid #2A7FFF; /* subtle highlight */
-}     
-
-/* Radio group layout */
-
-.radiogroup {
-    display: flex;
-    gap: 20px;      
-    margin-top: 5px;
-    font-size: 14px;
-    
-    
-}
-
-.radiogroup input {
-    accent-color: #2A7FFF;
-}
-
-.divider2 {
-    height: 70px;
-    width: 2px;
-    background: #ffffff;
-    border-radius: 1px;
-    margin: 0 10px;
-}   
-.passwordwrapper {
-    position: relative;
-}
-        
-.passwordinput {
-    padding-right: 40px !important;
-}
-
-.modal {
-    position: fixed;
-    inset: 0;
-     background: rgba(0, 0, 0, 0.7); 
-    backdrop-filter: blur(8px); 
-    -webkit-backdrop-filter: blur(8px); 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-}
-.loginbox {
-    position: relative;
-    width: 1100px;
-    max-width: 95%;
-    min-height: 800px; 
-    display: flex;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-    color: #555;
-}
+/* overlay (fix blocking clicks) */
 .loginbox::before {
     content: "";
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.25);
+    background: rgba(0, 0, 0, 0.15);
     z-index: 1;
+    pointer-events: none;
 }
 
+/* LEFT PANEL (FORM) */
 .leftside {
     position: absolute;
     top: 0;
@@ -245,65 +46,45 @@ h1 {
     display: flex;
     flex-direction: column;
     z-index: 5;
-    color: #555;
-    background-color: #ffffff; 
+    background: white;
+    color: #333;
     overflow-y: auto;
-    scroll-behavior: smooth;
-    scrollbar-width: none; 
-    -ms-overflow-style: none;  
+    scrollbar-width: none;
     transition: transform 0.6s cubic-bezier(0.7, 0, 0.3, 1);
 }
 .leftside::-webkit-scrollbar {
-    display: none; 
+    display: none;
 }
 
-
+/* RIGHT SHAPE */
 .blueshape {
     position: absolute;
     top: 0;
     right: 0;
     width: 50%;
     height: 100%;
+    background: #2A7FFF;
     z-index: 2;
-    pointer-events: none;
-    background-color: #2A7FFF;
     transition: transform 0.6s cubic-bezier(0.7, 0, 0.3, 1);
 }
 
+/* ANIMATION MODE */
 .loginbox.registermode .leftside {
-    transform: translateX(100%); 
+    transform: translateX(100%);
 }
 
 .loginbox.registermode .blueshape {
-    transform: translateX(-100%); 
+    transform: translateX(-100%);
 }
 
-.loginbox.registermode .blueshape svg {
-    transform: scaleX(-1);
+.blueshape svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-
-.leftside h1,
-.leftside label,
-.leftside .inputgroup input,
-.leftside .inputgroup select {
-    color: #333; 
-}
-
-
-.login {
-    background-color: #ffffff; 
-    color: #2A7FFF; 
-    border: 2px solid #2A7FFF;
-}
-
-.login:hover {
-    background-color: #e6f0ff;
-}
-
-/* --- UI ELEMENTS --- */
-
-.headermodal{
+/* HEADER */
+.headermodal {
     text-align: center;
     margin-bottom: 30px;
 }
@@ -311,8 +92,7 @@ h1 {
 .avatar {
     width: 120px;
     height: 120px;
-    margin: 0 auto 15px auto;
-    
+    margin: 0 auto 15px;
 }
 
 .avatar img {
@@ -322,17 +102,18 @@ h1 {
     object-fit: cover;
 }
 
-h1 {
+.loginh1 {
     font-size: 36px;
     font-weight: 500;
     letter-spacing: 2px;
-    margin: 0;
-    text-transform: uppercase;
     text-align: center;
+    margin: 0;
 }
 
+/* INPUTS */
 .inputgroup {
     margin-bottom: 25px;
+    position: relative;
 }
 
 .inputgroup label {
@@ -346,69 +127,50 @@ h1 {
     width: 100%;
     padding: 10px 0;
     border: none;
-    border-bottom: 2px solid rgb(24, 24, 24);
+    border-bottom: 2px solid #333;
     background: transparent;
-    color: #555;
+    color: #333;
     font-size: 16px;
     outline: none;
 }
-.namerow {
+
+/* REQUIRED ASTERISK FIX */
+.required {
+    position: absolute;
+    color: red;
+    font-size: 16px;
+    margin-left: 5px;
+}
+
+/* ROWS */
+.namerow,
+.rowshort {
     display: flex;
     gap: 15px;
 }
 
-.namerow .inputgroup {
-    flex: 1;
-}
-.rowshort {
-    display: flex;
-    gap: 20px;
-}
-.required {
-    position: fixed ;
-    color: rgb(218, 29, 29);
-    font-size:20px; 
-    margin-left: 5px;   
-    margin-top: -5px;
-}
+.namerow .inputgroup,
 .rowshort .inputgroup {
     flex: 1;
 }
+
+/* SELECT */
 .inputgroup select {
     width: 100%;
     padding: 10px 15px;
     font-size: 16px;
-    color: #555;
-    background-color: rgb(229, 243, 255);
+    color: #333;
+    background-color: #e5f3ff;
     border: none;
     border-radius: 8px;
     outline: none;
     cursor: pointer;
 }
 
-
-.inputgroup select option {
-    background-color: rgb(229, 243, 255);
-    color: #555;
-    padding: 8px 12px;
-    border-bottom: 2px solid rgb(24, 24, 24);
-}
-
-
-.inputgroup select:hover {
-    background-color: rgb(229, 243, 255);
-}
-
-
-.inputgroup select:focus {
-    background-color: rgb(229, 243, 255);
-    border-bottom: 2px solid #555;
-}     
-
-
+/* RADIO */
 .radiogroup {
     display: flex;
-    gap: 20px;      
+    gap: 20px;
     margin-top: 5px;
     font-size: 14px;
 }
@@ -417,114 +179,13 @@ h1 {
     accent-color: #2A7FFF;
 }
 
-.divider2 {
-    height: 70px;
-    width: 2px;
-    background: #353535;
-    border-radius: 1px;
-    margin: 0 10px;
-}   
+/* PASSWORD */
 .passwordwrapper {
     position: relative;
 }
-        
+
 .passwordinput {
     padding-right: 40px !important;
-}
-
-.forgot-password {
-  text-align: right;
-  margin-top: 5px;
-  margin-bottom: 10px;
-}
-
-.forgot-password span {
-  color: #1e69d4;
-  cursor: pointer;
-  font-size: 0.9rem;
-}
-
-.forgot-password span:hover {
-  text-decoration: underline;
-}
-
-
-.options {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 13px;
-    font-weight: bold;
-    margin-bottom: 25px;
-}
-
-.options a {
-    color: white;
-    text-decoration: none;
-}
-
-.login {
-    width: 100%;
-    padding: 15px;
-    background-color: #2A7FFF;
-    border: none;
-    color: rgb(255, 255, 255);
-    font-weight: bold;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-bottom: 15px;
-    transition: background 0.3s;
-}
-
-.login:hover {
-    background-color: #1e69d4;
-}
-
-.signuptext {
-    font-size: 13px;
-    font-weight: bold;
-    text-align: center;
-}
-
-.signuptext span {
-    color:  #1e69d4;
-    cursor: pointer;
-    margin-left: 5px;
-    text-decoration: underline; 
-}
-.blueshape svg {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.6s ease;
-}
-
-.close {
-    position: absolute;
-    top: 20px;
-    right: 25px;
-    background: none;
-    border: none;
-    font-size: 40px;
-    cursor: pointer;
-    z-index: 100;
-    transition: color 1.5s ease; 
-}
-
-
-.options {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 13px;
-    font-weight: bold;
-    margin-bottom: 25px;
-}
-
-.options a {
-    color: white;
-    text-decoration: none;
 }
 
 .togglepassword {
@@ -533,23 +194,36 @@ h1 {
     bottom: 5px;
     background: none;
     border: none;
-    color: black;
     cursor: pointer;
-    padding: 5px;
+    font-size: 20px;
+}
+
+/* FORGOT PASSWORD */
+.forgot-password {
+    text-align: right;
+    margin: 5px 0 10px;
+}
+
+.forgot-password span {
+    color: #0845a0;
+    cursor: pointer;
+}
+
+.forgot-password span:hover {
+    text-decoration: underline;
+}
+
+/* OPTIONS */
+.options {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    transition: color 0.2s;
-    font-size: 22px;
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 25px;
 }
 
-.togglepassword:hover {
-    color: gray;
-}
-
-input[type="password"]::-ms-reveal{
-    display: none;
-}
-
+/* BUTTON */
 .login {
     width: 100%;
     padding: 15px;
@@ -568,6 +242,7 @@ input[type="password"]::-ms-reveal{
     background-color: #1e69d4;
 }
 
+/* SIGNUP TEXT */
 .signuptext {
     font-size: 13px;
     font-weight: bold;
@@ -575,26 +250,56 @@ input[type="password"]::-ms-reveal{
 }
 
 .signuptext span {
-    color: #5fd665;
+    color: #0845a0;
     cursor: pointer;
     margin-left: 5px;
-    text-decoration: underline; 
+    text-decoration: underline;
 }
-.blueshape svg {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.6s ease;
+.error-text {
+    color: red;
+    font-size: 12px;
 }
-
+/* CLOSE BUTTON */
 .close {
     position: absolute;
     top: 20px;
     right: 25px;
     background: none;
     border: none;
-    font-size: 30px;
+    font-size: 28px;
     color: white;
     cursor: pointer;
     z-index: 100;
+}
+/* 🔴 FIX INPUT ERROR BORDER (IMPORTANT) */
+.inputgroup input.input-error,
+.inputgroup select.input-error {
+    border-bottom: 2px solid red !important;
+}
+
+/* optional stronger feedback */
+.inputgroup input.input-error:focus,
+.inputgroup select.input-error:focus {
+    border-bottom: 2px solid red !important;
+    box-shadow: 0 2px 0 red;
+}
+
+/* optional shake effect (nice UX) */
+.inputgroup input.input-error {
+    animation: shake 0.25s linear;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-3px); }
+    50% { transform: translateX(3px); }
+    75% { transform: translateX(-3px); }
+    100% { transform: translateX(0); }
+}
+.error-text {
+    color: #ef4444;
+    font-size: 12px;
+    margin-top: 4px;
+    display: block;
+    font-weight: 500;
 }
