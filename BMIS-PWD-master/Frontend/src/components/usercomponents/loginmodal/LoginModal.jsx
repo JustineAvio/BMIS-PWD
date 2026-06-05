@@ -228,7 +228,7 @@ function LoginModal({ isOpen, onClose, onLogin }) {
 
               if (decoded.role === "admin") navigate("/admin");
               else if (decoded.role === "staff") navigate("/staff");
-              else navigate("/landing-page");
+              else navigate("/");
 
               onClose();
 
