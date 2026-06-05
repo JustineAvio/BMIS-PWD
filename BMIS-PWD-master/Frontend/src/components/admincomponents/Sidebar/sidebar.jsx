@@ -37,15 +37,9 @@ const Sidebar = ({ handleLogoutClick }) => {
           Account Management
         </NavLink>
 
-        <NavLink 
-          to="/" 
-          onClick={(e)=>{
-            e.preventDefault();
-            handleLogoutClick();}} 
-          className={({ isActive }) => (isActive ? "menu-item logout active" : "menu-item logout")}
-        >
+        <button className="menu-item logout" onClick={handleLogoutClick}>
           Logout
-        </NavLink>
+        </button>
       </nav>
     </div>
   );

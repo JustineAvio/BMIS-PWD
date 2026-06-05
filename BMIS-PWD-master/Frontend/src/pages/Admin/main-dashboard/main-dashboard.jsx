@@ -31,6 +31,7 @@ export default function Main_Dashboard() {
                     
                 setNews(publishedNews);
             } catch (error) {
+                console.error("Error Fetch: ", error.response?.data || error.message);
             }
         };
 
@@ -51,6 +52,7 @@ export default function Main_Dashboard() {
                 setAgeData([]);
             }
         } catch (error) {
+             console.error("Error Fetch: ", error.response?.data || error.message);
         }
     };
 
@@ -71,6 +73,7 @@ export default function Main_Dashboard() {
                 setGenderData([]);
             }
         } catch (error) {
+            console.error("Error Fetch: ", error.response?.data || error.message)
         }
     };
 
@@ -78,8 +81,9 @@ export default function Main_Dashboard() {
         try{
             const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/fetch/count-application`);
             const data = response.data;
-            setAppCount(data[0].application_count);
+            setAppCount(data[0]?.application_count);
         } catch (error) {
+             console.error("Error Count: ", error.response?.data || error.message)
         }
     };
 
@@ -87,8 +91,9 @@ export default function Main_Dashboard() {
         try{
             const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/fetch/count-residents`);
             const data = response.data;
-            setResCount(data[0].resident_count);
+            setResCount(data[0]?.resident_count);
         } catch (error) {
+             console.error("Error Count: ", error.response?.data || error.message)
         }
     };
 
@@ -96,8 +101,9 @@ export default function Main_Dashboard() {
         try{
             const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/fetch/count-news`);
             const data = response.data;
-            setNewsCount(data[0].news_count);
+            setNewsCount(data[0]?.news_count);
         } catch (error) {
+            console.error("Error Count: ", error.response?.data || error.message)
         }
     };
 
@@ -156,7 +162,7 @@ export default function Main_Dashboard() {
                         <ResponsiveContainer width={375} height={375}>
                             <PieChart>
                                 <Pie data = {GenderData} dataKey="value" nameKey="name"
-                                cx='50%' cy='50%' outerRadius={120} label={({name, percent}) => `${name} ${(percent * 100).toFixed(0)}%`}>
+                                cx='50%' cy='50%' outerRadius={120} label={({name, percent}) => `${name} (${(percent * 100).toFixed(0)}%)`}>
                                     {GenderData.map((entry, index) => (
                                         <Cell key={index} fill={colors2[index % colors2.length]}/>
                                     ))}
@@ -181,13 +187,13 @@ export default function Main_Dashboard() {
                                     <img src={`${import.meta.env.VITE_BACKEND_URL}/uploads/news/${item.NewsImage}`} alt="news" />
                                     <div className="news-info">
                                        <h4>
-                            {item.NewsTitle.length > 45
+                            {(item.NewsTitle || "").length > 45
                                 ? item.NewsTitle.substring(0, 45) + "..."
                                 : item.NewsTitle}
                         </h4>
 
                         <p>
-                            {item.NewsContent.length > 100
+                            {(item.NewsContent || "").length > 100
                                 ? item.NewsContent.substring(0, 100) + "..."
                                 : item.NewsContent}
                         </p>
