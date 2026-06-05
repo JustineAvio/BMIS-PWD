@@ -18,7 +18,7 @@ const count_age = async (req, res) => {
         WHEN age BETWEEN 31 AND 50 THEN '31-50'
         ELSE '51+' END AS age_group, CAST(COUNT(*) AS SIGNED) AS count
         FROM ( SELECT TIMESTAMPDIFF(YEAR, Birthday, CURDATE()) AS age 
-        FROM bmisdb.persontable ) AS subquery GROUP BY age_group; `
+        FROM persontable ) AS subquery GROUP BY age_group; `
 
         const [count_record] = await db.query(query);
         res.json(count_record);
