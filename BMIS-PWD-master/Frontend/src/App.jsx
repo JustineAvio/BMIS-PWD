@@ -102,7 +102,7 @@
                     {/* Resident Protected Routes */}
                     <Route element={<ProtectedRoute allowedRoles={['resident']} />}>
                         <Route path="/profile" element={<ProfilePage user={user} setUser={setUser} />} />
-                        <Route path="/landing-page" element={<LPageLayout />} />
+                        <Route path="/" element={<LPageLayout />} />
                         <Route path="/about-us" element={<AboutUs/>}/>
                         <Route path="/faqs" element={<FAQs/>}/>   
                         <Route path="/news/:id" element={<NewsPerPage />} />
