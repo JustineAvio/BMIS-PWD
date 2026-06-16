@@ -33,7 +33,7 @@ exports.postNews = async (req, res) => {
     let image =  null;
 
     try {
-      console.log("FILE RECEIVED:", req.file);
+      
         if(req.file) {  
             image = `news-${Date.now()}.webp`;
             const uploadPath = path.join(__dirname, "..", "uploads", "news");
