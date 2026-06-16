@@ -23,9 +23,10 @@ const NewsViewModal = ({ isOpen, onClose, newsData, onEdit }) => {
 
   const fetchNewsDetails = async (id) => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/news/${id}`);
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/news/${id}`);
       setNews(response.data); 
     } catch (error) {
+      console.error(error.response?.data?.message);
       setNews(newsData); 
     } finally {
       setLoading(false);
@@ -52,7 +53,7 @@ const NewsViewModal = ({ isOpen, onClose, newsData, onEdit }) => {
         <div className="news-view-content">
           <div className="news-view-image">
             {image ? (
-              <img src={`http://localhost:3000/uploads/news/${image}`} alt={title} className="news-image" />
+              <img src={`${import.meta.env.VITE_API_URL}/uploads/news/${image}`} alt={title} className="news-image" />
             ) : (
               <div className="no-image">No Image</div>
             )}

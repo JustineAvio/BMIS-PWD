@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./residents.css";
 import axios from "axios";
-import ResidentDeleteModal from "../../../components/admincomponents/ResidentDeleteModal/residentdeletemodal.jsx";
+import ResidentDeleteModal from "../../../components/admincomponents/ResidentDeleteModal/ResidentDeleteModal.jsx";
 import { toast } from "react-toastify";
 
 export default function Residents() {
@@ -71,7 +71,7 @@ export default function Residents() {
 
   //fetch ng mga data/records from database tapos ididisplay sa website
   const displayResidents = async() => {
-    const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/resident`);
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/resident`);
     setResidents(response.data);
     setFilteredResidents(response.data);
   };
@@ -88,6 +88,7 @@ export default function Residents() {
   };
 
   const handleAccountSettings = (username) => {
+    console.log("Open account settings for", username);
     // Add navigation or modal logic here when needed
   };
   

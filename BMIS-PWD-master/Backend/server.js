@@ -15,7 +15,7 @@ const app = express();
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use('/uploads/news', express.static(path.join(process.cwd(), 'uploads', 'news')));
+app.use("/uploads/news", express.static("uploads/news"));
 
 app.use("/api/fetch", fetchroutes);
 app.use("/api/auth", authroutes);

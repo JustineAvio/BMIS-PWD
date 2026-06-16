@@ -12,7 +12,7 @@ export default function AccountManagement() {
 
   const displayAccounts = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/fetch`);
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch`);
       const data = await response.data;
 
       if (Array.isArray(data)) {
@@ -21,6 +21,7 @@ export default function AccountManagement() {
         setAccounts([]);
       }
     } catch (error) {
+      console.log("Error Fetching");
     }
   };
 
@@ -39,6 +40,7 @@ export default function AccountManagement() {
   };
 
   const handleDelete = (id) => {
+    console.log("Delete account", id);
   };
 
   const filteredAccounts = accounts.filter((acc) => {

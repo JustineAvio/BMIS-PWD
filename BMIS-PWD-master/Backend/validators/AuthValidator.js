@@ -91,13 +91,13 @@ const resetpassSchema = Joi.object({
     })
 });
 
-// Validator functions — take payload directly and validate
-const LoginValidator = (payload) => loginSchema.validate(payload, { abortEarly: false });
-const signUpValidator = (payload) => signUpSchema.validate(payload, { abortEarly: false });
-const forgotpassValidator = (payload) => forgotpassSchema.validate(payload, { abortEarly: false });
-const resetpassValidator = (payload) => resetpassSchema.validate(payload, { abortEarly: false });
+// Validator functions remain the same
+const LoginValidator = (schema) => (payload) => schema.validate(payload, { abortEarly: false });
+const signUpValidator = (schema) => (payload) => schema.validate(payload, { abortEarly: false });
+const forgotpassValidator = (schema) => (payload) => schema.validate(payload, { abortEarly: false });
+const resetpassValidator = (schema) => (payload) => schema.validate(payload, { abortEarly: false });
 
-exports.LoginValidator = LoginValidator;
-exports.signUpValidator = signUpValidator;
-exports.forgotpassValidator = forgotpassValidator;
-exports.resetpassValidator = resetpassValidator;
+exports.LoginValidator = LoginValidator(loginSchema);
+exports.signUpValidator = signUpValidator(signUpSchema);
+exports.forgotpassValidator = forgotpassValidator(forgotpassSchema);
+exports.resetpassValidator = resetpassValidator(resetpassSchema);

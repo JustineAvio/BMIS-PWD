@@ -1,37 +1,37 @@
-import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useState, useEffect} from "react";
+import { useParams } from "react-router-dom";
 import "./newsperpage.css";
 import axios from "axios";
 
 function NewsPerPage() {
     const { id } = useParams();
-    const [news, setNews] = useState(null);
+    const [news, setNews]= useState(null);
     const [loading, setLoading] = useState(true);
-    const BackedURL = `${import.meta.env.VITE_BACKEND_URL}/uploads/news/`;
+    const BackedURL = `${import.meta.env.VITE_API_URL}/uploads/news/`;
 
     const fetchNews = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/news/${id}`);
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/news/page/${id}`);
             setNews(response.data);
             setLoading(false);
         } catch (error) {
-            console.error("Error fetching news:", error);
+            console.error(error.response?.data?.message);
             setLoading(false);
         }   
     };
 
-    useEffect(() => {
+    React.useEffect(() => {
         fetchNews();
     }, [id]);
-
-    if(loading){
+    
+    if(loading) {
         return (
             <div className="single-news-loading">
                 <h1>Loading...</h1>
             </div>
         );
     }
-
+    
     if (!news) {
         return (
             <div className="single-news-notfound">
@@ -41,7 +41,7 @@ function NewsPerPage() {
     }
 
     return (
-       <div className="news-page">
+    <div className="news-page">
 
         <div className="news-wrapper">
 

@@ -28,7 +28,7 @@ export default function ResidentForm() {
     }
 
     try {
-      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/resident/add-resident`, formData);
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/resident/add-resident`, formData);
       toast.success("Resident Inserted Successfully!");
       navigate("/admin/resident");
     } catch (error) {

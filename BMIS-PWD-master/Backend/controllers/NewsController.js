@@ -29,27 +29,36 @@ exports.getNewsPerPage = async (req, res) => {
 
 exports.postNews = async (req, res) => {
     const { id } = req.params;
-    const { newstitle, newscategory, newscontent, newsstatus, existingImage } = req.body;
-    let image = existingImage || null;
+    const { newstitle, newscategory, newscontent, newsstatus} = req.body;
+    let image =  null;
 
     try {
-        if(req.file) {
+      console.log("FILE RECEIVED:", req.file);
+        if(req.file) {  
             image = `news-${Date.now()}.webp`;
-            const uploadPath = path.join(__dirname, "..", "uploads", "news", image);
+            const uploadPath = path.join(__dirname, "..", "uploads", "news");
+
             if(!fs.existsSync(uploadPath)) {
-                fs.mkdirSync(path.dirname(uploadPath), { recursive: true });
+                fs.mkdirSync(uploadPath, { recursive: true });
             }
-            await sharp(req.file.buffer)
-                .resize(800, 600, { fit: 'inside' })
-                .toFile(uploadPath);
+            const uploadImage = path.join(uploadPath, image);
+
+            try {
+                await sharp(req.file.buffer)
+                    .resize(800, 600, { fit: "inside" })
+                    .webp({ quality: 80 })
+                    .toFile(uploadImage);
+            } catch (err) {
+                console.log("SHARP ERROR:", err);
+            }
         }
-        const query = `INSERT INTO newstable (AccountID, NewsTitle, NewsCategory, NewsContent, NewsStatus, NewsImage) 
-                       VALUES (?, ?, ?, ?, ?, ?)`;
-        
-        const params = [id, newstitle, newscategory, newscontent, newsstatus, image];
-        
-        await db.query(query, params);
-        res.json({ success: true, message: "News saved successfully!" });
+         await db.query(
+            `INSERT INTO newstable
+            (NewsTitle, NewsCategory, NewsContent, NewsStatus, NewsImage)
+            VALUES (?, ?, ?, ?, ?)`,
+            [newstitle, newscategory, newscontent, newsstatus, image]);
+
+        res.status(201).json({ success: true, message: "News published successfully!"});
     } catch (error) {
         console.error("Database Error:", error.message);
         res.status(500).json({ error: "Check your database attribute lengths or constraints." });
@@ -58,45 +67,133 @@ exports.postNews = async (req, res) => {
 
 exports.editNews = async (req, res) => {
   const { id } = req.params;
-  const values = req.body;
-  let query, params;
+  const {
+    newstitle,
+    newscategory,
+    newscontent,
+    newsstatus,
+    existingImage
+  } = req.body;
 
-  try{
-    if (req.file) {
-        const newsImage = req.file ? req.file.filename : values.existingImage;
-        query = 'UPDATE newstable SET NewsTitle=?, NewsContent=?, NewsCategory=?, NewsStatus=?, NewsImage=? WHERE NewsID=?';
-        params = [values.newstitle, values.newscontent, values.newscategory, values.newsstatus, newsImage, id];
-    } else {
-        query = 'UPDATE newstable SET NewsTitle=?, NewsContent=?, NewsCategory=?, NewsStatus=? WHERE NewsID=?';
-        params = [values.newstitle, values.newscontent, values.newscategory, values.newsstatus, id];
+  let newsImage = existingImage;
+
+  try {
+
+    const uploadDir = path.join(__dirname, "..", "uploads", "news");
+
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
     }
 
-    await db.query(query, params);
-    res.status(200).json({ message: "News updated successfully!" });
+    if (req.file) {
 
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  };
-}
+      // ========================
+      // 1. DELETE OLD IMAGE FIRST
+      // ========================
+      if (existingImage) {
+        const oldFile = existingImage.includes("http")
+          ? existingImage.split("/uploads/news/")[1]
+          : existingImage;
+
+        const oldPath = path.join(uploadDir, oldFile);
+
+        if (fs.existsSync(oldPath)) {
+          fs.unlinkSync(oldPath);
+          console.log("Deleted old image:", oldFile);
+        }
+      }
+
+      // ========================
+      // 2. SAVE NEW IMAGE
+      // ========================
+      const fileName = `news-${Date.now()}.webp`;
+      const filePath = path.join(uploadDir, fileName);
+
+      await sharp(req.file.buffer)
+        .resize(800, 600, { fit: "inside" })
+        .webp({ quality: 80 })
+        .toFile(filePath);
+
+      newsImage = fileName; // IMPORTANT: overwrite completely
+
+      console.log("Saved new image:", fileName);
+    }
+
+    // ========================
+    // 3. UPDATE DB (ONLY ONE IMAGE)
+    // ========================
+    await db.query(
+      `UPDATE newstable
+       SET NewsTitle=?,
+           NewsCategory=?,
+           NewsContent=?,
+           NewsStatus=?,
+           NewsImage=?
+       WHERE NewsID=?`,
+      [
+        newstitle,
+        newscategory,
+        newscontent,
+        newsstatus,
+        newsImage,
+        id
+      ]
+    );
+
+    res.json({ success: true });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Edit failed" });
+  }
+};
 
 exports.deleteNews = async (req, res) => {
     const { id } = req.params;
 
-    try{
-        const [image] = await db.query("SELECT NewsImage FROM newstable WHERE NewsID = ?", [id]);
-        if (image.length > 0 && image[0].NewsImage) {
-            const imagePath = path.join(__dirname, "../uploads/", image[0].NewsImage);
-            if(fs.existsSync(imagePath)) {
-                fs.unlinkSync(imagePath);
+    try {
+        // 1. Get image from DB
+        const [rows] = await db.query(
+            "SELECT NewsImage FROM newstable WHERE NewsID = ?",
+            [id]
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).json({ error: "News not found" });
+        }
+
+        const image = rows[0].NewsImage;
+
+        // 2. Build correct file path
+        const uploadDir = path.join(__dirname, "..", "uploads", "news");
+
+        if (image) {
+            const fileName = image.includes("http")
+                ? image.split("/uploads/news/")[1]
+                : image;
+
+            const filePath = path.join(uploadDir, fileName);
+
+            // 3. Delete file if exists
+            if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+                console.log("Deleted image:", fileName);
             }
         }
 
-        await db.query("DELETE FROM newstable WHERE NewsID = ?", [id]);
+        // 4. Delete DB record
+        await db.query(
+            "DELETE FROM newstable WHERE NewsID = ?",
+            [id]
+        );
+
         res.json({ message: "News deleted successfully!" });
+
     } catch (error) {
-        res.status(500).json({ error: "Error deleting news." });
+        console.error("Delete News Error:", error);
+        res.status(500).json({ error: "Failed to delete news" });
     }
-}
+};
 
 exports.fetchSpecificNews = async (req, res) => {
     const { id } = req.params;

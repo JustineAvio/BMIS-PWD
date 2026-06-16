@@ -8,15 +8,17 @@ const NewsDeleteModal = ({ isOpen, onClose, newsData, onConfirmDelete }) => {
   const handleDelete = async () => {
     const id = newsData.NewsID;
     if(!id) {
+      console.error("No valid ID found for deletion.");
       return;
     }
 
     try {
-      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/news/delete/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/news/delete/${id}`);
       if (onConfirmDelete) onConfirmDelete(id);
       
       onClose();
     } catch (error) {
+      console.error(error.data?.message);
     }
     
   };

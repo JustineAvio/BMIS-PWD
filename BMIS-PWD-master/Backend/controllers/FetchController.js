@@ -18,7 +18,7 @@ const count_age = async (req, res) => {
         WHEN age BETWEEN 31 AND 50 THEN '31-50'
         ELSE '51+' END AS age_group, CAST(COUNT(*) AS SIGNED) AS count
         FROM ( SELECT TIMESTAMPDIFF(YEAR, Birthday, CURDATE()) AS age 
-        FROM persontable ) AS subquery GROUP BY age_group; `
+        FROM bmisdb.persontable ) AS subquery GROUP BY age_group; `
 
         const [count_record] = await db.query(query);
         res.json(count_record);
@@ -34,7 +34,7 @@ const count_sex = async (req, res) => {
         const [count_record] = await db.query(query);
         res.json(count_record);
     } catch (err) {
-         res.status(500).json({message: "Internal Server Error", error: err.message});
+         res.status(500).json({message: "Internal Server Error", error: error.message});
     }
 }
 
@@ -44,7 +44,7 @@ const count_news = async (req, res) => {
         const [count_record] = await db.query(query);
         res.json(count_record);
     } catch (err) {
-         res.status(500).json({message: "Internal Server Error", error: err.message});
+         res.status(500).json({message: "Internal Server Error", error: error.message});
     }
 }
 
@@ -54,7 +54,7 @@ const count_residents = async (req, res) => {
         const [count_record] = await db.query(query);
         res.json(count_record);
     } catch (err) {
-         res.status(500).json({message: "Internal Server Error", error: err.message});
+         res.status(500).json({message: "Internal Server Error", error: error.message});
     }
 }
 
@@ -64,7 +64,7 @@ const count_applications = async (req, res) => {
         const [count_record] = await db.query(query);
         res.json(count_record);
     } catch (err) {
-         res.status(500).json({message: "Internal Server Error", error: err.message});
+         res.status(500).json({message: "Internal Server Error", error: error.message});
     }
 }
 

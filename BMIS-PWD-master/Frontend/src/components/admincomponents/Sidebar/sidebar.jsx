@@ -1,13 +1,16 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import './sidebar.css';
+import logo from '../../../assets/images/logo2.png'
+import { useAuth } from '../../../routes/AuthContext.jsx';
 
 const Sidebar = ({ handleLogoutClick }) => {
+  const { logout } = useAuth(); 
   return (
     <div className="sidebar">
       {/* BRANDING AREA */}
       <div className="logo-area">
-        <img src="/images/logo2.png" className="logo" alt="Logo" />
+        <img src={logo} className="logo" alt="Logo" />
         <h3>Barangay System</h3>
       </div>
 
@@ -37,9 +40,13 @@ const Sidebar = ({ handleLogoutClick }) => {
           Account Management
         </NavLink>
 
-        <button className="menu-item logout" onClick={handleLogoutClick}>
+        <NavLink 
+          to="/" 
+          onClick={logout} 
+          className={({ isActive }) => (isActive ? "menu-item logout active" : "menu-item logout")}
+        >
           Logout
-        </button>
+        </NavLink>
       </nav>
     </div>
   );

@@ -1,7 +1,8 @@
 import { useState } from "react";
 import "./formspage.css";
-import { useAuth } from "../../../routes/AuthContext.jsx";
+import bg from "../../../assets/images/bg.jpg";
 import FormModal from "../../../components/usercomponents/formsmodal/formsmodal.jsx";
+import { useAuth } from "../../../routes/AuthContext.jsx";
 
 function FormsPage() {
 
@@ -15,11 +16,10 @@ function FormsPage() {
         "Solo Parent Certificate",
         "Good Moral Certificate"
     ];
-    
-    const {isLoggedIn, user} = useAuth();
-    
+
     const [selectedForm, setSelectedForm] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
+    const { user, isLoggedIn } = useAuth();
 
     const openForm = (form) => {
         setSelectedForm(form);
@@ -34,15 +34,13 @@ function FormsPage() {
     return (
         <div className="forms-page">
 
-            {/* HERO */}
             <div className="forms-hero">
-                <img src="/images/bg.jpg" alt="Forms Banner" />
+                <img src={bg} alt="Forms Banner" />
                 <div className="overlay">
                     <h1>Certificates and Forms</h1>
                 </div>
             </div>
 
-            {/* CONTENT */}
             <div className="forms-container">
                 <h2>ONLINE APPLICATION</h2>
 
@@ -60,12 +58,10 @@ function FormsPage() {
                 </div>
             </div>
 
-            {/* MODAL COMPONENT */}
             <FormModal
                 open={modalOpen}
                 onClose={closeModal}
                 form={selectedForm}
-                isLoggedIn={isLoggedIn}
             />
 
         </div>

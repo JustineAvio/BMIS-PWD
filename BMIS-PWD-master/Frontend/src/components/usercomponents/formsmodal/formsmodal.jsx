@@ -11,9 +11,10 @@ function FormModal({ open, onClose, form }) {
     const [phone, setPhone] = useState("");
 
     const [errors, setErrors] = useState({});
-    const { isLoggedIn, user } = useAuth();
+    const { user, loading } = useAuth();
 
     if (!open) return null;
+    if(loading) return null;
 
     const validate = () => {
         const newErrors = {};
@@ -65,13 +66,13 @@ function FormModal({ open, onClose, form }) {
 
             const config = {headers: {Authorization: `Bearer ${token}`,}};
 
-            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/forms/submit/${user.id}`, formData, config);
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/forms/submit/${user.id}`, formData, config);
             toast.success("Application submitted successfully!");
             onClose();
          }catch(error){
-
-             toast.error("An error occurred while submitting the form. Please try again later.");
-             return;
+            console.error("Error submitting form:", error);
+            toast.error(error.response?.data?.message);
+            return;
         }
     };
     
@@ -94,7 +95,7 @@ function FormModal({ open, onClose, form }) {
                     <button className="formsModalClose" onClick={onClose}>×</button>
                 </div>
 
-                {!isLoggedIn && !user ? (
+                {!user? (
                     <div className="formsModalLoginGate">
                         <div className="formsModalIcon">🔒</div>
                         <h3 className="formsModalLoginTitle">Login Required</h3>

@@ -1,4 +1,7 @@
 import "./aboutuspage.css";
+import bg from "../../../assets/images/bg.jpg";
+import hall from "../../../assets/images/hall.jpg";
+import capedgie from "../../../assets/images/capedgie.jpg";
 
 function AboutUsPage() {
     return (
@@ -6,7 +9,7 @@ function AboutUsPage() {
 
             {/* HERO SECTION */}
             <div className="about-hero">
-                <img src="/images/bg.jpg" alt="Barangay Background" />
+                <img src={bg} alt="Barangay Background" />
 
                 <div className="about-overlay">
                     <h1>About Us</h1>
@@ -23,7 +26,7 @@ function AboutUsPage() {
 
                 <div className="about-content">
                     <div className="about-image">
-                        <img src={"images/hall.jpg"} alt="Barangay Hall" />
+                        <img src={hall} alt="Barangay Hall" />
                     </div>
 
                     <div className="about-text">
@@ -83,7 +86,7 @@ function AboutUsPage() {
                     </div>
 
                     <div className="official-card">
-                        <img src="/images/capedgie.jpg" alt="Barangay Captain" />
+                        <img src={capedgie} alt="Barangay Captain" />
 
                         <div className="official-info">
                             <h2>Hon. Edgardo D. Reyes</h2>

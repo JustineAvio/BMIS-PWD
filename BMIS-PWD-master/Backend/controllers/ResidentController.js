@@ -77,6 +77,7 @@ exports.add_resident =  async (request, response) => {
         response.status(200).json({ success: true, message: "Added Successfully" });
     } catch(error){
         await connection.rollback()
+        console.error("Error during registration:", error); 
         response.status(500).json({error: "An error occurred during registration"});
     } finally {
         connection.release();
@@ -92,6 +93,7 @@ exports.edit_resident = async (request, response) => {
 
     if (error) {
         const formattedErrors = error.details.reduce((acc, curr) => {
+            console.log(`Validation error for ${curr.path[0]}: ${curr.message}`); // Debug log for each validation error
             acc[curr.path[0]] = curr.message;
             return acc;
         }, {});
@@ -113,6 +115,7 @@ exports.edit_resident = async (request, response) => {
 
         response.json(updateResult);
     } catch(error){
+        console.error("Error updating resident:", error);
         response.status(500).json({error: "Failed to update resident"});
     }
 }
@@ -195,9 +198,14 @@ exports.delete_resident = async (request, response) => {
             await connection.rollback();
         }
 
+        console.error("Error deleting resident:", error);
+
+        // Better error response
         if (error.code === "ER_ROW_IS_REFERENCED_2") {
+
             return response.status(400).json({
-                error: "Cannot delete resident because related records still exist."
+                error:
+                    "Cannot delete resident because related records still exist."
             });
         }
 

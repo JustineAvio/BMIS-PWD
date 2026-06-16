@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "./formmanagement.css";
 import axios from "axios";
 import { toast } from 'react-toastify';
+
 export default function FormManagement() {
   const [applications, setApplications] = useState([]);
   const [selectedApplication, setSelectedApplication] = useState(null);
@@ -9,39 +10,76 @@ export default function FormManagement() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
+  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [rejectReason, setRejectReason] = useState("");
+
   const statusOptions = ["all", "Submitted", "In Review", "Approved", "Rejected"];
 
   const fetchApplications = async () => {
-    try{
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/forms`);
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/forms`);
       setApplications(response.data);
     } catch (error) {
-      console.error("Error fetching applications:", error);
+      console.error(error.response?.data?.message);
     }
   };
 
   const handleStatusChange = async (applicationId, newStatus) => {
-    try{
-      const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/forms/decision/${applicationId}`, {
-        decision: newStatus
-      });
+    try {
+      const response = await axios.put(
+        `${import.meta.env.VITE_API_URL}/api/forms/decision/${applicationId}`,
+        { decision: newStatus }
+      );
 
-        toast.success(response.data.message);
-        setSelectedApplication(null);
-        fetchApplications();
-  
+      toast.success(response.data.message);
+      setSelectedApplication(null);
+      fetchApplications();
+
     } catch (error) {
-      console.error("Error updating application status:", error);
+      console.error(error.response?.data?.message);
     }
   };
 
+  const handleRejectSubmit = async () => {
+
+  if (!rejectReason.trim()) {
+    toast.error("Please provide a rejection reason.");
+    return;
+  }
+
+  try {
+
+    const response = await axios.put(
+      `${import.meta.env.VITE_API_URL}/api/forms/decision/${selectedApplication.ApplicationID}`,
+      {
+        decision: "Rejected",
+        reason: rejectReason
+      }
+    );
+
+    toast.success(response.data.message);
+
+    setShowRejectModal(false);
+    setRejectReason("");
+    setSelectedApplication(null);
+
+    fetchApplications();
+
+  } catch (error) {
+    toast.error(error.response?.data?.message || "Failed to reject application.");
+  }
+};
+
   const handleReview = async (applicationId) => {
-    try{
-      const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/forms/review/${applicationId}`);
+    try {
+      const response = await axios.put(
+        `http://localhost:3000/api/forms/review/${applicationId}`
+      );
+
       toast.success(response.data.message);
       fetchApplications();
     } catch (error) {
-      console.error("Error opening application for review:", error);
+      console.error(error.response?.data?.message);
     }
   };
 
@@ -50,18 +88,21 @@ export default function FormManagement() {
   }, []);
 
   const filteredApplications = applications.filter((application) => {
-    const name = `${application.GivenName} ${application.MiddleName || null} ${application.LastName}`.replace(/\s+/g, " ").trim();
+    const name = `${application.GivenName} ${application.MiddleName || ""} ${application.LastName}`
+      .replace(/\s+/g, " ")
+      .trim();
+
     const type = application.ApplicationType;
     const status = application.Status;
     const id = application.ApplicationID;
 
-    const searchValue = `${id}${name} ${type} ${status}`.toLowerCase();
+    const searchValue = `${id} ${name} ${type} ${status}`.toLowerCase();
     const matchesSearch = searchValue.includes(searchTerm.toLowerCase());
 
     const matchesStatus = statusFilter === "all" || status === statusFilter;
-
     const matchesFrom = dateFrom ? application.DateSubmitted >= dateFrom : true;
     const matchesTo = dateTo ? application.DateSubmitted <= dateTo : true;
+
     return matchesSearch && matchesStatus && matchesFrom && matchesTo;
   });
 
@@ -69,9 +110,7 @@ export default function FormManagement() {
     (acc, item) => {
       acc.total += 1;
       const status = item.Status;
-      if(status){
-        acc[status] = (acc[status] || 0) + 1;
-      }
+      if (status) acc[status] = (acc[status] || 0) + 1;
       return acc;
     },
     { total: 0 }
@@ -82,7 +121,9 @@ export default function FormManagement() {
       <div className="page-header">
         <div>
           <h3>Application Management</h3>
-          <p className="page-description">Review incoming applications from residents and track each submission status.</p>
+          <p className="page-description">
+            Review incoming applications from residents and track each submission status.
+          </p>
         </div>
       </div>
 
@@ -122,6 +163,7 @@ export default function FormManagement() {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
+
             <div className="tool-item">
               <label htmlFor="application-status">Filter by status</label>
               <select
@@ -136,13 +178,25 @@ export default function FormManagement() {
                 ))}
               </select>
             </div>
+
             <div className="tool-item date-group">
               <label htmlFor="date-from">From</label>
-              <input id="date-from" type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} />
+              <input
+                id="date-from"
+                type="date"
+                value={dateFrom}
+                onChange={(e) => setDateFrom(e.target.value)}
+              />
             </div>
+
             <div className="tool-item date-group">
               <label htmlFor="date-to">To</label>
-              <input id="date-to" type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} />
+              <input
+                id="date-to"
+                type="date"
+                value={dateTo}
+                onChange={(e) => setDateTo(e.target.value)}
+              />
             </div>
           </div>
 
@@ -158,32 +212,45 @@ export default function FormManagement() {
                   <th>Action</th>
                 </tr>
               </thead>
+
               <tbody>
                 {filteredApplications.length > 0 ? (
                   filteredApplications.map((application) => (
                     <tr
                       key={application.ApplicationID}
-                      className={selectedApplication?.id === application.id ? "selected-row" : ""}
+                      className={
+                        selectedApplication?.ApplicationID === application.ApplicationID
+                          ? "selected-row"
+                          : ""
+                      }
                       onClick={() => setSelectedApplication(application)}
                     >
                       <td>{application.ApplicationID || ""}</td>
                       <td>{application.FullName}</td>
                       <td>{application.ApplicationType}</td>
-                      <td>{new Date(application.DateSubmitted).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      })}</td>
                       <td>
-                        <span className={`status-chip ${(application.Status).replace(/\s+/g, "-")}`}>
-                        {application.Status}
+                        {new Date(application.DateSubmitted).toLocaleDateString(
+                          "en-US",
+                          { year: "numeric", month: "long", day: "numeric" }
+                        )}
+                      </td>
+                      <td>
+                        <span
+                          className={`status-chip ${application.Status.replace(/\s+/g, "-")}`}
+                        >
+                          {application.Status}
                         </span>
                       </td>
                       <td>
-                        <button className="view-btn" type="button" onClick={(e) => {
-                          e.stopPropagation();
-                          handleReview(application.ApplicationID);
-                          setSelectedApplication(application)}}>
+                        <button
+                          className="view-btn"
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleReview(application.ApplicationID);
+                            setSelectedApplication(application);
+                          }}
+                        >
                           Review
                         </button>
                       </td>
@@ -204,52 +271,66 @@ export default function FormManagement() {
         <aside className="detail-card">
           <div className="detail-header">
             <h4>Application Details</h4>
-            <p className="detail-subtitle">Select a request to review full application data.</p>
+            <p className="detail-subtitle">
+              Select a request to review full application data.
+            </p>
           </div>
+
           {selectedApplication ? (
             <div className="detail-content">
               <div className="detail-row">
                 <span>Application ID</span>
-                <strong>{`${selectedApplication.ApplicationID}` || ""}</strong>
+                <strong>{selectedApplication.ApplicationID}</strong>
               </div>
+
               <div className="detail-row">
                 <span>Applicant</span>
                 <strong>{selectedApplication.FullName}</strong>
               </div>
+
               <div className="detail-row">
                 <span>Form Type</span>
                 <strong>{selectedApplication.ApplicationType}</strong>
               </div>
+
               <div className="detail-row">
                 <span>Submitted</span>
-                <strong>{new Date(selectedApplication.DateSubmitted).toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}</strong>
+                <strong>
+                  {new Date(selectedApplication.DateSubmitted).toLocaleDateString(
+                    "en-US",
+                    { year: "numeric", month: "long", day: "numeric" }
+                  )}
+                </strong>
               </div>
+
               <div className="detail-row">
                 <span>Contact</span>
                 <strong>{selectedApplication.PhoneNo}</strong>
               </div>
-              {/* <div className="detail-row">
-                <span>Barangay</span>
-                <strong>{selectedApplication.barangay}</strong>
-              </div> */}
-              {/* <div className="detail-row detail-description">
-                <span>Application Summary</span>
-                <p>{selectedApplication.description}</p>
-              </div> */}
-              <div className="detail-actions">
-                <button className="approve-btn" type="button" disabled={selectedApplication.Status === "Approved"}
-                onClick={() => {handleStatusChange(selectedApplication.ApplicationID, "Approved")}}>
-                  Approve
-                </button>
-                <button className="reject-btn" type="button" disabled={selectedApplication.Status === "Rejected"}
-                onClick={() => {handleStatusChange(selectedApplication.ApplicationID, "Rejected")}}>
-                  Reject
-                </button>
-              </div>
+
+              {/* ✅ ONLY SHOW BUTTONS IF NOT DECIDED */}
+              {selectedApplication.Status !== "Approved" &&
+                selectedApplication.Status !== "Rejected" && (
+                  <div className="detail-actions">
+                    <button
+                      className="approve-btn"
+                      type="button"
+                      onClick={() =>
+                        handleStatusChange(selectedApplication.ApplicationID, "Approved")
+                      }
+                    >
+                      Approve
+                    </button>
+
+                    <button
+                      className="reject-btn"
+                      type="button"
+                      onClick={() => setShowRejectModal(true)}
+                    >
+                      Reject
+                    </button>
+                  </div>
+                )}
             </div>
           ) : (
             <div className="detail-placeholder">
@@ -258,6 +339,51 @@ export default function FormManagement() {
           )}
         </aside>
       </div>
+      {showRejectModal && (
+        <div className="modal-overlay">
+          <div className="reject-modal">
+
+            <div className="reject-modal-header">
+              <h3>Reject Application</h3>
+            </div>
+
+            <div className="reject-modal-body">
+
+              <label>Reason for Rejection</label>
+
+              <textarea
+                rows="4"
+                value={rejectReason}
+                onChange={(e) => setRejectReason(e.target.value)}
+                placeholder="Enter rejection reason..."
+              />
+
+            </div>
+
+            <div className="reject-modal-footer">
+
+              <button
+                className="cancel-btn"
+                onClick={() => {
+                  setShowRejectModal(false);
+                  setRejectReason("");
+                }}
+              >
+                Cancel
+              </button>
+
+              <button
+                className="confirm-reject-btn"
+                onClick={handleRejectSubmit}
+              >
+                Confirm Rejection
+              </button>
+
+            </div>
+
+          </div>
+        </div>
+      )}
     </div>
   );
 }

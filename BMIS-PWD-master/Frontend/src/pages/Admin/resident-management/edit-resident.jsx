@@ -18,7 +18,7 @@ export default function EditResident() {
   useEffect(() => {
     const fetchResident = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/resident/${id}`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/resident/${id}`);
         const data = response.data;
         const formattedDate = data.Birthday ? data.Birthday.split("T")[0] : "";
         setformData({
@@ -28,7 +28,7 @@ export default function EditResident() {
           address: data.address || data.Address || ""
         });
       } catch (error) {
-        console.error("Error fetching resident:", error);
+        console.error(error.response?.data?.message);
       }
     };
         fetchResident(); 
@@ -48,11 +48,11 @@ export default function EditResident() {
           address: formData.address || formData.Address || ""
         };
 
-        await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/resident/update-resident/${id}`, payload);
+        await axios.put(`${import.meta.env.VITE_API_URL}/api/resident/update-resident/${id}`, payload);
         toast.success("Updated Successfully!");
         navigate("/admin/resident");
         } catch (err) {
-            toast.error("Update failed!");
+            toast.error(err.data?.message);
         }
     };
 

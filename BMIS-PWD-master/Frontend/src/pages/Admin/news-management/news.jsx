@@ -32,9 +32,11 @@
       setisLoading(true);
 
       try {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/news`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/news`);
         if(response.data && response.data.length > 0){
           setNews(response.data);
+          if(response.data.length === 0){
+          }
         } else {
           setNews([]);
         }
@@ -84,7 +86,7 @@
 
     const handleDeleteNews = async (newsID) => {
       try {
-        await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/news/delete/${newsID}`);
+        await axios.delete(`${import.meta.env.VITE_API_URL}/api/news/delete/${newsID}`);
         toast.success("News deleted successfully!");
         fetchNews();
       } catch (error) {
@@ -207,7 +209,7 @@
                     <div className="news-thumbnail-container">
                       {displayImage ? (
                         <img 
-                          src={`${import.meta.env.VITE_BACKEND_URL}/uploads/news/${displayImage}`} 
+                          src={`${import.meta.env.VITE_API_URL}/uploads/news/${displayImage}`} 
                           alt="thumbnail" 
                           className="table-thumbnail" 
                         />

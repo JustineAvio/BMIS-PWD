@@ -14,7 +14,7 @@ export default function Main_Dashboard() {
     const colors2 = ["#00BFFF", "#F4C2C2", "#FFFF00"];
     const fetchNews = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/news`);
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/news`);
                 
                 // Use the exact case from your Database/ERD
                 const publishedNews = response.data
@@ -31,13 +31,13 @@ export default function Main_Dashboard() {
                     
                 setNews(publishedNews);
             } catch (error) {
-                console.error("Error Fetch: ", error.response?.data || error.message);
+                console.error("Error fetching news:", error);
             }
         };
 
     const fetchAgeData = async () => {
         try{
-            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/fetch/count-age`);
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch/count-age`);
             const data = response.data;
 
             if(Array.isArray(data)){
@@ -52,13 +52,13 @@ export default function Main_Dashboard() {
                 setAgeData([]);
             }
         } catch (error) {
-             console.error("Error Fetch: ", error.response?.data || error.message);
+            console.log("Error Fetching Age Data", error);
         }
     };
 
      const fetchGenderData = async () => {
         try{
-            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/fetch/count-sex`);
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch/count-sex`);
             const data = response.data;
 
             if(Array.isArray(data)){
@@ -73,37 +73,37 @@ export default function Main_Dashboard() {
                 setGenderData([]);
             }
         } catch (error) {
-            console.error("Error Fetch: ", error.response?.data || error.message)
+            console.log("Error Fetching Gender Data", error);
         }
     };
 
     const countApplicationData = async () => {
         try{
-            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/fetch/count-application`);
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch/count-application`);
             const data = response.data;
-            setAppCount(data[0]?.application_count);
+            setAppCount(data[0].application_count);
         } catch (error) {
-             console.error("Error Count: ", error.response?.data || error.message)
+            console.log("Error Fetching Application Data", error);
         }
     };
 
      const countResidentData = async () => {
         try{
-            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/fetch/count-residents`);
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch/count-residents`);
             const data = response.data;
-            setResCount(data[0]?.resident_count);
+            setResCount(data[0].resident_count);
         } catch (error) {
-             console.error("Error Count: ", error.response?.data || error.message)
+            console.log("Error Fetching Resident Data", error);
         }
     };
 
      const countNewsData = async () => {
         try{
-            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/fetch/count-news`);
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/fetch/count-news`);
             const data = response.data;
-            setNewsCount(data[0]?.news_count);
+            setNewsCount(data[0].news_count);
         } catch (error) {
-            console.error("Error Count: ", error.response?.data || error.message)
+            console.log("Error Fetching News Data", error);
         }
     };
 
@@ -142,7 +142,7 @@ export default function Main_Dashboard() {
 
                     {/* CHARTS SECTION */}
                     <div className="dashboard">
-                         <div className="pieChart">
+                        <div className="pieChart">
                         <h3 align="center">Age</h3>
                         <ResponsiveContainer width={375} height={375}>
                             <PieChart>
@@ -162,7 +162,7 @@ export default function Main_Dashboard() {
                         <ResponsiveContainer width={375} height={375}>
                             <PieChart>
                                 <Pie data = {GenderData} dataKey="value" nameKey="name"
-                                cx='50%' cy='50%' outerRadius={120} label={({name, percent}) => `${name} (${(percent * 100).toFixed(0)}%)`}>
+                                cx='50%' cy='50%' outerRadius={120} label={({name, percent}) => `${name} ${(percent * 100).toFixed(0)}%`}>
                                     {GenderData.map((entry, index) => (
                                         <Cell key={index} fill={colors2[index % colors2.length]}/>
                                     ))}
@@ -184,16 +184,16 @@ export default function Main_Dashboard() {
                         {news.length > 0 ? (
                             news.map((item, index) => (
                                 <div key={index} className="news-item">
-                                    <img src={`${import.meta.env.VITE_BACKEND_URL}/uploads/news/${item.NewsImage}`} alt="news" />
+                                    <img src={`${import.meta.env.VITE_API_URL}/uploads/news/${item.NewsImage}`} alt="news" />
                                     <div className="news-info">
                                        <h4>
-                            {(item.NewsTitle || "").length > 45
+                            {item.NewsTitle.length > 45
                                 ? item.NewsTitle.substring(0, 45) + "..."
                                 : item.NewsTitle}
                         </h4>
 
                         <p>
-                            {(item.NewsContent || "").length > 100
+                            {item.NewsContent.length > 100
                                 ? item.NewsContent.substring(0, 100) + "..."
                                 : item.NewsContent}
                         </p>

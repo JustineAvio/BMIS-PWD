@@ -45,6 +45,21 @@ exports.requestform = async (req, res) => {
     }
 
     try {
+        
+        const [existing] = await db.query(
+            `SELECT * FROM applicationtable 
+             WHERE AccountID = ? 
+             AND ApplicationType = ?
+             AND Status IN ('Submitted', 'In Review')`,
+            [id, AppType]
+        );
+
+        if (existing.length > 0) {
+            return res.status(409).json({
+                success: false,
+                message: "You already have a pending application of this type."
+            });
+        }
 
         const fullname =
             `${GivenName.trim()} ${MiddleName ? MiddleName.trim() + " " : ""}${LastName.trim()}`;

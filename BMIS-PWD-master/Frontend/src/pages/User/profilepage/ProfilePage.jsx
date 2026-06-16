@@ -12,11 +12,13 @@ function ProfilePage({ user, onLogout }) {
             const id = user?.ResidentID;
 
             if(!id) return;
-            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/resident/${id}`);
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/resident/${id}`);
+            console.log("API Response:", response.data);
             const data = response.data;
             const formattedDate = data.Birthday ? data.Birthday.split("T")[0]:'';
             setFormData({...data, Birthday: formattedDate})
         } catch(error) {
+            console.error("Error fetching resident:", error);
         }
     }
 
@@ -34,6 +36,7 @@ function ProfilePage({ user, onLogout }) {
     };
 
     const handleSave = () => {
+        console.log("Updated user:", formData);
         setEditing(false);
     };
 

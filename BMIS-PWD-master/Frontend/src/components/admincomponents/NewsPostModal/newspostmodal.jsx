@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import "./newspostmodal.css";
+import "../NewsPostModal/newspostmodal.css";
 import { toast } from "react-toastify";
 
 export default function NewsPostModal({ isOpen, onClose, refresh, selectedNews }) {
@@ -13,7 +13,7 @@ export default function NewsPostModal({ isOpen, onClose, refresh, selectedNews }
   const [image, setImage] = useState(null);
   const [existingImage, setExistingImage] = useState("");
   const isEditMode = Boolean(selectedNews); 
-  const backendUrl = `${import.meta.env.VITE_BACKEND_URL}/uploads/news/`;
+  const backendUrl = `${import.meta.env.VITE_API_URL}/uploads/news/`;
 
   useEffect(() => {
     if (isOpen) {
@@ -43,6 +43,8 @@ export default function NewsPostModal({ isOpen, onClose, refresh, selectedNews }
     e.preventDefault();
     
     const id = selectedNews?.newsid || selectedNews?.id || selectedNews?.NewsID;
+    console.log("Submitting with ID:", id); // Verify this ID is correct
+    console.log("Form Data:", form);
     
     const formData = new FormData();
     formData.append("newstitle", form.title);
@@ -64,15 +66,16 @@ export default function NewsPostModal({ isOpen, onClose, refresh, selectedNews }
 
     try {
       if (id) {
-        await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/news/edit/${id}`, formData);
+        await axios.put(`${import.meta.env.VITE_API_URL}/api/news/edit/${id}`, formData);
         toast.success("News updated successfully!");
       } else {
-        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/news/publish`, formData);
+        await axios.post(`${import.meta.env.VITE_API_URL}/api/news/publish`, formData);
         toast.success("News published successfully!");
       }
       refresh(); 
       onClose();
     } catch (err) {
+      console.error("Save Error:", err);
       toast.error("Error saving news.");
     }
   };

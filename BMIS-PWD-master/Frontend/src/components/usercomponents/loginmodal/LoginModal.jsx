@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./LoginModal.css";
+import modalbg from "../../../assets/images/modalbg.png";
+import logo2 from "../../../assets/images/logo2.png";
 import ForgotPass from "../forgotpasswordmodal/forgotpassmodal.jsx";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
+import { useAuth } from "../../../routes/AuthContext.jsx";
 
-function LoginModal({ isOpen, onClose, onLogin }) {
+function LoginModal({ isOpen, onClose }) {
  
   const [isRegister, setIsRegister] = useState(false);
+  const { login } = useAuth();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -175,7 +179,7 @@ function LoginModal({ isOpen, onClose, onLogin }) {
       if (isRegister) {
         if (!validateRegistration()) return;
 
-        const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/register`, {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
           GivenName: formData.givenName,
           MiddleName: formData.middleName,
           LastName: formData.lastName,
@@ -188,9 +192,12 @@ function LoginModal({ isOpen, onClose, onLogin }) {
           username: formData.username,
           password: formData.password,
           confirmPassword: formData.confirmPassword
-        });
+        }); 
+        
+        login(response.data.token);
 
         if (response.data.success) {
+         
           toast.success("Registration successful!");
           onClose();
         }
@@ -206,7 +213,7 @@ function LoginModal({ isOpen, onClose, onLogin }) {
           return;
         }
 
-        const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
           username: formData.username,
           password: formData.password,
         });
@@ -215,20 +222,18 @@ function LoginModal({ isOpen, onClose, onLogin }) {
           const token = response.data.accessToken;
 
           if (token) {
-            localStorage.setItem("accessToken", token);
+            login(token);
 
             try {
               const decoded = jwtDecode(token);
 
-              if (typeof onLogin === "function") {
-                onLogin(decoded);
-              }
-
               toast.success("Login successful!");
 
-              if (decoded.role === "admin") navigate("/admin");
-              else if (decoded.role === "staff") navigate("/staff");
-              else navigate("/");
+              if (decoded.role === "admin"){
+                navigate("/admin");
+              } else {
+                navigate("/");
+              }
 
               onClose();
 
@@ -244,21 +249,12 @@ function LoginModal({ isOpen, onClose, onLogin }) {
       }
 
     } catch (error) {
-      console.error("Login/Register error:", error);
+      console.error(error.response?.data?.message);
 
-      const status = error.response?.status;
-      const serverMessage = error.response?.data?.message;
-
-      if (status === 401) {
-        toast.error(serverMessage || "Wrong username or password.");
-      } else if (status === 403) {
-        toast.error(serverMessage || "Account is temporarily locked. Please try again later.");
-      } else if (status === 500) {
-        toast.error("Server error. Please try again later.");
-      } else if (!error.response) {
-        toast.error("Cannot reach the server. Please check your connection.");
+      if (error.response?.status === 401) {
+        toast.error("Wrong username/password");
       } else {
-        toast.error(serverMessage || "Something went wrong. Please try again.");
+        toast.error("Something went wrong. Please try again.");
       }
     }
   };
@@ -279,7 +275,7 @@ function LoginModal({ isOpen, onClose, onLogin }) {
         onClick={(e) => e.stopPropagation()}
 
         style={{
-          backgroundImage: `url(/images/modalbg.png)`,
+          backgroundImage: `url(${modalbg})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -299,7 +295,7 @@ function LoginModal({ isOpen, onClose, onLogin }) {
         <div className="leftside">
           <div className="headermodal">
             <div className="avatar">
-              <img src="/images/logo2.png" alt="avatar" />
+              <img src={logo2} alt="avatar" />
             </div>
             <h1 className="loginh1">{isRegister ? "REGISTER" : "WELCOME"}</h1>
           </div>

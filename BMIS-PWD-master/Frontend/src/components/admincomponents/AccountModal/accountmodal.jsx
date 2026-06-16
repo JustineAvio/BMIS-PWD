@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import './accountmodal.css';
+import '../AccountModal/accountmodal.css';
 import { toast } from 'react-toastify';
 
 export default function AccountModal({ isOpen, onClose, selectedAccount, onRefresh }) {
@@ -38,7 +38,7 @@ export default function AccountModal({ isOpen, onClose, selectedAccount, onRefre
     const accountID = selectedAccount?.AccountID;
 
     await axios.put(
-      `${import.meta.env.VITE_BACKEND_URL}/api/accounts/change-role/${accountID}`,
+      `${import.meta.env.VITE_API_URL}/api/accounts/change-role/${accountID}`,
       {
         Email: form.Email,
         Role: form.Role
@@ -57,7 +57,7 @@ export default function AccountModal({ isOpen, onClose, selectedAccount, onRefre
     onClose();
 
   } catch (error) {
-    console.error(error);
+    console.error(error.data?.message);
 
     toast.error(
       error.response?.data?.message ||

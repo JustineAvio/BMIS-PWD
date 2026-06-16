@@ -15,63 +15,40 @@
     import ProtectedRoute from './routes/protectedroute.jsx';
     import Header from './components/usercomponents/navbar/Header.jsx';
     import Footer from './components/usercomponents/footer/Footer.jsx';
-    import Sidebar from './components/admincomponents/Sidebar/sidebar.jsx';
+    import Sidebar from './components/admincomponents/sidebar/sidebar.jsx';
     import AccessibilityMenu from './components/usercomponents/access/AccessibilityMenu.jsx';
     import LoginModal from './components/usercomponents/loginmodal/LoginModal.jsx';
-    import NewsPerPage from './pages/User/newsperpage/newsperpage.jsx';
-    import { AuthProvider } from './routes/AuthContext.jsx';
-    import { useState, useEffect } from 'react';
-    import { jwtDecode } from 'jwt-decode';
+    import NewsPerPage from './pages/User/newsperpage/NewsPerPage.jsx';
+    import { useAuth } from './routes/AuthContext.jsx';
+    import { useState } from 'react';
     import { ToastContainer } from 'react-toastify';
     import 'react-toastify/dist/ReactToastify.css'
     function App() {
-        const [user, setUser] = useState(null);
         const [isModalOpen, setIsModalOpen] = useState(false);
-        const [loading, setLoading] = useState(true);
-
-       useEffect(() => {
-            const token = localStorage.getItem('accessToken');
-            if (token && token.split('.').length === 3) {
-                try {
-                    // Define it INSIDE the try block
-                    const decoded = jwtDecode(token); 
-                    setUser(decoded);
-                } catch (err) {
-                    localStorage.removeItem("accessToken");
-                }
-            }
-            setLoading(false);
-        }, []);
-
+        const { user, loading, logout }= useAuth();
 
         const handleAccountClick = () => {
             if (!user) setIsModalOpen(true);
         };
 
-        const handleLogout = () => {
-            localStorage.removeItem('accessToken');
-            setUser(null);
-            window.location.href = "/";
-        };
-
-        const handleLogin = (decodedUser) => {
-            setUser(decodedUser);
-        };
+        const handleLogoutClick = () => {
+            logout();
+        }
 
         const LPageLayout = () => (
             <>
-                <Header user={user} onAccountClick={handleAccountClick} onLogout={handleLogout} />
-                <LoginModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onLogin={(userObj) => setUser(userObj)} />
+                <Header onAccountClick={handleAccountClick} onLogout={handleLogoutClick} />
+                <LoginModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
                 <Outlet />
                 <AccessibilityMenu />
-                <Footer user={user} />
+                <Footer/>
             </>
         );
 
-        const AdminLayoutWrapper = ({ setUser, onLogout }) => {
+        const AdminLayoutWrapper = () => {
             return (
                 <div className="app">
-                    <Sidebar handleLogoutClick={handleLogout} />
+                    <Sidebar handleLogoutClick={handleLogoutClick} />
                     <div className="main">
                         <div className="content">
                             <Outlet />
@@ -81,38 +58,32 @@
             );
         };
 
-        if(loading) return null;
-
         return (
-            <AuthProvider>
-            <BrowserRouter>
+            <>
                 <Routes>
-                    {/* Root */}
+
+                    {/* Public layout */}
+                    <Route element={<LPageLayout />}>
+                        <Route path="/" element={<LandingPage />} />
+                        <Route path="/forms" element={<FormsPage />} />
+                        <Route path="/about-us" element={<AboutUs />} />
+                        <Route path="/faqs" element={<FAQs />} />
+                        <Route path="/news/:id" element={<NewsPerPage />} />
+                    </Route>
+
+                    {/* Auth routes */}
                     <Route path="/reset-password/:token" element={<ResetPassword />} />
 
-                    {/* Public Routes */}
-                    <Route element = {<LPageLayout />}>
-                        <Route path="/forms" element={<FormsPage />} />
-                        <Route path="/" element={<LandingPage />} /> 
-                        <Route path="/about-us" element={<AboutUs/>}/>
-                        <Route path="/faqs" element={<FAQs/>}/>   
-                        <Route path="/news/:id" element={<NewsPerPage />} />
-                    </Route>
-
-                    {/* Resident Protected Routes */}
+                    {/* Resident routes */}
                     <Route element={<ProtectedRoute allowedRoles={['resident']} />}>
-                        <Route path="/profile" element={<ProfilePage user={user} setUser={setUser} />} />
-                        <Route path="/" element={<LPageLayout />} />
-                        <Route path="/about-us" element={<AboutUs/>}/>
-                        <Route path="/faqs" element={<FAQs/>}/>   
-                        <Route path="/news/:id" element={<NewsPerPage />} />
+                        <Route path="/profile" element={<ProfilePage />} />
                     </Route>
 
-                    {/* Admin Protected Routes */}
+                    {/* Admin routes */}
                     <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
-                        <Route path="/admin" element={<AdminLayoutWrapper onLogout={handleLogout} />}>
-                            <Route index element={<AdminDashboard />} /> 
-                            <Route path="resident" element={<ResidentDashboard />} /> 
+                        <Route path="/admin" element={<AdminLayoutWrapper />}>
+                            <Route index element={<AdminDashboard />} />
+                            <Route path="resident" element={<ResidentDashboard />} />
                             <Route path="add-resident" element={<AddResident />} />
                             <Route path="update-resident/:id" element={<EditResident />} />
                             <Route path="application" element={<FormManagement />} />
@@ -122,6 +93,7 @@
                     </Route>
 
                     <Route path="*" element={<h1>404 Not Found</h1>} />
+
                 </Routes>
 
                 <ToastContainer
@@ -133,10 +105,9 @@
                 pauseOnHover
                 draggable
                 theme="colored"
-                />
-            </BrowserRouter>
-            </AuthProvider>
-        );
+                /> 
+           </> 
+        )
     }
 
     export default App;

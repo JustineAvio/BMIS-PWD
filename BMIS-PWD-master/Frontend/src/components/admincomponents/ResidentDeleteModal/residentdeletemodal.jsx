@@ -15,12 +15,13 @@ const ResidentDeleteModal = ({
     const id = residentData.ResidentID;
 
     if (!id) {
+      console.error("No valid resident ID found.");
       return;
     }
 
     try {
       await axios.delete(
-        `${import.meta.env.VITE_BACKEND_URL}/api/resident/delete/${id}`
+        `${import.meta.env.VITE_API_URL}/api/resident/delete/${id}`
       );
 
       toast.success("Resident deleted successfully!");
@@ -31,7 +32,7 @@ const ResidentDeleteModal = ({
 
       onClose();
     } catch (error) {
-      toast.error("Failed to delete resident.");
+      toast.error("Failed to delete resident.", error.data?.message);
     }
   };
 
