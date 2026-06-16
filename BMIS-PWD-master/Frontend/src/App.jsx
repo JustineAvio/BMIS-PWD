@@ -15,10 +15,10 @@
     import ProtectedRoute from './routes/protectedroute.jsx';
     import Header from './components/usercomponents/navbar/Header.jsx';
     import Footer from './components/usercomponents/footer/Footer.jsx';
-    import Sidebar from './components/admincomponents/sidebar/sidebar.jsx';
+    import Sidebar from './components/admincomponents/Sidebar/sidebar.jsx';
     import AccessibilityMenu from './components/usercomponents/access/AccessibilityMenu.jsx';
     import LoginModal from './components/usercomponents/loginmodal/LoginModal.jsx';
-    import NewsPerPage from './pages/User/newsperpage/NewsPerPage.jsx';
+    import NewsPerPage from './pages/User/newsperpage/newsperpage.jsx';
     import { useAuth } from './routes/AuthContext.jsx';
     import { useState } from 'react';
     import { ToastContainer } from 'react-toastify';
