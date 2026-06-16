@@ -12,14 +12,22 @@ const accountRoute = require("./routes/AccountRoute.js");
 
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://bmis-pwd-kqx4.vercel.app"
+];
+
 app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    process.env.FRONTEND_URL
-  ],
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
+  origin: function(origin, callback) {
+    console.log("Origin:", origin);
+
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
 }));
 
 app.use(express.urlencoded({ extended: true }));
@@ -33,6 +41,8 @@ app.use("/api/news", newsroutes);
 app.use("/api/forms", FormRoute);
 app.use("/api/accounts", accountRoute);
 
-app.listen(3000, () => {
-    console.log("Running on port 3000!");
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`Running on port ${PORT}!`);
 })
