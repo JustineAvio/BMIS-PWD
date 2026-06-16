@@ -50,7 +50,7 @@
                     
                 setNews(publishedNews);
             } catch (error) {
-                console.error(error.response?.data?.message);
+                console.error(error.response.data.message);
             } finally {
                 setLoading(false);
             }
