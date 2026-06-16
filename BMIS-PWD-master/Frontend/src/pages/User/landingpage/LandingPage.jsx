@@ -1,5 +1,5 @@
     import React, { useEffect, useState } from 'react';
-    import './LandingPage.css';;
+    import '../landingpage/LandingPage.css';
     import image2 from '../../../assets/images/image 2.png';
     import signature from '../../../assets/images/signature.png';
     import bg from '../../../assets/images/bg.jpg';
