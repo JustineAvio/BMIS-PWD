@@ -41,7 +41,7 @@ const signUpSchema = Joi.object({
         'string.empty': 'Please specify if you are a PWD or not.',
         'any.required': 'Please select a PWD status.'
     }),
-    email: Joi.string().email().required().messages({
+    Email: Joi.string().email().required().messages({
         'string.email': 'Please provide a valid email address.',
         'string.empty': 'Email address is required.',
         'any.required': 'Email is required.'
@@ -56,36 +56,36 @@ const signUpSchema = Joi.object({
         'string.empty': 'Complete address is required.',
         'any.required': 'Address is required.'
     }),
-    username: Joi.string().alphanum().min(3).max(20).required().messages({
+    Username: Joi.string().alphanum().min(3).max(20).required().messages({
         'string.alphanum': 'Username must only contain letters and numbers.',
         'string.min': 'Username must be at least 3 characters.',
         'string.max': 'Username cannot exceed 20 characters.',
         'any.required': 'Username is required.'
     }),
-    password: Joi.string().min(6).max(30).required().messages({
+    Password: Joi.string().min(6).max(30).required().messages({
         'string.min': 'Password must be at least 6 characters long.',
         'string.max': 'Password is too long (max 30).',
         'any.required': 'Password is required.'
     }),
-    confirmPassword: Joi.string().valid(Joi.ref('password')).required().messages({
+    ConfirmPassword: Joi.string().valid(Joi.ref('password')).required().messages({
         'any.only': 'Passwords do not match.',
         'any.required': 'Please confirm your password.'
     })
 });
 
 const forgotpassSchema = Joi.object({
-    email: Joi.string().email().required().messages({
+    Email: Joi.string().email().required().messages({
         'string.email': 'Enter a valid email to receive the reset link.',
         'any.required': 'Email is required.'
     })
 });
 
 const resetpassSchema = Joi.object({
-    password: Joi.string().min(6).max(30).required().messages({
+    Password: Joi.string().min(6).max(30).required().messages({
         'string.min': 'New password must be at least 6 characters.',
         'any.required': 'New password is required.'
     }),
-    confirmPassword: Joi.string().valid(Joi.ref('password')).required().messages({
+    ConfirmPassword: Joi.string().valid(Joi.ref('password')).required().messages({
         'any.only': 'Confirmation password does not match.',
         'any.required': 'Please confirm your new password.'
     })
