@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./residents.css";
 import axios from "axios";
-import ResidentDeleteModal from "../../../components/admincomponents/ResidentDeleteModal/ResidentDeleteModal.jsx";
+import ResidentDeleteModal from "../../../components/admincomponents/ResidentDeleteModal/residentdeletemodal.jsx";
 import { toast } from "react-toastify";
 
 export default function Residents() {
