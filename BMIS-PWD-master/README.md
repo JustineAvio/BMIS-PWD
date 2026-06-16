@@ -1,0 +1,1 @@
+Deployed in Railway and Vercel
