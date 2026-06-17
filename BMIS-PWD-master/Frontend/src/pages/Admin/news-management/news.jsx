@@ -84,15 +84,11 @@
       setIsDeleteModalOpen(true);
     };
 
-    const handleDeleteNews = async (newsID) => {
-      try {
-        await axios.delete(`${import.meta.env.VITE_API_URL}/api/news/delete/${newsID}`);
-        toast.success("News deleted successfully!");
-        fetchNews();
-      } catch (error) {
-        toast.error("Error deleting news. Please try again.");
-      }
+    const handleDeleteNews = (newsID) => {
+      setNews(prev => prev.filter(item => item.NewsID !== newsID));
+      toast.success("News deleted successfully!");
     };
+
     const filteredNews = news.filter(item => {
     const title = (item.NewsTitle || item.newstitle || "").toLowerCase();
     const content = (item.NewsContent || item.newscontent || "").toLowerCase();
@@ -267,11 +263,11 @@
 
         {/* News Delete Modal */}
         <NewsDeleteModal
-          isOpen={isDeleteModalOpen}
-          onClose={() => setIsDeleteModalOpen(false)}
-          newsData={deleteNewsData}
-          onConfirmDelete={() => handleDeleteNews(deleteNewsData.NewsID)}
-        />
+            isOpen={isDeleteModalOpen}
+            onClose={() => setIsDeleteModalOpen(false)}
+            newsData={deleteNewsData}
+            onConfirmDelete={handleDeleteNews}
+          />
       </div>
     );
   }

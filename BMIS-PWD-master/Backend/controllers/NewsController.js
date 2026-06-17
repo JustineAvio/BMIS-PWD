@@ -150,16 +150,24 @@ exports.editNews = async (req, res) => {
 exports.deleteNews = async (req, res) => {
     const { id } = req.params;
 
+    console.log("Delete request received");
+    console.log("ID:", id);
+
     try {
-        // 1. Get image from DB
         const [rows] = await db.query(
             "SELECT NewsImage FROM newstable WHERE NewsID = ?",
             [id]
         );
 
+        console.log("Rows found:", rows.length);
+
         if (rows.length === 0) {
-            return res.status(404).json({ error: "News not found" });
+            return res.status(404).json({
+                error: "News not found"
+            });
         }
+
+        // rest of code...
 
         const image = rows[0].NewsImage;
 
@@ -174,23 +182,34 @@ exports.deleteNews = async (req, res) => {
             const filePath = path.join(uploadDir, fileName);
 
             // 3. Delete file if exists
-            if (fs.existsSync(filePath)) {
-                fs.unlinkSync(filePath);
-                console.log("Deleted image:", fileName);
-            }
+            try {
+                if (fs.existsSync(filePath)) {
+                    fs.unlinkSync(filePath);
+                }
+            } catch (err) {
+                console.error("File delete error:", err);
+            }   
         }
 
         // 4. Delete DB record
-        await db.query(
-            "DELETE FROM newstable WHERE NewsID = ?",
-            [id]
-        );
+        const [result] = await db.query(
+                "DELETE FROM newstable WHERE NewsID = ?",
+                [id]
+            );
 
-        res.json({ message: "News deleted successfully!" });
+            console.log("Delete result:", result);
+
+            return res.status(200).json({
+                success: true,
+                message: "News deleted successfully!"
+            });
 
     } catch (error) {
         console.error("Delete News Error:", error);
-        res.status(500).json({ error: "Failed to delete news" });
+        return res.status(500).json({
+            success: false,
+            error: error.message
+        });
     }
 };
 
