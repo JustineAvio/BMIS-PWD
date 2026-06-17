@@ -6,6 +6,7 @@ const { generateResetToken } = require("../utils/token.js");
 const { LoginValidator, signUpValidator, forgotpassValidator, resetpassValidator } = require("../validators/AuthValidator.js");
 
 exports.login = async (req, res) => {
+    console.log("LOGIN BODY:", req.body);
     const { username, password } = req.body;
     const { error, value } = LoginValidator({ username, password });
 
